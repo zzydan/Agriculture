@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.agriculture.dao.SecResMapper" >
+    <!-- List<SecRes> loading_res(Integer roleId); -->
+    <select id="loading_res" resultType="com.agriculture.pojo.SecRes">
+        SELECT sec_res.* FROM sec_role_res
+            LEFT JOIN sec_res on sec_role_res.res_id=sec_res.id
+          WHERE sec_role_res.role_id = #{roleId}
+    </select>
+
+
+    <!-- List<SecRes> findRes(); -->
+    <select id="findRes" resultType="com.agriculture.pojo.SecRes">
+        select * from sec_res
+    </select>
+</mapper>

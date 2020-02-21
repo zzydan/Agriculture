@@ -1,0 +1,58 @@
+#springMVC的视图解析器
+spring:
+  mvc:
+    view:
+      prefix: /jsps/
+      suffix: .jsp
+    static-path-pattern: /static/**
+  #配置数据库信息
+  datasource:
+    url: jdbc:mysql://59.110.139.4:3306/zhny?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+  #开启热部署
+  devtools:
+    restart:
+      enabled: true
+  http:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.upload-path}
+  jackson:
+    time-zone: "GMT+8"
+    date-format: "yyyy-MM-dd HH:mm:ss"
+    default-property-inclusion: non_null
+
+#修改tomcat的端口号
+server:
+  jsp-servlet:
+    init-parameters:
+      development: true
+  port: 8080
+  address: 0.0.0.0
+#配置mybatis信息
+mybatis:
+  #注意：一定要对应mapper映射xml文件的所在路径
+  mapper-locations: classpath:mapper/*.xml
+  # 注意：对应实体类的路径 起别名
+  type-aliases-package: com.agriculture.pojo
+
+  configuration:
+    # spring boot集成mybatis的方式打印sql
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #开启驼峰命名法
+    map-underscore-to-camel-case: true
+    #开启懒加载
+    aggressive-lazy-loading: true
+
+# 配置pageHelper分页插件的内容
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
