@@ -6,6 +6,44 @@
     <select id="findUserByName" resultType="com.agriculture.pojo.SecUser">
         SELECT * FROM sec_user WHERE trueName = #{userName}
     </select>
-
-
+    <!-- List<SecUser> findManager(@Param("info")OrderPageInfo pageInfo); -->
+    <select id="findManager" resultType="com.agriculture.pojo.SecUser" parameterType="com.agriculture.pojo.OrderPageInfo">
+        SELECT * FROM
+        (sec_user LEFT JOIN sec_role ON sec_role.id=sec_user.role_id)
+        LEFT JOIN enterprise ON enterprise.id=sec_user.enterprise_id
+        WHERE 1=1
+        <if test="info.username != null and info.username != ''">
+            and sec_user.trueName like CONCAT('%',#{info.username },'%')
+        </if>
+        <if test="info.roleId != null and info.roleId != ''">
+            and sec_user.role_id = #{info.roleId}
+        </if>
+    </select>
+    <!-- int addUser(@Param("voio")UserRoleFormdata voio); -->
+    <insert id="addUser" parameterType="com.agriculture.pojo.SecUser">
+       INSERT INTO sec_user (trueName,role_id,password,tel,bz,createtime,enterprise_id)
+        VALUES (#{userName},#{roleId},#{password},#{tel},#{bz},now(),#{id})
+    </insert>
+    <!--SecUser selectUserId(@Param("id") Integer id);-->
+    <select id="selectUserId" resultType="com.agriculture.pojo.SecUser">
+         SELECT * FROM sec_user
+        LEFT JOIN sec_role ON sec_role.id=sec_user.role_id
+				where sec_user.id=#{id}
+    </select>
+    <!--int deleteUserId(@Param("id")Integer id);-->
+    <delete id="deleteUserId" parameterType="com.agriculture.pojo.SecUser">
+         DELETE
+          FROM
+	        sec_user
+        WHERE
+	      id = #{id}
+    </delete>
+    <update id="upUserId" parameterType="com.agriculture.pojo.SecUser">
+        update
+			sec_user
+		set
+			trueName=#{userName},role_id=#{roleId},`password`=#{password},tel=#{tel},enterprise_id=#{enterpriseId}
+		where
+			id=#{id}
+    </update>
 </mapper>

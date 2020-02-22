@@ -18,7 +18,57 @@ public class SecUser implements Serializable {
 
     private Boolean disabled;
 
+    private Integer enterpriseId;
+
     private Date createtime;
+
+    private String roleName;
+
+    private String userName;
+
+    private  String name;
+
+    public Integer getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(Integer enterpriseId) {
+        this.enterpriseId = enterpriseId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
+    }
+
+    private String roleType;
 
     private static final long serialVersionUID = 1L;
 
@@ -88,20 +138,18 @@ public class SecUser implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", truename=").append(truename);
-        sb.append(", roleId=").append(roleId);
-        sb.append(", password=").append(password);
-        sb.append(", tel=").append(tel);
-        sb.append(", bz=").append(bz);
-        sb.append(", disabled=").append(disabled);
-        sb.append(", createtime=").append(createtime);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return "SecUser{" +
+                "id=" + id +
+                ", truename='" + truename + '\'' +
+                ", roleId=" + roleId +
+                ", password='" + password + '\'' +
+                ", tel='" + tel + '\'' +
+                ", bz='" + bz + '\'' +
+                ", disabled=" + disabled +
+                ", createtime=" + createtime +
+                ", roleName='" + roleName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", roleType='" + roleType + '\'' +
+                '}';
     }
 }
