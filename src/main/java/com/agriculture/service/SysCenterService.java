@@ -65,4 +65,32 @@ public interface SysCenterService {
      * @return
      */
     int upUserId(SecUser SecUser);
+    /**
+     * 查询所有角色信息和企业
+     * @return
+     */
+    List<SecRole> findRoleEnter();
+    /**
+     * 添加角色
+     * @param SecRole
+     * @return
+     */
+    int addRole(SecRole SecRole);
+    /**
+     * 查询单个角色
+     * @return
+     */
+    SecRole findRoleId(Integer id);
+    /**
+     * 修改角色
+     * @param SecRole
+     * @return
+     */
+    int upRoleId(SecRole SecRole);
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    int deleteRoleId(Integer id);
 }

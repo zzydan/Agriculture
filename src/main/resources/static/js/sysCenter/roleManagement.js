@@ -1,18 +1,44 @@
 $(function () {
     role_table();
+    findEnter();
+
 })
 
 //点击打开新建用户模态框
 function addUserInfo() {
     $("#addUserInfo_Modal").modal("show");
-    findRes();
+    /*findRes();*/
 }
+function findEnter() {
+    $.ajax({
+        type: "post",
+        url: "/sysCenter/findEnterprise",
+        data: {},
+        dataType: "json",
+        success: function (data) {
+            var str = "";
+            if (data != null && data.length != 0) {
+                $("#Enterprise_select_1").children("option:gt(0)").remove();
+                $("#Enterprise_select_1_up").children("option:gt(0)").remove();
+                str = str + "<option value=''>选择企业</option>";
+                for (var i = 0; i < data.length; i++) {
+                    str = str + "<option value=" + data[i].id + ">" + data[i].name + "</option>";
+                }
+                $("#Enterprise_select_1").append(str);
+                $("#Enterprise_select_1_up").append(str);
 
+            }
+        },//请求失败时回调函数
+        error: function () {
+            alert("失败 ");
+        }
+    });
+}
 
 function role_table() {
     $("#role_table").bootstrapTable("destroy");
     $("#role_table").bootstrapTable({ // 对应table标签的id
-        url: "/usermanager/findRole", // 获取表格数据的url
+        url: "/sysCenter/findRoleEnter", // 获取表格数据的url
         method: "get", //请求方式
         cache: false, //关闭缓存
         toolbar: '#toolbar', //工具按钮用哪个容器
@@ -34,32 +60,39 @@ function role_table() {
                     return index + 1;
                 }
             }, {
-                field: 'rolename',
+                field: 'roleName',
                 title: '角色名称'
             }, {
-                field: 'rolecode',
-                title: '角色编号'
+                field: 'name',
+                title: '所属企业'
             }, {
-                field: 'info',
-                title: '角色描述',
-            }, {
-                field: 'type',
-                title: "角色类别",
+                field: 'roleType',
+                title: '客户端',
                 formatter: function (value, row, index) {
-                    if(value=="dept"){
-                        return "部门";
-                    }else if(value=="user"){
-                        return "用户";
+                    if (value == 1) {
+                        return 'app'
+                    } else if (value == 2) {
+                        return 'pc'
+                    }else if (value == 3) {
+                        return 'app/pc'
+                    } else {
+                        return '未知'
                     }
                 }
+            }, {
+                field: 'createname',
+                title: "创建人",
+            }, {
+                field: 'createtime',
+                title: "创建时间",
             }, {
                 title: "操作",
                 formatter: function (value, row, index) {
                     var str =
-                        "<a href='javascript:updateRole(" + row.id + ")' class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
+                        "<a onclick=\"updRoleById(\'" + row.id + "\')\" class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
                         "<i  class=\"layui-icon layui-icon-edit\">" +
                         "</i>编辑</a> " +
-                        "<a href='javascript:deleteRole(" + row.id + ")' class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
+                        "<a onclick=\"deleteManager(\'" + row.id + "\')\" class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
                         "<i class=\"layui-icon layui-icon-delete\">" +
                         "</i>删除</a> ";
                     return str;
@@ -102,8 +135,106 @@ function findRes() {
         }
     });
 }
+function addRole() {
+    var createUser=$("#id_add").val();
+    var enterpriseId=$("#Enterprise_select_1").val();
+    var roleName=$("#rolename").val();
+    var roleType=$("#select_roletype").val();
+    var roleBz=$("#roleBz").val();
+    $.ajax({
+        url: "/sysCenter/addRole",
+        type: "post",
+        dataType: "json",
+        data: {
+            createUser:createUser,
+            enterpriseId:enterpriseId,
+            roleName:roleName,
+            roleType:roleType,
+            roleBz:roleBz
+        },
+        success: function (data) {
+            alert("创建管理员成功！！");
+            window.location.reload();
+        },
+        error: function () {
+            alert("请求失败");
+        }
+    });
+}
+function upRole() {
+    var id=$("#id_up").val();
+    var enterpriseId=$("#Enterprise_select_1_up").val();
+    var roleName=$("#rolename_up").val();
+    var roleType=$("#select_roletype_up").val();
+    var roleBz=$("#roleBz_up").val();
+    $.ajax({
+        url: "/sysCenter/upRoleId",
+        type: "post",
+        dataType: "json",
+        data: {
+            id:id,
+            enterpriseId:enterpriseId,
+            roleName:roleName,
+            roleType:roleType,
+            roleBz:roleBz
+        },
+        success: function (data) {
+            alert("修改角色成功！！");
+            window.location.reload();
+        },
+        error: function () {
+            alert("请求失败");
+        }
+    });
+}
+//删除
+function deleteManager(id) {
+    if (confirm("确认删除么！！！")) {
+        $.ajax({
+            url: "/sysCenter/deleteRoleId/"+id,
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                if(data>0){
+                    alert("删除成功！！！");
+                    $("#role_table").bootstrapTable("refresh");
+                }
+            },
+            error: function () {
+                alert("请求失败");
+            }
+        });
+    }
+}
 
-//添加角色
+//点击打开编辑用户模态框
+function updRoleById(id) {
+    $.ajax({
+        url: "/sysCenter/findRoleId/"+id,
+        type:"post",
+        dataType:"json",
+        success:function(data){
+            $("#id_up").val(data.id);
+            $("#rolename_up").val(data.roleName);
+            $("#roleBz_up").val(data.roleBz);
+            $("#Enterprise_select_1_up option").each(function(){
+                if($(this).val()==data.enterpriseId){
+                    $(this).attr("selected","selected");
+                }
+            });
+            $("#select_roletype_up option").each(function(){
+                if($(this).val()==data.roleType){
+                    $(this).attr("selected","selected");
+                }
+            });
+            $("#UpUserInfo_Modal").modal("show");
+        },error:function(){
+            console.log("出错了！");
+        }
+    });
+}
+
+/*//添加角色
 function addRole() {
     var rolename = $("#rolename");
     if (!rolename.val()) {
@@ -136,7 +267,7 @@ function addRole() {
             layer.alert("请求失败");
         }
     });
-}
+}*/
 
 //删除角色
 function deleteRole(id) {

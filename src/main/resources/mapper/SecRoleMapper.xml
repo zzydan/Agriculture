@@ -5,4 +5,40 @@
     <select id="findRole" resultType="com.agriculture.pojo.SecRole">
         select * from sec_role
     </select>
+    <!--List<SecRole> findRoleEnter();-->
+    <select id="findRoleEnter" resultType="com.agriculture.pojo.SecRole">
+        select a.*,b.role_name as createname,en.*
+        from (sec_role a left join sec_role b on a.create_user=b.id)
+        LEFT JOIN enterprise en ON en.id=a.enterprise_id
+        WHERE 1=1
+    </select>
+    <!--SecRole findRoleEnterId(@Param("id")Integer id);-->
+    <select id="findRoleId" resultType="com.agriculture.pojo.SecRole">
+        select a.*,b.role_name as createname,en.*
+        from (sec_role a left join sec_role b on a.create_user=b.id)
+        LEFT JOIN enterprise en ON en.id=a.enterprise_id
+        WHERE a.id=#{id}
+    </select>
+    <!--int addRole(SecRole SecRole);-->
+    <insert id="addRole" parameterType="com.agriculture.pojo.SecRole">
+       INSERT INTO sec_role (role_name,enterprise_id,role_type,role_bz,createtime,create_user)
+        VALUES (#{roleName},#{enterpriseId},#{roleType},#{roleBz},now(),#{createUser})
+    </insert>
+    <!-- int upRoleId(SecRole SecRole);-->
+    <update id="upRoleId" parameterType="com.agriculture.pojo.SecRole">
+        update
+			sec_role
+		set
+			role_name=#{roleName},enterprise_id=#{enterpriseId},role_type=#{roleType},role_bz=#{roleBz}
+		where
+			id=#{id}
+    </update>
+    <!--int deleteRoleId(@Param("id")Integer id);-->
+    <delete id="deleteRoleId" parameterType="com.agriculture.pojo.SecRole">
+         DELETE
+          FROM
+	        sec_role
+        WHERE
+	      id = #{id}
+    </delete>
 </mapper>

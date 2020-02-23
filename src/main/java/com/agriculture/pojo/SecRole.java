@@ -22,7 +22,37 @@ public class SecRole implements Serializable {
 
     private Date createtime;
 
+    private String createname;
+
+    private String name;
+
+    private String roleBz;
+
+    public String getRoleBz() {
+        return roleBz;
+    }
+
+    public void setRoleBz(String roleBz) {
+        this.roleBz = roleBz;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     private static final long serialVersionUID = 1L;
+
+    public String getCreatename() {
+        return createname;
+    }
+
+    public void setCreatename(String createname) {
+        this.createname = createname;
+    }
 
     public Integer getId() {
         return id;

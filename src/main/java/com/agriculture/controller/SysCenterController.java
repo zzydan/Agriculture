@@ -86,7 +86,6 @@ public class SysCenterController<pu> {
     @RequestMapping("selectUserId/{id}")
     @ResponseBody
     public  SecUser selectUserId(@PathVariable("id")Integer id){
-        System.out.println(id);
         SecUser list=sysCenterServiceImpl.selectUserId(id);
         return list;
     }
@@ -101,6 +100,11 @@ public class SysCenterController<pu> {
     public int deleteUserId(@PathVariable("id")Integer id){
         return sysCenterServiceImpl.deleteUserId(id);
     }
+
+    /**
+     * 查询所有企业
+     * @return
+     */
     @RequestMapping("findEnterprise")
     @ResponseBody
     public List<Enterprise> findEnterprise(){
@@ -118,5 +122,59 @@ public class SysCenterController<pu> {
     public int upUserId(SecUser SecUser){
         return sysCenterServiceImpl.upUserId(SecUser);
     }
+
+    /**
+     * 查询角色模块信息
+     * @return
+     */
+    @RequestMapping("findRoleEnter")
+    @ResponseBody
+    public List<SecRole> findRoleEnter(){
+        List<SecRole> list=sysCenterServiceImpl.findRoleEnter();
+        return list;
+    }
+
+    /**
+     * 添加角色
+     * @param SecRole
+     * @return
+     */
+    @RequestMapping("addRole")
+    @ResponseBody
+    public int addRole(SecRole SecRole){
+        return sysCenterServiceImpl.addRole(SecRole);
+    }
+    /**
+     * 查询单个角色
+     * @return
+     */
+    @RequestMapping("findRoleId/{id}")
+    @ResponseBody
+    public SecRole findRoleId(@PathVariable("id")Integer id){
+        SecRole list=sysCenterServiceImpl.findRoleId(id);
+        return list;
+    }
+
+    /**
+     * 修改角色
+     * @param SecRole
+     * @return
+     */
+    @RequestMapping("upRoleId")
+    @ResponseBody
+    public int upRoleId(SecRole SecRole){
+        return sysCenterServiceImpl.upRoleId(SecRole);
+    }
+    /**
+     * 删除角色
+     * @param id
+     * @return
+     */
+    @RequestMapping("deleteRoleId/{id}")
+    @ResponseBody
+    public int deleteRoleId(@PathVariable("id")Integer id){
+        return sysCenterServiceImpl.deleteRoleId(id);
+    }
+
 }
 

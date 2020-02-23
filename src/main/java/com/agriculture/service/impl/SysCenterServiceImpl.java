@@ -117,4 +117,30 @@ public class SysCenterServiceImpl implements SysCenterService {
     public int upUserId(SecUser SecUser) {
         return secUserMapper.upUserId(SecUser);
     }
+
+    @Override
+    public List<SecRole> findRoleEnter() {
+        List<SecRole> list = secRoleMapper.findRoleEnter();
+        return list;
+    }
+
+    @Override
+    public int addRole(SecRole SecRole) {
+        return secRoleMapper.addRole(SecRole);
+    }
+
+    @Override
+    public SecRole findRoleId(Integer id) {
+        return secRoleMapper.findRoleId(id);
+    }
+
+    @Override
+    public int upRoleId(SecRole SecRole) {
+        return secRoleMapper.upRoleId(SecRole);
+    }
+
+    @Override
+    public int deleteRoleId(Integer id) {
+        return secRoleMapper.deleteRoleId(id);
+    }
 }
