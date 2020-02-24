@@ -12,11 +12,9 @@
                 <div class="panel-body">
                     <form id="user_likeForm" class="form-horizontal">
                         <div class="form-group" style="margin-top:15px">
-                            <label class="control-label col-sm-1">角色名称</label>
+                            <label class="control-label col-sm-1">电话</label>
                             <div class="col-sm-3">
-                                <select class="form-control" id="role_select" name="roleId">
-
-                                </select>
+                                <input type="text" class="form-control" name="tel">
                             </div>
                             <label class="control-label col-sm-1">用户名称</label>
                             <div class="col-sm-3">
@@ -80,11 +78,12 @@
                                     <input type="text" class="form-control" id="username" name="username"
                                            placeholder="请输入用户登录账号">
                                 </div>
-                                <label for="password" class="col-md-1 control-label"><span
-                                        style="color: #ff0007">*</span>密码</label>
+                                <label for="Enterprise_select" class="col-md-1 control-label"><span
+                                        style="color: #ff0007">*</span>企业</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="password" name="password"
-                                           placeholder="请输入密码">
+                                    <select class="form-control" id="Enterprise_select" name="Enterprise_select">
+
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -103,14 +102,16 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="Enterprise_select" class="col-md-1 control-label"><span
-                                        style="color: #ff0007">*</span>企业</label>
+
+                                <label for="password" class="col-md-1 control-label"><span
+                                        style="color: #ff0007">*</span>密码</label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" id="Enterprise_select" name="Enterprise_select">
-
-                                    </select>
+                                    <input type="text" class="form-control" id="password" name="password"
+                                           placeholder="请输入密码" value="Zhny123456" onfocus="javascript:if(this.value=='Zhny123456')this.value='';" onblur="javascript:if(this.value=='')this.value='Zhny123456';">
                                 </div>
-
+                                <div class="col-sm-5" style="margin-top:9px">
+                                    <span style="color: #c0c0c2">如未设置密码，默认密码为Zhny123456</span>
+                                </div>
                             </div>
                         </form>
                     </div>

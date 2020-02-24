@@ -33,7 +33,15 @@ public class OrderPageInfo implements Serializable {
     //角色分页
     private String username;
     private String roleId;
+    private String tel;
 
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
 
     public String getStartTime() {
         return startTime;
