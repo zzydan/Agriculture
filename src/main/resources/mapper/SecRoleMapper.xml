@@ -10,14 +10,14 @@
         select a.*,b.role_name as createname,en.*
         from (sec_role a left join sec_role b on a.create_user=b.id)
         LEFT JOIN enterprise en ON en.id=a.enterprise_id
-        WHERE 1=1
+        WHERE 1=1 AND a.disabled = 0
     </select>
     <!--SecRole findRoleEnterId(@Param("id")Integer id);-->
     <select id="findRoleId" resultType="com.agriculture.pojo.SecRole">
         select a.*,b.role_name as createname,en.*
         from (sec_role a left join sec_role b on a.create_user=b.id)
         LEFT JOIN enterprise en ON en.id=a.enterprise_id
-        WHERE a.id=#{id}
+        WHERE a.id=#{id} AND a.disabled = 0
     </select>
     <!--int addRole(SecRole SecRole);-->
     <insert id="addRole" parameterType="com.agriculture.pojo.SecRole">
@@ -34,11 +34,7 @@
 			id=#{id}
     </update>
     <!--int deleteRoleId(@Param("id")Integer id);-->
-    <delete id="deleteRoleId" parameterType="com.agriculture.pojo.SecRole">
-         DELETE
-          FROM
-	        sec_role
-        WHERE
-	      id = #{id}
-    </delete>
+    <update id="deleteRoleId" parameterType="com.agriculture.pojo.SecRole">
+         UPDATE sec_role SET disabled = 1 WHERE id = #{id}
+    </update>
 </mapper>

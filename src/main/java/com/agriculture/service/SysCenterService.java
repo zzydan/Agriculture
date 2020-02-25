@@ -93,4 +93,32 @@ public interface SysCenterService {
      * @return
      */
     int deleteRoleId(Integer id);
+
+    /**
+     * 企业管理的查询
+     * @param pageInfo
+     * @return
+     */
+    PageInfo<Enterprise> findEnterpriseByPage(OrderPageInfo pageInfo);
+
+    /**
+     * 企业管理的新增
+     * @param enterprise
+     * @return
+     */
+    int addEnterprise(Enterprise enterprise);
+
+    /**
+     * 企业管理的修改
+     * @param enterprise
+     * @return
+     */
+    int updateEnterprise(Enterprise enterprise);
+
+    /**
+     * 根据id查询企业所有数据
+     * @param id
+     * @return
+     */
+    Enterprise findEnterpriseById(Integer id);
 }

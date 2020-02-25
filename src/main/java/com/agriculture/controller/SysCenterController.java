@@ -37,7 +37,9 @@ public class SysCenterController<pu> {
     @RequestMapping("findManager")
     @ResponseBody
     public PageInfo<SecUser> findManager(OrderPageInfo pageInfo) {
+
         PageInfo<SecUser> user = sysCenterServiceImpl.findManager(pageInfo);
+
         return user;
     }
 
@@ -176,5 +178,62 @@ public class SysCenterController<pu> {
         return sysCenterServiceImpl.deleteRoleId(id);
     }
 
+
+    /**
+     * 企业管理的查询
+     * @param pageInfo
+     * @return
+     */
+    @RequestMapping("/findEnterpriseByPage")
+    @ResponseBody
+    public PageInfo<Enterprise> findEnterpriseByPage(OrderPageInfo pageInfo){
+
+        PageInfo<Enterprise> enterpriseList = sysCenterServiceImpl.findEnterpriseByPage(pageInfo);
+
+        return enterpriseList;
+    }
+
+    /**
+     * 企业管理的新增
+     * @param enterprise
+     * @return
+     */
+    @RequestMapping("/addEnterprise")
+    @ResponseBody
+    public boolean addEnterprise(Enterprise enterprise){
+
+        int i =  sysCenterServiceImpl.addEnterprise(enterprise);
+
+        return i>0;
+
+    }
+
+    /**
+     * 根据id 查询所有数据
+     * @param id
+     * @return
+     */
+    @RequestMapping("/findEnterpriseById/{id}")
+    @ResponseBody
+    public Enterprise findEnterpriseById(@PathVariable("id")Integer id){
+
+        Enterprise enterprise = sysCenterServiceImpl.findEnterpriseById(id);
+
+        return enterprise;
+    }
+
+    /**
+     * 企业管理的修改
+     * @param enterprise
+     * @return
+     */
+    @RequestMapping("/updateEnterprise")
+    @ResponseBody
+    public boolean updateEnterprise(Enterprise enterprise){
+
+        int i =  sysCenterServiceImpl.updateEnterprise(enterprise);
+
+        return i>0;
+    }
 }
 

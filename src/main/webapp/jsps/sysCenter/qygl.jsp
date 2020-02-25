@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="../common/head.jsp"></jsp:include>
 
-<script src="${pageContext.request.contextPath}/static/js/sysCenter/userManagement.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/sysCenter/qygl.js"></script>
 
 <div class="layui-fluid" style="height: 50%">
     <div class="layui-card">

@@ -18,13 +18,6 @@ public class OrderPageInfo implements Serializable {
     //排序的规则  desc和asc
     private String order;
 
-    //订单分页
-    private String orderName;
-    private String orderCode;
-    private Integer clientId;
-    private Integer userId;
-    private String status;
-
     private Integer disabled;
 
     private String startTime;
@@ -75,45 +68,7 @@ public class OrderPageInfo implements Serializable {
         this.roleId = roleId;
     }
 
-    public String getOrderName() {
-        return orderName;
-    }
 
-    public void setOrderName(String orderName) {
-        this.orderName = orderName;
-    }
-
-    public String getOrderCode() {
-        return orderCode;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
-    }
-
-    public Integer getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(Integer clientId) {
-        this.clientId = clientId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public Integer getLimit() {
         return limit;

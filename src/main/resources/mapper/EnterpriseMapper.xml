@@ -1,9 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.EnterpriseMapper" >
-    <!--List<Enterprise> findEnterprise();-->
+    <!-- 下拉框查询所有企业 List<Enterprise> findEnterprise();-->
     <select id="findEnterprise" resultType="com.agriculture.pojo.Enterprise">
-        select * from enterprise
+        select * from enterprise WHERE disabled = 0
     </select>
+
+    <!-- 分页查询所有企业 List<Enterprise> findEnterpriseByPage(OrderPageInfo pageInfo); -->
+    <select id="findEnterpriseByPage" resultType="com.agriculture.pojo.Enterprise">
+        select enterprise.*,COUNT(u1.id) as userNumber,u2.trueName as createuserName FROM enterprise
+        left join sec_user as u1 on enterprise.id = u1.enterprise_id
+				LEFT join sec_user as u2 on enterprise.createuser = u2.id
+        WHERE enterprise.disabled = 0
+        GROUP BY enterprise.id
+    </select>
+
+    <!-- 新增企业 int addEnterprise(@Param("enterprise") Enterprise enterprise); -->
+    <insert id="addEnterprise" parameterType="com.agriculture.pojo.Enterprise">
+        insert into enterprise (createtime, name, address, intro, longitude, latitude,
+        filiale, mapper_user1, mapper_user1_pic, mapper_user2,
+        mapper_user2_pic, mapper_user3, mapper_user3_pic)
+        values (now(),#{enterprise.name},#{enterprise.address},#{enterprise.intro},#{enterprise.longitude},#{enterprise.latitude}
+        ,#{enterprise.filiale},#{enterprise.mapperUser1},#{enterprise.mapperUser1Pic},#{enterprise.mapperUser2}
+        ,#{enterprise.mapperUser2Pic},#{enterprise.mapperUser3},#{enterprise.mapperUser3Pic});
+    </insert>
+
+    <!--  根据id查询企业所有信息  Enterprise findEnterpriseById(Integer id); -->
+    <select id="findEnterpriseById" resultType="com.agriculture.pojo.Enterprise">
+        SELECT * FROM enterprise WHERE id = #{id}
+    </select>
+
+    <!-- 修改企业 int updateEnterprise(@Param("enterprise") Enterprise enterprise); -->
+    <update id="updateEnterprise" parameterType="com.agriculture.pojo.Enterprise">
+        update enterprise
+          set name = #{enterprise.name},
+          address = #{enterprise.address},
+          intro = #{enterprise.intro},
+          longitude = #{enterprise.longitude},
+          latitude = #{enterprise.latitude},
+          filiale = #{enterprise.filiale},
+          mapper_user1 = #{enterprise.mapperUser1},
+          mapper_user1_pic = #{enterprise.mapperUser1Pic},
+          mapper_user2 = #{enterprise.mapperUser2},
+          mapper_user2_pic = #{enterprise.mapperUser2Pic},
+          mapper_user3 = #{enterprise.mapperUser3},
+          mapper_user3_pic = #{enterprise.mapperUser3Pic}
+        where id = #{enterprise.id}
+    </update>
+
 
 </mapper>

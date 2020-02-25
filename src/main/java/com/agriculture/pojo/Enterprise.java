@@ -7,11 +7,17 @@ public class Enterprise {
 
     private Boolean disabled;
 
+    private Integer createuser;
+
+    private String createuserName;
+
     private Date createtime;
 
     private String name;
 
     private String address;
+
+    private Integer userNumber;
 
     private String intro;
 
@@ -32,6 +38,30 @@ public class Enterprise {
     private String mapperUser3;
 
     private Integer mapperUser3Pic;
+
+    public Integer getCreateuser() {
+        return createuser;
+    }
+
+    public void setCreateuser(Integer createuser) {
+        this.createuser = createuser;
+    }
+
+    public String getCreateuserName() {
+        return createuserName;
+    }
+
+    public void setCreateuserName(String createuserName) {
+        this.createuserName = createuserName;
+    }
+
+    public Integer getUserNumber() {
+        return userNumber;
+    }
+
+    public void setUserNumber(Integer userNumber) {
+        this.userNumber = userNumber;
+    }
 
     public Integer getId() {
         return id;

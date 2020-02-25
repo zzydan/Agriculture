@@ -4,7 +4,7 @@
 
     <!-- 用户登录 SecUser findUserByName(String userName); -->
     <select id="findUserByName" resultType="com.agriculture.pojo.SecUser">
-        SELECT * FROM sec_user WHERE trueName = #{userName}
+        SELECT * FROM sec_user WHERE trueName = #{userName} AND disabled = 0
     </select>
     <!-- List<SecUser> findManager(@Param("info")OrderPageInfo pageInfo); -->
     <select id="findManager" resultType="com.agriculture.pojo.SecUser" parameterType="com.agriculture.pojo.OrderPageInfo">
@@ -24,20 +24,19 @@
        INSERT INTO sec_user (trueName,role_id,password,tel,bz,createtime,enterprise_id)
         VALUES (#{userName},#{roleId},#{password},#{tel},#{bz},now(),#{id})
     </insert>
+
     <!--SecUser selectUserId(@Param("id") Integer id);-->
     <select id="selectUserId" resultType="com.agriculture.pojo.SecUser">
          SELECT * FROM sec_user
         LEFT JOIN sec_role ON sec_role.id=sec_user.role_id
 				where sec_user.id=#{id}
     </select>
+
     <!--int deleteUserId(@Param("id")Integer id);-->
-    <delete id="deleteUserId" parameterType="com.agriculture.pojo.SecUser">
-         DELETE
-          FROM
-	        sec_user
-        WHERE
-	      id = #{id}
-    </delete>
+    <update id="deleteUserId" parameterType="com.agriculture.pojo.SecUser">
+         update sec_user set disabled = 1 where id = #{id}
+    </update>
+
     <update id="upUserId" parameterType="com.agriculture.pojo.SecUser">
         update
 			sec_user

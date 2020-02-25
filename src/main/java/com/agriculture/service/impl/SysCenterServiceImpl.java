@@ -113,34 +113,119 @@ public class SysCenterServiceImpl implements SysCenterService {
         return enterpriseMapper.findEnterprise();
     }
 
+    /**
+     *
+     * @param SecUser
+     * @return
+     */
     @Override
     public int upUserId(SecUser SecUser) {
         return secUserMapper.upUserId(SecUser);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public List<SecRole> findRoleEnter() {
         List<SecRole> list = secRoleMapper.findRoleEnter();
         return list;
     }
 
+    /**
+     *
+     * @param SecRole
+     * @return
+     */
     @Override
     public int addRole(SecRole SecRole) {
         return secRoleMapper.addRole(SecRole);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Override
     public SecRole findRoleId(Integer id) {
         return secRoleMapper.findRoleId(id);
     }
 
+    /**
+     *
+     * @param SecRole
+     * @return
+     */
     @Override
     public int upRoleId(SecRole SecRole) {
         return secRoleMapper.upRoleId(SecRole);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Override
     public int deleteRoleId(Integer id) {
         return secRoleMapper.deleteRoleId(id);
+    }
+
+    /**
+     * 分页查询所有企业
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public PageInfo<Enterprise> findEnterpriseByPage(OrderPageInfo pageInfo) {
+
+        PageHelper.offsetPage(pageInfo.getOffset(),pageInfo.getLimit());
+
+        List<Enterprise> list = enterpriseMapper.findEnterpriseByPage();
+
+        PageInfo info = new PageInfo(list);
+
+        return info;
+    }
+
+    /**
+     * 新增企业
+     * @param enterprise
+     * @return
+     */
+    @Override
+    public int addEnterprise(Enterprise enterprise) {
+
+        int i = enterpriseMapper.addEnterprise(enterprise);
+
+        return i;
+    }
+
+    /**
+     * 修改企业
+     * @param enterprise
+     * @return
+     */
+    @Override
+    public int updateEnterprise(Enterprise enterprise) {
+
+        int i = enterpriseMapper.updateEnterprise(enterprise);
+
+        return i;
+    }
+
+    /**
+     * 根据id查询企业所有信息
+     * @param id
+     * @return
+     */
+    @Override
+    public Enterprise findEnterpriseById(Integer id) {
+
+        Enterprise enterprise = enterpriseMapper.findEnterpriseById(id);
+
+        return enterprise;
     }
 }
