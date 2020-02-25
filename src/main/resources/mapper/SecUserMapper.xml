@@ -11,12 +11,12 @@
         SELECT * FROM
         (sec_user LEFT JOIN sec_role ON sec_role.id=sec_user.role_id)
         LEFT JOIN enterprise ON enterprise.id=sec_user.enterprise_id
-        WHERE 1=1
+        WHERE 1=1 and sec_user.disabled=0
         <if test="info.username != null and info.username != ''">
             and sec_user.trueName like CONCAT('%',#{info.username },'%')
         </if>
-        <if test="info.roleId != null and info.roleId != ''">
-            and sec_user.role_id = #{info.roleId}
+        <if test="info.tel != null and info.tel != ''">
+            and sec_user.tel like CONCAT('%',#{info.tel },'%')
         </if>
     </select>
     <!-- int addUser(@Param("voio")UserRoleFormdata voio); -->

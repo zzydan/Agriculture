@@ -56,14 +56,12 @@ function findRole() {
         success: function (data) {
             var str = "";
             if (data != null && data.length != 0) {
-                $("#role_select").children("option:gt(0)").remove();
                 $("#role_select_1").children("option:gt(0)").remove();
                 $("#role_select_1_up").children("option:gt(0)").remove();
                 str = str + "<option value=''>选择角色</option>";
                 for (var i = 0; i < data.length; i++) {
                     str = str + "<option value=" + data[i].id + ">" + data[i].roleName + "</option>";
                 }
-                $("#role_select").append(str);
                 $("#role_select_1").append(str);
                 $("#role_select_1_up").append(str);
 
