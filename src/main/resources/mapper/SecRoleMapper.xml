@@ -10,7 +10,7 @@
         select a.*,b.role_name as createname,en.*
         from (sec_role a left join sec_role b on a.create_user=b.id)
         LEFT JOIN enterprise en ON en.id=a.enterprise_id
-        WHERE 1=1 AND a.disabled = 0
+        WHERE 1=1 and a.disabled=0
     </select>
     <!--SecRole findRoleEnterId(@Param("id")Integer id);-->
     <select id="findRoleId" resultType="com.agriculture.pojo.SecRole">
