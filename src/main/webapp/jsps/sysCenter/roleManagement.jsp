@@ -112,7 +112,7 @@
                     <div class="panel-body">
                         <form action="##" class="form-horizontal" role="form" id="roleForm_up">
                             <div class="form-group">
-                                <label for="Enterprise_select_1" class="col-md-2 control-label">企业</label>
+                                <label for="Enterprise_select_1_up" class="col-md-2 control-label">企业</label>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="Enterprise_select_1_up" name="Enterprise_select_1_up">
 
@@ -120,7 +120,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="roleName" class="col-md-2 control-label">角色名称</label>
+                                <label for="rolename_up" class="col-md-2 control-label">角色名称</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="rolename_up" name="rolename_up"
                                            placeholder="请输入新角色名">

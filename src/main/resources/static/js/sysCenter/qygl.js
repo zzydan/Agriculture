@@ -82,20 +82,12 @@ function updRoleById(id) {
         type:"post",
         dataType:"json",
         success:function(data){
-            $("#id_up").val(data.id);
-            $("#username_up").val(data.truename);
-            $("#password_up").val(data.password);
-            $("#tel_up").val(data.tel);
-            $("#role_select_1_up option").each(function(){
-                if($(this).val()==data.roleId){
-                    $(this).attr("selected","selected");
-                }
-            });
-            $("#Enterprise_select_1 option").each(function(){
-                if($(this).val()==data.enterpriseId){
-                    $(this).attr("selected","selected");
-                }
-            });
+            console.log(data)
+            $("#enterpriseid_up").val(data.id);
+            $("#enterprisename_up").val(data.name);
+            $("#enterpriseaddress_up").val(data.address);
+            $("#enterpriseintro_up").val(data.intro);
+
 
             $("#upEnterpriseInfo_Modal").modal("show");
         },error:function(){
@@ -105,10 +97,11 @@ function updRoleById(id) {
 }
 
 
+
+
+
 /*添加用户信息*/
 function addEnterprise() {
-
-
     $.ajax({
         url: "/sysCenter/addEnterprise",
         type: "post",
@@ -128,9 +121,6 @@ function addEnterprise() {
 
 /*修改用户信息*/
 function updateEnterprise() {
-
-
-
     $.ajax({
         url: "/sysCenter/updateEnterprise",
         type: "post",
@@ -147,8 +137,6 @@ function updateEnterprise() {
         }
     });
 }
-
-
 
 
 //验证通过

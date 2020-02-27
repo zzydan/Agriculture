@@ -26,7 +26,11 @@ public class BasicCenterController {
     @Autowired
     private BasicCenterService basicCenterService;
 
-    /*添加地块*/
+    /**
+     * 添加地块
+     * @param parvialfield
+     * @return
+     */
     @RequestMapping("addPlace")
     @ResponseBody
     public boolean addPlace(Parvialfield parvialfield){
@@ -38,7 +42,12 @@ public class BasicCenterController {
 
         return b;
     }
-    /*修改地块信息*/
+
+    /**
+     * 修改地块信息
+     * @param parvialfield
+     * @return
+     */
     @RequestMapping("updatePlace")
     @ResponseBody
     public boolean updatePlace(Parvialfield parvialfield){
@@ -48,9 +57,10 @@ public class BasicCenterController {
         return b;
     }
 
-
-    /*查询分场列表*/
-
+    /**
+     * 查询分场列表
+     * @return
+     */
     @RequestMapping("getFenChangList")
     @ResponseBody
     public List<Parvialfield> getFenChangList(){
@@ -60,7 +70,11 @@ public class BasicCenterController {
         return parvialfields;
     }
 
-    /*查询角色id查询人员列表*/
+    /**
+     * 查询角色id查询人员列表
+     * @param roleId
+     * @return
+     */
     @RequestMapping("getUserListByRole")
     @ResponseBody
     public List<SecUser> getUserListByRole(Integer roleId){
@@ -69,7 +83,11 @@ public class BasicCenterController {
 
         return secUsers;
     }
-    /*根据分场id查询分场详情信息*/
+    /**
+     * 根据分场id查询分场详情信息
+     * @param id
+     * @return
+     */
     @RequestMapping("getFenChangById")
     @ResponseBody
     public Parvialfield getFenChangById(Integer id){

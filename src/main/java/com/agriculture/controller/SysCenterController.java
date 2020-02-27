@@ -205,7 +205,6 @@ public class SysCenterController<pu> {
         int i =  sysCenterServiceImpl.addEnterprise(enterprise);
 
         return i>0;
-
     }
 
     /**

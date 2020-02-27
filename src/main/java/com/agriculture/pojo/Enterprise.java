@@ -27,6 +27,8 @@ public class Enterprise {
 
     private String filiale;
 
+    private String filialeCenter;
+
     private String mapperUser1;
 
     private Integer mapperUser1Pic;
@@ -61,6 +63,15 @@ public class Enterprise {
 
     public void setUserNumber(Integer userNumber) {
         this.userNumber = userNumber;
+    }
+
+
+    public String getFilialeCenter() {
+        return filialeCenter;
+    }
+
+    public void setFilialeCenter(String filialeCenter) {
+        this.filialeCenter = filialeCenter;
     }
 
     public Integer getId() {
