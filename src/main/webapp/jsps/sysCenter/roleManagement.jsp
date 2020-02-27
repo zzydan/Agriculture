@@ -35,7 +35,8 @@
 
 
 <!-- 添加模态框（Modal） -->
-<div class="modal" id="addUserInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel" style="margin-left: -700px;">
+<div class="modal" id="addUserInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
+     style="margin-left: -560px;">
     <div class="modal-dialog">
         <div class="modal-content" style="width: 1100px;margin-right: 300px">
             <div class="modal-header">
@@ -49,8 +50,7 @@
                         <input type="hidden" value="${USER_SESSION.id}" id="id_add" name="id" >
                         <form action="##" class="form-horizontal" role="form" id="roleForm">
                             <div class="form-group">
-                                <label for="Enterprise_select_1" class="col-md-2 control-label"><span
-                                        style="color: #ff0007">*</span>企业</label>
+                                <label for="Enterprise_select_1" class="col-md-2 control-label">企业</label>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="Enterprise_select_1" name="Enterprise_select_1">
 
@@ -58,8 +58,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="roleName" class="col-md-2 control-label"><span
-                                        style="color: #ff0007">*</span>角色名称</label>
+                                <label for="roleName" class="col-md-2 control-label">角色名称</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="rolename" name="rolename"
                                            placeholder="请输入新角色名">
@@ -69,8 +68,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="select_roletype" class="col-md-2 control-label"><span
-                                        style="color: #ff0007">*</span>客户端</label>
+                                <label for="select_roletype" class="col-md-2 control-label">客户端</label>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="select_roletype" name="select_roletype">
                                         <option value="1">pc</option>
@@ -80,8 +78,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="roleBz" class="col-md-2 control-label"><span
-                                        style="color: #ff0007">*</span>备注</label>
+                                <label for="roleBz" class="col-md-2 control-label">备注</label>
                                 <div class="col-md-7 column" >
                                     <textarea rows="7" cols="60"  id="roleBz" name="roleBz"  class="layui-textarea" placeholder="请输入内容"></textarea>
                                 </div>
@@ -100,7 +97,8 @@
     </div><!-- /.modal -->
 </div>
 <!-- 编辑模态框（Modal） -->
-<div class="modal" id="UpUserInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel" style="margin-left: -700px;">
+<div class="modal" id="UpUserInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
+     style="margin-left: -560px;">
     <div class="modal-dialog">
         <div class="modal-content" style="width: 1100px;margin-right: 300px">
             <div class="modal-header">
@@ -114,8 +112,7 @@
                     <div class="panel-body">
                         <form action="##" class="form-horizontal" role="form" id="roleForm_up">
                             <div class="form-group">
-                                <label for="Enterprise_select_1" class="col-md-2 control-label"><span
-                                        style="color: #ff0007">*</span>企业</label>
+                                <label for="Enterprise_select_1" class="col-md-2 control-label">企业</label>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="Enterprise_select_1_up" name="Enterprise_select_1_up">
 
@@ -123,8 +120,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="roleName" class="col-md-2 control-label"><span
-                                        style="color: #ff0007">*</span>角色名称</label>
+                                <label for="roleName" class="col-md-2 control-label">角色名称</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="rolename_up" name="rolename_up"
                                            placeholder="请输入新角色名">
@@ -134,8 +130,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="select_roletype_up" class="col-md-2 control-label"><span
-                                        style="color: #ff0007">*</span>客户端</label>
+                                <label for="select_roletype_up" class="col-md-2 control-label">客户端</label>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="select_roletype_up" name="select_roletype_up">
                                         <option value="1">pc</option>
@@ -145,8 +140,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="roleBz_up" class="col-md-2 control-label"><span
-                                        style="color: #ff0007">*</span>备注</label>
+                                <label for="roleBz_up" class="col-md-2 control-label">备注</label>
                                 <div class="col-md-7 column" >
                                     <textarea rows="7" cols="60"  id="roleBz_up" name="roleBz_up"  class="layui-textarea" placeholder="请输入内容"></textarea>
                                 </div>

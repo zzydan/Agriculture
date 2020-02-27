@@ -1,111 +1,11 @@
 $(function () {
     //1.初始化Table
-    user_table(null);
-
-    findRole();
-    findEnterprise();
-
-    $("#collapseOne").on('show.bs.collapse', function () {
-        $("#collapseID").val(1);
-    })
-
-    $("#collapseTwo").on('show.bs.collapse', function () {
-        $("#collapseID").val(2);
-        $.ajax({
-            url: "/user/findRes",
-            type: "post",
-            dataType: "json",
-            async: false,
-            data: {},
-            success: function (data) {
-                $("#resParentCheckbox").empty();
-                for (var i = 0; i < data.length; i++) {
-                    $("#resParentCheckbox").append("<div id=" + "resChildCheckbox" + data[i].info + " class='panel-body panel-success'></div>");
-
-                    $("#resChildCheckbox" + data[i].info).append(
-                        "<div><label class='checkbox-inline'>" +
-                        "<input type='checkbox' name='listRes' onchange='checkAll(this)' value=" + data[i].id + ">" + data[i].resname +
-                        "</label></div>");
-                    var list = data[i].resList;
-
-                    $("#resChildCheckbox" + data[i].info).append("<div>");
-                    for (var j = 0; j < list.length; j++) {
-                        $("#resChildCheckbox" + data[i].info).append(
-                            "<label class='checkbox-inline'>" +
-                            "<input type='checkbox' name='listRes' onchange='checkaaa(this)' value=" + list[j].id + ">" + list[j].resname +
-                            "</label>");
-                    }
-                    $("#resParentCheckbox").append("</div></div>");
-                }
-            },
-            error: function () {
-                alert("请求失败");
-            }
-        });
-
-
-    })
+    enterprise_table();
 })
-
-function findRole() {
-    $.ajax({
-        type: "post",
-        url: "/sysCenter/findRole",
-        data: {},
-        dataType: "json",
-        success: function (data) {
-            var str = "";
-            if (data != null && data.length != 0) {
-                $("#role_select").children("option:gt(0)").remove();
-                $("#role_select_1").children("option:gt(0)").remove();
-                $("#role_select_1_up").children("option:gt(0)").remove();
-                str = str + "<option value=''>选择角色</option>";
-                for (var i = 0; i < data.length; i++) {
-                    str = str + "<option value=" + data[i].id + ">" + data[i].roleName + "</option>";
-                }
-                $("#role_select").append(str);
-                $("#role_select_1").append(str);
-                $("#role_select_1_up").append(str);
-
-            }
-        },//请求失败时回调函数
-        error: function () {
-            alert("失败 ");
-        }
-    });
-}
-function findEnterprise() {
-    $.ajax({
-        type: "post",
-        url: "/sysCenter/findEnterprise",
-        data: {},
-        dataType: "json",
-        success: function (data) {
-            var str = "";
-            if (data != null && data.length != 0) {
-                $("#Enterprise_select").children("option:gt(0)").remove();
-                $("#Enterprise_select_1").children("option:gt(0)").remove();
-                str = str + "<option value=''>选择角色</option>";
-                for (var i = 0; i < data.length; i++) {
-                    str = str + "<option value=" + data[i].id + ">" + data[i].name + "</option>";
-                }
-                $("#Enterprise_select").append(str);
-                $("#Enterprise_select_1").append(str);
-
-
-            }
-        },//请求失败时回调函数
-        error: function () {
-            alert("失败 ");
-        }
-    });
-}
-
-
-function user_table(formData) {
-    $("#user_table").bootstrapTable("destroy");
-    $("#user_table").bootstrapTable({ // 对应table标签的id
-        url: "/sysCenter/findEnterpriseByPage?"+formData, // 获取表格数据的url
+function enterprise_table() {
+    $("#enterprise_table").bootstrapTable("destroy");
+    $("#enterprise_table").bootstrapTable({ // 对应table标签的id
+        url: "/sysCenter/findEnterpriseByPage", // 获取表格数据的url
         method: "get", //请求方式
         cache: false, //关闭缓存
         toolbar: '#toolbar', //工具按钮用哪个容器
@@ -171,14 +71,14 @@ function user_table(formData) {
 }
 
 //点击打开新建用户模态框
-function addUserInfo() {
-    $("#addUserInfo_Modal").modal("show");
+function addEnterpriseInfo() {
+    $("#addEnterpriseInfo_Modal").modal("show");
 }
 
 //点击打开编辑用户模态框
 function updRoleById(id) {
     $.ajax({
-        url: "/sysCenter/selectUserId/"+id,
+        url: "/sysCenter/findEnterpriseById/"+id,
         type:"post",
         dataType:"json",
         success:function(data){
@@ -196,32 +96,28 @@ function updRoleById(id) {
                     $(this).attr("selected","selected");
                 }
             });
-            $("#upUserInfo_Modal").modal("show");
+
+            $("#upEnterpriseInfo_Modal").modal("show");
         },error:function(){
             console.log("出错了！");
         }
     });
 }
 
-function addUserRole() {
-    var userName=$("#username").val();
-    var password=$("#password").val();
-    var roleId=$("#role_select_1").val();
-    var id=$("#Enterprise_select").val();
-    var tel=$("#tel").val();
+
+/*添加用户信息*/
+function addEnterprise() {
+
+
     $.ajax({
-        url: "/sysCenter/addUser",
+        url: "/sysCenter/addEnterprise",
         type: "post",
         dataType: "json",
         data: {
-            userName:userName,
-            password:password,
-            roleId:roleId,
-            tel:tel,
-            id:id
+
         },
         success: function (data) {
-            alert("创建管理员成功！！");
+            alert("添加成功！！");
             window.location.reload();
         },
         error: function () {
@@ -229,25 +125,18 @@ function addUserRole() {
         }
     });
 }
+
 /*修改用户信息*/
-function upUserRoleId() {
-    var id=$("#id_up").val();
-    var userName=$("#username_up").val();
-    var password=$("#password_up").val();
-    var roleId=$("#role_select_1_up").val();
-    var enterpriseId=$("#Enterprise_select_1").val();
-    var tel=$("#tel_up").val();
+function updateEnterprise() {
+
+
+
     $.ajax({
-        url: "/sysCenter/upUserId",
+        url: "/sysCenter/updateEnterprise",
         type: "post",
         dataType: "json",
         data: {
-            id:id,
-            userName:userName,
-            password:password,
-            roleId:roleId,
-            tel:tel,
-            enterpriseId:enterpriseId
+
         },
         success: function (data) {
             alert("修改成功！！");
@@ -258,6 +147,9 @@ function upUserRoleId() {
         }
     });
 }
+
+
+
 
 //验证通过
 function isOk(obj, text) {

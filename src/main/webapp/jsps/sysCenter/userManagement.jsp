@@ -59,7 +59,8 @@
 
 
     <!-- 添加的模态框（Modal） -->
-    <div class="modal" id="addUserInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel" style=" margin-left: -700px;">
+    <div class="modal" id="addUserInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
+         style=" margin-left: -560px;">
         <div class="modal-dialog">
             <div class="modal-content" style="width: 1100px;margin-right: 300px">
                 <div class="modal-header">
@@ -72,14 +73,12 @@
                     <div class="panel-body">
                         <form action="##" class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label for="username" class="col-md-1 control-label"><span
-                                        style="color: #ff0007">*</span>用户名</label>
+                                <label for="username" class="col-md-1 control-label">用户名</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="username" name="username"
                                            placeholder="请输入用户登录账号">
                                 </div>
-                                <label for="Enterprise_select" class="col-md-1 control-label"><span
-                                        style="color: #ff0007">*</span>企业</label>
+                                <label for="Enterprise_select" class="col-md-1 control-label">企业</label>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="Enterprise_select" name="Enterprise_select">
 
@@ -87,15 +86,13 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="password" class="col-md-1 control-label"><span
-                                        style="color: #ff0007">*</span>角色</label>
+                                <label for="password" class="col-md-1 control-label">角色</label>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="role_select_1" name="roleId">
 
                                     </select>
                                 </div>
-                                <label for="tel" class="col-md-1 control-label"><span
-                                        style="color: #ff0007">*</span>电话</label>
+                                <label for="tel" class="col-md-1 control-label">电话</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="tel" name="tel"
                                            placeholder="请输入手机号">
@@ -103,8 +100,7 @@
                             </div>
                             <div class="form-group">
 
-                                <label for="password" class="col-md-1 control-label"><span
-                                        style="color: #ff0007">*</span>密码</label>
+                                <label for="password" class="col-md-1 control-label">密码</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="password" name="password"
                                            placeholder="请输入密码" value="Zhny123456" onfocus="javascript:if(this.value=='Zhny123456')this.value='';" onblur="javascript:if(this.value=='')this.value='Zhny123456';">
@@ -126,7 +122,8 @@
         </div><!-- /.modal -->
 
         <!-- 编辑模态框（Modal） -->
-        <div class="modal" id="upUserInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel" style=" margin-left: -700px;">
+        <div class="modal" id="upUserInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
+             style=" margin-left: -560px;">
             <div class="modal-dialog">
                 <div class="modal-content" style="width: 1100px;margin-right: 300px">
                     <div class="modal-header">
@@ -138,37 +135,32 @@
                         <div class="panel-body">
                             <form action="##" class="form-horizontal" role="form">
                                 <div class="form-group">
-                                    <label for="username_up" class="col-md-1 control-label"><span
-                                            style="color: #ff0007">*</span>用户名</label>
+                                    <label for="username_up" class="col-md-1 control-label">用户名</label>
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control" id="username_up" name="username_up"
                                                placeholder="请输入用户登录账号">
                                     </div>
-                                    <label for="password_up" class="col-md-1 control-label"><span
-                                            style="color: #ff0007">*</span>密码</label>
+                                    <label for="password_up" class="col-md-1 control-label">密码</label>
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control" id="password_up" name="password_up"
                                                placeholder="请输入密码">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="role_select_1_up" class="col-md-1 control-label"><span
-                                            style="color: #ff0007">*</span>角色</label>
+                                    <label for="role_select_1_up" class="col-md-1 control-label">角色</label>
                                     <div class="col-sm-4">
                                         <select class="form-control" id="role_select_1_up" name="roleId_up">
 
                                         </select>
                                     </div>
-                                    <label for="tel_up" class="col-md-1 control-label"><span
-                                            style="color: #ff0007">*</span>电话</label>
+                                    <label for="tel_up" class="col-md-1 control-label">电话</label>
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control" id="tel_up" name="tel_up"
                                                placeholder="请输入手机号">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="Enterprise_select_1" class="col-md-1 control-label"><span
-                                            style="color: #ff0007">*</span>企业</label>
+                                    <label for="Enterprise_select_1" class="col-md-1 control-label">企业</label>
                                     <div class="col-sm-4">
                                         <select class="form-control" id="Enterprise_select_1" name="Enterprise_select_1">
 
