@@ -128,7 +128,12 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.35</version>
         </dependency>
-
+        <!--实体类简化工具-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
+        </dependency>
 
     </dependencies>
 
