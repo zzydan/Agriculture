@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.agriculture.dao.BasicCenterMapper" >
+    <!--/*添加地块表主键返回*/
+      boolean addParvialfield(Parvialfield parvialfield);-->
+    <insert id="addParvialfield" keyProperty="id" useGeneratedKeys="true">
+        insert into parvialfield (createtime,name,address,fieldlength_user,technician_user)
+        values (now(),#{name},#{address},#{fieldlengthUser},#{technicianUser});
+    </insert>
+
+    <!--/* 添加地理位置表*/
+    boolean addLocation(Location location);-->
+    <insert id="addLocation">
+        insert into location (createtime,obj_id,obj_type,longitude,latitude)
+        values (now(),#{objId},#{objType},#{longitude},#{latitude});
+    </insert>
+
+    <!--/*查询分场列表*/
+    List<Parvialfield> getFenChangList();-->
+    <select id="getFenChangList" resultType="com.agriculture.pojo.Parvialfield">
+        SELECT
+            parvialfield.id,
+            parvialfield.NAME,
+            parvialfield.address,
+            a.trueName AS technicianUserName,
+            b.trueName AS fieldlengthUserName
+        FROM
+            parvialfield,
+            sec_user a,
+            sec_user b
+        WHERE
+            parvialfield.technician_user = a.id
+            AND parvialfield.fieldlength_user = b.id
+
+    </select>
+
+    <!--/*查询角色id查询人员列表*/
+    List<SecUser> getUserListByRole(Integer roleId);-->
+    <select id="getUserListByRole" resultType="com.agriculture.pojo.SecUser">
+        select * from sec_user where role_id=#{roleId}
+    </select>
+    
+    <!--/*根据分场id查询分场详情信息*/
+    Parvialfield getFenChangById(Integer id);-->
+    
+    <select id="getFenChangById" resultType="com.agriculture.pojo.Parvialfield">
+        SELECT
+            parvialfield.id,
+            parvialfield.NAME,
+            parvialfield.address,
+            parvialfield.technician_user,
+            parvialfield.fieldlength_user,
+            a.trueName AS technicianUserName,
+            b.trueName AS fieldlengthUserName,
+            location.longitude,
+            location.latitude
+        FROM
+            parvialfield,
+            sec_user a,
+            sec_user b,
+            location
+        WHERE
+            parvialfield.technician_user = a.id
+            and location.obj_id=parvialfield.id
+            and location.obj_type='zone'
+            AND parvialfield.fieldlength_user = b.id
+            AND parvialfield.id =#{id}
+    </select>
+
+    <!--/*地块修改基本信息*/
+    boolean updateParvialfield(Parvialfield parvialfield);-->
+    <update id="updateParvialfield">
+        update
+            parvialfield
+        set
+            name=#{name},address=#{address},
+            fieldlength_user=#{fieldlengthUser},
+            technician_user=#{technicianUser}
+        where id=#{id}
+
+    </update>
+    <!--/* 修改地块地理位置*/
+    boolean updateLocation(Parvialfield parvialfield);-->
+    <!--insert into location (createtime,obj_id,obj_type,longitude,latitude)
+    values (now(),#{objId},#{objType},#{longitude},#{latitude});-->
+    <update id="updateLocation">
+      update
+        location
+      set
+        longitude=#{longitude},latitude=#{latitude}
+      where obj_id=#{id} and obj_type='zone'
+    </update>
+</mapper>
