@@ -25,21 +25,21 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!--pojo生成位置-->
-        <javaModelGenerator targetPackage="com.zhny.pojo" targetProject="e:\workspace\zhny\src\main\java">
+        <javaModelGenerator targetPackage="com.agriculture.pojo" targetProject="e:\workspace\Agriculture\src\main\java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!--mapper.xml生成位置-->
-        <sqlMapGenerator targetPackage="mapper" targetProject="e:\workspace\zhny\src\main\resources">
+        <sqlMapGenerator targetPackage="mapper" targetProject="e:\workspace\Agriculture\src\main\resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!--mapper接口生成位置-->
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.zhny.dao"
-                             targetProject="e:\workspace\zhny\src\main\java">
+                             targetProject="e:\workspace\Agriculture\src\main\java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="enterprise"/>
+        <table tableName="sec_pic"/>
 
 
     </context>

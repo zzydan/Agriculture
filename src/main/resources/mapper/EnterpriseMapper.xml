@@ -18,10 +18,10 @@
     <!-- 新增企业 int addEnterprise(@Param("enterprise") Enterprise enterprise); -->
     <insert id="addEnterprise" parameterType="com.agriculture.pojo.Enterprise">
         insert into enterprise (createtime, name, address, intro, longitude, latitude,
-        filiale, mapper_user1, mapper_user1_pic, mapper_user2,
+        filiale,filialeCenter, mapper_user1, mapper_user1_pic, mapper_user2,
         mapper_user2_pic, mapper_user3, mapper_user3_pic)
         values (now(),#{enterprise.name},#{enterprise.address},#{enterprise.intro},#{enterprise.longitude},#{enterprise.latitude}
-        ,#{enterprise.filiale},#{enterprise.mapperUser1},#{enterprise.mapperUser1Pic},#{enterprise.mapperUser2}
+        ,#{enterprise.filiale},#{enterprise.filialeCenter},#{enterprise.mapperUser1},#{enterprise.mapperUser1Pic},#{enterprise.mapperUser2}
         ,#{enterprise.mapperUser2Pic},#{enterprise.mapperUser3},#{enterprise.mapperUser3Pic});
     </insert>
 

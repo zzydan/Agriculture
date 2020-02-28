@@ -3,6 +3,77 @@
 <jsp:include page="../common/head.jsp"></jsp:include>
 
 <script src="${pageContext.request.contextPath}/static/js/sysCenter/qygl.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=zWlNt9jWwftjOInernxGsIcuGGkmTRWG"></script>
+
+<style type="text/css">
+
+    .article {
+        padding-left: 160px;
+        min-height: 230px;
+    }
+
+    .item {
+        width: 34px;
+        height: 34px;
+        float: left;
+        position: relative;
+        margin: 0px;
+    }
+
+    .addImg {
+        width: 34px;
+        height: 34px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 2;
+        cursor: pointer;
+    }
+
+    .preview, .preBlock {
+        position: absolute;
+        display: block;
+        width: 34px;
+        height: 34px;
+        left: 0;
+        top: 0;
+    }
+
+    .delete {
+        width: 15px;
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        cursor: pointer;
+        display: none;
+    }
+
+    .preBlock img {
+        display: block;
+        width: 34px;
+        height: 34px;
+    }
+
+    .upload_input {
+        display: block;
+        width: 0;
+        height: 0;
+        -webkit-opacity: 0.0;
+        /* Netscape and Older than Firefox 0.9 */
+        -moz-opacity: 0.0;
+        /* Safari 1.x (pre WebKit!) 老式khtml内核的Safari浏览器*/
+        -khtml-opacity: 0.0;
+        /* IE9 + etc...modern browsers */
+        opacity: .0;
+        /* IE 4-9 */
+        filter: alpha(opacity=0);
+        /*This works in IE 8 & 9 too*/
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+        /*IE4-IE9*/
+        filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    }
+</style>
+
 
 <div class="layui-fluid" style="height: 50%">
     <div class="layui-card">
@@ -71,10 +142,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="enterpriselot_add" class="col-md-2 control-label">企业位置</label>
-                                <div class="col-md-9 column" >
-                                    <textarea rows="4" cols="60"  id="enterpriselot_add" name="intro"
-                                              class="layui-textarea" placeholder="请输入内容"></textarea>
+                                <div class="col-md-8 column" >
+                                    <div id="enterpriselot_add" style="width: 500px;height: 300px">
+
+                                    </div>
                                 </div>
+                                <input hidden id="longitude_add" name="longitude">
+                                <input hidden id="latitude_add" name="latitude">
                             </div>
                             <hr />
                             <div class="form-group">
@@ -90,21 +164,43 @@
                                            placeholder="请输入">
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="enterprisemapperUser1_add" class="col-md-2 control-label">Mapper负责人-1</label>
                                 <div class="col-md-3 column" >
                                     <input type="text" class="form-control" id="enterprisemapperUser1_add" name="mapperUser1"
                                            placeholder="请输入">
                                 </div>
-                                <input type="file">
+                                <div class="item">
+                                    <img class="icon addImg" onclick="clickImg(this);"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/addImg.png">
+                                    <input name="url" type="file" class="upload_input" onchange="change(this)">
+                                    <div class="preBlock">
+                                        <img id="enterprisemapperUser1Pic_add" class="preview" alt="" name="pic" width="34"
+                                             height="34">
+                                    </div>
+                                    <img class="delete" onclick="deleteImg(this)"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/delete.png">
+                                </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="enterprisemapperUser2_add" class="col-md-2 control-label">Mapper负责人-2</label>
                                 <div class="col-md-3 column" >
                                     <input type="text" class="form-control" id="enterprisemapperUser2_add" name="mapperUser2"
                                            placeholder="请输入">
                                 </div>
-                                <input type="file">
+                                <div class="item">
+                                    <img class="icon addImg" onclick="clickImg(this);"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/addImg.png">
+                                    <input name="url" type="file" class="upload_input" onchange="change(this)">
+                                    <div class="preBlock">
+                                        <img id="enterprisemapperUser2Pic_add" class="preview" alt="" name="pic" width="34"
+                                             height="34">
+                                    </div>
+                                    <img class="delete" onclick="deleteImg(this)"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/delete.png">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="enterprisemapperUser3_add" class="col-md-2 control-label">Mapper负责人-3</label>
@@ -112,7 +208,17 @@
                                     <input type="text" class="form-control" id="enterprisemapperUser3_add" name="mapperUser3"
                                            placeholder="请输入">
                                 </div>
-                                <input type="file">
+                                <div class="item">
+                                    <img class="icon addImg" onclick="clickImg(this);"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/addImg.png">
+                                    <input name="url" type="file" class="upload_input" onchange="change(this)">
+                                    <div class="preBlock">
+                                        <img id="enterprisemapperUser3Pic_add" class="preview" alt="" name="pic" width="34"
+                                             height="34">
+                                    </div>
+                                    <img class="delete" onclick="deleteImg(this)"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/delete.png">
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -165,8 +271,11 @@
                             <div class="form-group">
                                 <label for="enterpriselot_up" class="col-md-2 control-label">企业位置</label>
                                 <div class="col-md-8 column" >
-                                    <textarea rows="4" cols="60"  id="enterpriselot_up" name="intro"
-                                              class="layui-textarea" placeholder="请输入内容"></textarea>
+                                    <div id="enterpriselot_up" style="width: 500px;height: 300px">
+
+                                    </div>
+                                    <input hidden id="longitude_up" name="longitude">
+                                    <input hidden id="latitude_up" name="latitude">
                                 </div>
                             </div>
                             <hr />
@@ -189,7 +298,17 @@
                                     <input type="text" class="form-control" id="enterprisemapperUser1_up" name="mapperUser1"
                                            placeholder="请输入">
                                 </div>
-                                <input type="file">
+                                <div class="item">
+                                    <img class="icon addImg" onclick="clickImg(this);"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/addImg.png">
+                                    <input name="url" type="file" class="upload_input" onchange="change(this)">
+                                    <div class="preBlock">
+                                        <img id="enterprisemapperUser1Pic_up" class="preview" alt="" name="pic" width="34"
+                                             height="34">
+                                    </div>
+                                    <img class="delete" onclick="deleteImg(this)"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/delete.png">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="enterprisemapperUser2_up" class="col-md-2 control-label">Mapper负责人-2</label>
@@ -197,7 +316,17 @@
                                     <input type="text" class="form-control" id="enterprisemapperUser2_up" name="mapperUser2"
                                            placeholder="请输入">
                                 </div>
-                                <input type="file">
+                                <div class="item">
+                                    <img class="icon addImg" onclick="clickImg(this);"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/addImg.png">
+                                    <input name="url" type="file" class="upload_input" onchange="change(this)">
+                                    <div class="preBlock">
+                                        <img id="enterprisemapperUser2Pic_up" class="preview" alt="" name="pic" width="34"
+                                             height="34">
+                                    </div>
+                                    <img class="delete" onclick="deleteImg(this)"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/delete.png">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="enterprisemapperUser3_up" class="col-md-2 control-label">Mapper负责人-3</label>
@@ -205,7 +334,17 @@
                                     <input type="text" class="form-control" id="enterprisemapperUser3_up" name="mapperUser3"
                                            placeholder="请输入">
                                 </div>
-                                <input type="file">
+                                <div class="item">
+                                    <img class="icon addImg" onclick="clickImg(this);"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/addImg.png">
+                                    <input name="url" type="file" class="upload_input" onchange="change(this)">
+                                    <div class="preBlock">
+                                        <img id="enterprisemapperUser3Pic_up" class="preview" alt="" name="pic" width="34"
+                                             height="34">
+                                    </div>
+                                    <img class="delete" onclick="deleteImg(this)"
+                                         src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/delete.png">
+                                </div>
                             </div>
                         </form>
                     </div>

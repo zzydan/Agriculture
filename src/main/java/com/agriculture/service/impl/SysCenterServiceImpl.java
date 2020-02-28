@@ -1,17 +1,17 @@
 package com.agriculture.service.impl;
 
 import com.agriculture.dao.EnterpriseMapper;
+import com.agriculture.dao.SecPicMapper;
 import com.agriculture.dao.SecRoleMapper;
 import com.agriculture.dao.SecUserMapper;
-import com.agriculture.pojo.Enterprise;
-import com.agriculture.pojo.OrderPageInfo;
-import com.agriculture.pojo.SecRole;
-import com.agriculture.pojo.SecUser;
+import com.agriculture.pojo.*;
 import com.agriculture.service.SysCenterService;
+import com.agriculture.tools.OssUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,17 +28,24 @@ public class SysCenterServiceImpl implements SysCenterService {
     @Autowired
     private SecUserMapper secUserMapper;
     @Autowired
-    private  EnterpriseMapper enterpriseMapper;
+    private EnterpriseMapper enterpriseMapper;
+    @Autowired
+    private SecPicMapper secPicMapper;
+
+
+    @Autowired
+    private OssUtils ossUtils;
 
     /**
      * 查询所有人员信息
+     *
      * @param pageInfo
      * @return
      */
     @Override
     public PageInfo<SecUser> findManager(OrderPageInfo pageInfo) {
 
-        PageHelper.offsetPage(pageInfo.getOffset(),pageInfo.getLimit());
+        PageHelper.offsetPage(pageInfo.getOffset(), pageInfo.getLimit());
 
         List<SecUser> list = secUserMapper.findManager(pageInfo);
 
@@ -49,6 +56,7 @@ public class SysCenterServiceImpl implements SysCenterService {
 
     /**
      * 查询所有角色信息
+     *
      * @return
      */
     @Override
@@ -61,14 +69,15 @@ public class SysCenterServiceImpl implements SysCenterService {
 
     /**
      * 验证用户
+     *
      * @param userName
      * @return
      */
     @Override
     public int findUserName(String userName) {
 
-        SecUser secUser= secUserMapper.findUserByName(userName);
-        if(secUser!=null){
+        SecUser secUser = secUserMapper.findUserByName(userName);
+        if (secUser != null) {
             return 1;
         }
         return 0;
@@ -76,6 +85,7 @@ public class SysCenterServiceImpl implements SysCenterService {
 
     /**
      * 添加用户
+     *
      * @param SecUser
      * @return
      */
@@ -86,6 +96,7 @@ public class SysCenterServiceImpl implements SysCenterService {
 
     /**
      * 查询单个用户信息回显
+     *
      * @param id
      * @return
      */
@@ -96,6 +107,7 @@ public class SysCenterServiceImpl implements SysCenterService {
 
     /**
      * 删除
+     *
      * @param id
      * @return
      */
@@ -106,6 +118,7 @@ public class SysCenterServiceImpl implements SysCenterService {
 
     /**
      * 查询所有企业
+     *
      * @return
      */
     @Override
@@ -114,7 +127,6 @@ public class SysCenterServiceImpl implements SysCenterService {
     }
 
     /**
-     *
      * @param SecUser
      * @return
      */
@@ -124,7 +136,6 @@ public class SysCenterServiceImpl implements SysCenterService {
     }
 
     /**
-     *
      * @return
      */
     @Override
@@ -134,7 +145,6 @@ public class SysCenterServiceImpl implements SysCenterService {
     }
 
     /**
-     *
      * @param SecRole
      * @return
      */
@@ -144,7 +154,6 @@ public class SysCenterServiceImpl implements SysCenterService {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -154,7 +163,6 @@ public class SysCenterServiceImpl implements SysCenterService {
     }
 
     /**
-     *
      * @param SecRole
      * @return
      */
@@ -164,7 +172,6 @@ public class SysCenterServiceImpl implements SysCenterService {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -175,13 +182,14 @@ public class SysCenterServiceImpl implements SysCenterService {
 
     /**
      * 分页查询所有企业
+     *
      * @param pageInfo
      * @return
      */
     @Override
     public PageInfo<Enterprise> findEnterpriseByPage(OrderPageInfo pageInfo) {
 
-        PageHelper.offsetPage(pageInfo.getOffset(),pageInfo.getLimit());
+        PageHelper.offsetPage(pageInfo.getOffset(), pageInfo.getLimit());
 
         List<Enterprise> list = enterpriseMapper.findEnterpriseByPage();
 
@@ -192,11 +200,61 @@ public class SysCenterServiceImpl implements SysCenterService {
 
     /**
      * 新增企业
+     *
      * @param enterprise
+     * @param user1Pic
+     * @param user2Pic
+     * @param user3Pic
      * @return
      */
     @Override
-    public int addEnterprise(Enterprise enterprise) {
+    public int addEnterprise(Enterprise enterprise, MultipartFile user1Pic, MultipartFile user2Pic, MultipartFile user3Pic) {
+
+        if (user1Pic != null) {
+            String filename = user1Pic.getOriginalFilename();
+            if (!"".equals(filename.trim())) {
+                //上传到OSS
+                String uploadUrl = ossUtils.uploadImg2Oss(user1Pic);
+                SecPic secPic = new SecPic();
+                secPic.setName(filename);
+                secPic.setInfo("mapperUser-1 heardpic");
+                secPic.setPath(uploadUrl);
+
+                int id = secPicMapper.addPiC(secPic);
+
+                enterprise.setMapperUser1Pic(secPic.getId());
+            }
+        }
+        if (user2Pic != null) {
+            String filename2 = user2Pic.getOriginalFilename();
+            if (!"".equals(filename2.trim())) {
+                //上传到OSS
+                String uploadUrl2 = ossUtils.uploadImg2Oss(user2Pic);
+                SecPic secPic = new SecPic();
+                secPic.setName(filename2);
+                secPic.setInfo("mapperUser-2 heardpic");
+                secPic.setPath(uploadUrl2);
+
+                int id = secPicMapper.addPiC(secPic);
+
+                enterprise.setMapperUser2Pic(secPic.getId());
+            }
+        }
+        if (user3Pic != null) {
+            String filename3 = user3Pic.getOriginalFilename();
+            if (!"".equals(filename3.trim())) {
+                //上传到OSS
+                String uploadUrl3 = ossUtils.uploadImg2Oss(user3Pic);
+                SecPic secPic = new SecPic();
+                secPic.setName(filename3);
+                secPic.setInfo("mapperUser-3 heardpic");
+                secPic.setPath(uploadUrl3);
+
+                int id = secPicMapper.addPiC(secPic);
+
+                enterprise.setMapperUser3Pic(secPic.getId());
+            }
+        }
 
         int i = enterpriseMapper.addEnterprise(enterprise);
 
@@ -205,6 +263,7 @@ public class SysCenterServiceImpl implements SysCenterService {
 
     /**
      * 修改企业
+     *
      * @param enterprise
      * @return
      */
@@ -218,6 +277,7 @@ public class SysCenterServiceImpl implements SysCenterService {
 
     /**
      * 根据id查询企业所有信息
+     *
      * @param id
      * @return
      */
