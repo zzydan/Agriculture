@@ -23,7 +23,12 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Resource
     private BasicCenterMapper basicCenterMapper;
 
-    /*添加地块*/
+    /**
+     * 添加地块
+     * @param parvialfield
+     * @param location
+     * @return
+     */
     @Transactional
     @Override
     public boolean addPlace(Parvialfield parvialfield, Location location) {
@@ -39,7 +44,10 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         return b&b1;
     }
 
-    /*查询分场列表*/
+    /**
+     * 查询分场列表
+     * @return
+     */
     @Override
     public List<Parvialfield> getFenChangList() {
 
@@ -48,7 +56,12 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         return parvialfields;
     }
 
-    /*查询角色id查询人员列表*/
+
+    /**
+     * 查询角色id查询人员列表
+     * @param roleId
+     * @return
+     */
     @Override
     public List<SecUser> getUserListByRole(Integer roleId) {
 
@@ -57,7 +70,11 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         return secUsers;
     }
 
-    /*根据分场id查询分场详情信息*/
+    /**
+     * 根据分场id查询分场详情信息
+     * @param id
+     * @return
+     */
     @Override
     public Parvialfield getFenChangById(Integer id) {
 
@@ -66,7 +83,11 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         return parvialfield;
     }
 
-    /*修改地块信息*/
+    /**
+     * 修改地块信息
+     * @param parvialfield
+     * @return
+     */
     @Override
     public boolean updatePlace(Parvialfield parvialfield) {
 
