@@ -334,9 +334,7 @@
                             <label class="layui-form-label">所属分场</label>
                             <div class="layui-input-block">
                                 <select name="ssfc" lay-filter="" >
-                                    <option value="">请选择</option>
-                                    <option value="4">客户1</option>
-                                    <option value="5">客户2</option>
+
                                 </select>
                             </div>
                         </div>
@@ -361,20 +359,16 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">作物种类</label>
                             <div class="layui-input-block">
-                                <select name="zwzl" lay-filter="">
-                                    <option value="">请选择</option>
-                                    <option value="2">销售1</option>
-                                    <option value="3">销售2</option>
+                                <select id="zwzl" name="zwzl" lay-filter="zwzl">
+
                                 </select>
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">作物品种</label>
                             <div class="layui-input-block">
-                                <select name="zwpz" lay-filter="" >
-                                    <option value="">请选择</option>
-                                    <option value="全数检验">全数检验</option>
-                                    <option value="抽样检验">抽样检验</option>
+                                <select id="zwpz" name="zwpz" lay-filter="zwpz" >
+
                                 </select>
                             </div>
                         </div>
@@ -384,9 +378,7 @@
                         <label class="layui-form-label">地块组长</label>
                         <div class="layui-inline" style="width: 300px">
                             <select name="dkzz" lay-filter="" >
-                                <option value="">请选择</option>
-                                <option value="全数检验">全数检验</option>
-                                <option value="抽样检验">抽样检验</option>
+
                             </select>
                         </div>
                         <div class="layui-inline">
@@ -439,8 +431,8 @@
                 </form>
                 <div class="panel-body">
                     <div class="form-group">
-                        <button onclick="getPoint()" class="layui-btn" style="margin-left: 40%;">确定</button>
-                        <button onclick="clearAll()" class="layui-btn" style="margin-left: 5%;">清除</button>
+                        <button onclick="addDiKuai()" class="layui-btn" style="margin-left: 40%;">添加</button>
+                        <button data-dismiss="modal" aria-hidden="true" class="layui-btn" style="margin-left: 5%;">取消</button>
                     </div>
                 </div>
             </div><!-- /.modal-content -->
@@ -448,22 +440,88 @@
     </div><!-- /.modal -->
 </div>
 <script>
+
+    var speciesList=null;//物种集合
+    var varietyList=null;//品种集合
     $('#basicDiKUai_Modal').on('show.bs.modal', function () {
         layui.use('form', function () {//form表单预加载样式
             var form = layui.form;
             form.render();
 
-            //预加载场长下拉框
+            //预加载组长下拉框
             getLeaderList();
+
+            //预加载分场名
+            getFenChangList();
+
+            //预加载物种种类
+            getSpeciesList();
+
+            //查询物种品种
+            getVarietyList()
+
+            //物种下拉框改变，品种的选项相应的变化
+            form.on('select(zwzl)', function(data){
+                var html="<option value=\"\">请选择</option>"
+                if(data.value!=null &&data.value!=""){
+
+                    $.each(varietyList,function (a,b) {
+                        if(data.value==b.species){
+                            html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                        }
+                    })
+
+                }else {
+                    $.each(varietyList,function (a,b) {
+                        html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                    })
+                }
+                $("select[name='zwpz']").empty()
+                $("select[name='zwpz']").append(html)
+                form.render("select");
+            });
+
+
+            //品种变化相应的物种跟着变化
+            //lay-filter="zwpz"
+            form.on('select(zwpz)', function(data){
+                var html="<option value=\"\">请选择</option>"
+                if(data.value!=null &&data.value!=""){
+                    var zwpz=null;
+                    for (let i = 0; i < varietyList.length; i++) {
+                        if(data.value==varietyList[i].id){
+                            zwpz=varietyList[i].species
+                        }
+                    }
+
+                    $.each(speciesList,function (a,b) {
+                        if(zwpz==b.id){
+                            html+=" <option selected value=\""+b.id+"\">"+b.name+"</option>"
+                        }else {
+                            html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                        }
+                    })
+
+                }else{
+                    $.each(speciesList,function (a,b) {
+                            html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                    })
+
+                }
+                $("select[name='zwzl']").empty()
+                $("select[name='zwzl']").append(html)
+                layui.form.render("select");
+            });
+
         })
+
     })
 
-
-    //查询场长列表
+    //查询组长列表
     function getLeaderList() {
         $.ajax({
             url:"/basicCenter/getUserListByRole",
-            data:{"roleId":4},
+            data:{"roleId":6},
             dataType:"json",
             type:"post",
             success:function(data){
@@ -473,7 +531,66 @@
                         html+=" <option value=\""+b.id+"\">"+b.truename+"</option>"
                     })
                 }
-                $("select[name='fieldlengthUser']").append(html)
+                $("select[name='dkzz']").append(html)
+                layui.form.render("select");
+            }
+        })
+
+    }
+    //查询分场列表
+    function getFenChangList() {
+        $.ajax({
+            url:"/basicCenter/getFenChangList",
+            dataType:"json",
+            type:"post",
+            success:function(data){
+                var html="<option value=\"\">请选择</option>"
+                if(data){
+                    $.each(data,function (a,b) {
+                        html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                    })
+                }
+                $("select[name='ssfc']").append(html)
+                layui.form.render("select");
+            }
+        })
+
+    }
+    //查询种类列表
+    function getSpeciesList() {
+        $.ajax({
+            url:"/basicCenter/getSpeciesList",
+            dataType:"json",
+            type:"post",
+            success:function(data){
+                var html="<option value=\"\">请选择</option>"
+                if(data){
+                    speciesList=data;
+                    $.each(data,function (a,b) {
+                        html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                    })
+                }
+                $("select[name='zwzl']").append(html)
+                layui.form.render("select");
+            }
+        })
+
+    }
+    //查询品种列表
+    function getVarietyList() {
+        $.ajax({
+            url:"/basicCenter/getVarietyList",
+            dataType:"json",
+            type:"post",
+            success:function(data){
+                var html="<option value=\"\">请选择</option>"
+                if(data){
+                    varietyList=data;
+                    $.each(data,function (a,b) {
+                        html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                    })
+                }
+                $("select[name='zwpz']").append(html)
                 layui.form.render("select");
             }
         })
