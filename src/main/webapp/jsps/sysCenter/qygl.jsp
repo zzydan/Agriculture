@@ -301,7 +301,7 @@
                                 <div class="item">
                                     <img class="icon addImg" onclick="clickImg(this);"
                                          src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/addImg.png">
-                                    <input name="url" type="file" class="upload_input" onchange="change(this)">
+                                    <input id="enterprisemapperUser1Pic_up1" name="url" type="file" class="upload_input" onchange="change(this)">
                                     <div class="preBlock">
                                         <img id="enterprisemapperUser1Pic_up" class="preview" alt="" name="pic" width="34"
                                              height="34">
@@ -319,7 +319,7 @@
                                 <div class="item">
                                     <img class="icon addImg" onclick="clickImg(this);"
                                          src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/addImg.png">
-                                    <input name="url" type="file" class="upload_input" onchange="change(this)">
+                                    <input id="enterprisemapperUser2Pic_up1" name="url" type="file" class="upload_input" onchange="change(this)">
                                     <div class="preBlock">
                                         <img id="enterprisemapperUser2Pic_up" class="preview" alt="" name="pic" width="34"
                                              height="34">
@@ -337,7 +337,7 @@
                                 <div class="item">
                                     <img class="icon addImg" onclick="clickImg(this);"
                                          src="${pageContext.request.contextPath}/static/jquerygwscmoban/images/addImg.png">
-                                    <input name="url" type="file" class="upload_input" onchange="change(this)">
+                                    <input id="enterprisemapperUser3Pic_up1" name="url" type="file" class="upload_input" onchange="change(this)">
                                     <div class="preBlock">
                                         <img id="enterprisemapperUser3Pic_up" class="preview" alt="" name="pic" width="34"
                                              height="34">

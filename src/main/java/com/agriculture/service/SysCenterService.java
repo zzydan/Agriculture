@@ -114,9 +114,12 @@ public interface SysCenterService {
     /**
      * 企业管理的修改
      * @param enterprise
+     * @param user1Pic
+     * @param user2Pic
+     * @param user3Pic
      * @return
      */
-    int updateEnterprise(Enterprise enterprise);
+    int updateEnterprise(Enterprise enterprise, MultipartFile user1Pic, MultipartFile user2Pic, MultipartFile user3Pic);
 
     /**
      * 根据id查询企业所有数据

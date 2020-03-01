@@ -265,10 +265,59 @@ public class SysCenterServiceImpl implements SysCenterService {
      * 修改企业
      *
      * @param enterprise
+     * @param user1Pic
+     * @param user2Pic
+     * @param user3Pic
      * @return
      */
     @Override
-    public int updateEnterprise(Enterprise enterprise) {
+    public int updateEnterprise(Enterprise enterprise, MultipartFile user1Pic, MultipartFile user2Pic, MultipartFile user3Pic) {
+
+        if (user1Pic != null) {
+            String filename = user1Pic.getOriginalFilename();
+            if (!"".equals(filename.trim())) {
+                //上传到OSS
+                String uploadUrl = ossUtils.uploadImg2Oss(user1Pic);
+                SecPic secPic = new SecPic();
+                secPic.setName(filename);
+                secPic.setInfo("mapperUser-1 heardpic");
+                secPic.setPath(uploadUrl);
+
+                int id = secPicMapper.addPiC(secPic);
+
+                enterprise.setMapperUser1Pic(secPic.getId());
+            }
+        }
+        if (user2Pic != null) {
+            String filename2 = user2Pic.getOriginalFilename();
+            if (!"".equals(filename2.trim())) {
+                //上传到OSS
+                String uploadUrl2 = ossUtils.uploadImg2Oss(user2Pic);
+                SecPic secPic = new SecPic();
+                secPic.setName(filename2);
+                secPic.setInfo("mapperUser-2 heardpic");
+                secPic.setPath(uploadUrl2);
+
+                int id = secPicMapper.addPiC(secPic);
+
+                enterprise.setMapperUser2Pic(secPic.getId());
+            }
+        }
+        if (user3Pic != null) {
+            String filename3 = user3Pic.getOriginalFilename();
+            if (!"".equals(filename3.trim())) {
+                //上传到OSS
+                String uploadUrl3 = ossUtils.uploadImg2Oss(user3Pic);
+                SecPic secPic = new SecPic();
+                secPic.setName(filename3);
+                secPic.setInfo("mapperUser-3 heardpic");
+                secPic.setPath(uploadUrl3);
+
+                int id = secPicMapper.addPiC(secPic);
+
+                enterprise.setMapperUser3Pic(secPic.getId());
+            }
+        }
 
         int i = enterpriseMapper.updateEnterprise(enterprise);
 

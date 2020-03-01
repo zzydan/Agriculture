@@ -33,13 +33,43 @@ public class Enterprise {
 
     private Integer mapperUser1Pic;
 
+    private String mapperUser1PicPath;
+
     private String mapperUser2;
 
     private Integer mapperUser2Pic;
 
+    private String mapperUser2PicPath;
+
     private String mapperUser3;
 
     private Integer mapperUser3Pic;
+
+    private String mapperUser3PicPath;
+
+    public String getMapperUser1PicPath() {
+        return mapperUser1PicPath;
+    }
+
+    public void setMapperUser1PicPath(String mapperUser1PicPath) {
+        this.mapperUser1PicPath = mapperUser1PicPath;
+    }
+
+    public String getMapperUser2PicPath() {
+        return mapperUser2PicPath;
+    }
+
+    public void setMapperUser2PicPath(String mapperUser2PicPath) {
+        this.mapperUser2PicPath = mapperUser2PicPath;
+    }
+
+    public String getMapperUser3PicPath() {
+        return mapperUser3PicPath;
+    }
+
+    public void setMapperUser3PicPath(String mapperUser3PicPath) {
+        this.mapperUser3PicPath = mapperUser3PicPath;
+    }
 
     public Integer getCreateuser() {
         return createuser;

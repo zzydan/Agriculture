@@ -92,7 +92,9 @@ function updRoleById(id) {
             $("#enterprisemapperUser1_up").val(data.mapperUser1);
             $("#enterprisemapperUser2_up").val(data.mapperUser2);
             $("#enterprisemapperUser3_up").val(data.mapperUser3);
-
+            $("#enterprisemapperUser1Pic_up").attr("src",data.mapperUser1PicPath);
+            $("#enterprisemapperUser2Pic_up").attr("src",data.mapperUser2PicPath);
+            $("#enterprisemapperUser3Pic_up").attr("src",data.mapperUser3PicPath);
 
             $("#upEnterpriseInfo_Modal").modal("show");
         },error:function(){
@@ -171,15 +173,65 @@ function addEnterprise() {
 
 /*修改用户信息*/
 function updateEnterprise() {
+    var id=$("#enterpriseid_up").val();
+    var name=$("#enterprisename_up").val();
+    var address=$("#enterpriseaddress_up").val();
+    var intro=$("#enterpriseintro_up").val();
+    var longitude=$("#longitude_up").val();
+    var latitude=$("#latitude_up").val();
+    var filiale=$("#enterprisefiliale_up").val();
+    var filialeCenter=$("#enterprisefilialeCenter_up").val();
+
+    var mapperUser1=$("#enterprisemapperUser1_up").val();
+    var mapperUser2=$("#enterprisemapperUser2_up").val();
+    var mapperUser3=$("#enterprisemapperUser3_up").val();
+
+    var formData = new FormData();
+    formData.append('id', id);
+    formData.append('name', name);
+    formData.append('address', address);
+    formData.append('intro', intro);
+    formData.append('longitude', longitude);
+    formData.append('latitude', latitude);
+    formData.append('filiale', filiale);
+    formData.append('filialeCenter', filialeCenter);
+    formData.append('mapperUser1', mapperUser1);
+    formData.append('mapperUser2', mapperUser2);
+    formData.append('mapperUser3', mapperUser3);
+
+    //1.获取图片的数据
+    var User1Pic=$("#enterprisemapperUser1Pic_up1").val();
+    if(User1Pic!= "" ){
+        var User1PicPath=$("#enterprisemapperUser1Pic_up").attr("src");
+        //2.把二进制的图片数据转为Blob对象
+        var User1Pic_blob = processData(User1PicPath);
+        formData.append('User1Pic', User1Pic_blob);
+    }
+    //1.获取图片的数据
+    var User2Pic=$("#enterprisemapperUser2Pic_up1").val();
+    if(User2Pic!= ""){
+        var User2PicPath=$("#enterprisemapperUser2Pic_up").attr("src");
+        //2.把二进制的图片数据转为Blob对象
+        var User2Pic_blob = processData(User2PicPath);
+        formData.append('User2Pic', User2Pic_blob);
+    }
+    //1.获取图片的数据
+    var User3Pic=$("#enterprisemapperUser3Pic_up1").val();
+    if(User3Pic!= ""){
+        var User3PicPath=$("#enterprisemapperUser3Pic_up").attr("src");
+        //2.把二进制的图片数据转为Blob对象
+        var User3Pic_blob = processData(User3PicPath);
+        formData.append('User3Pic', User3Pic_blob);
+    }
 
 
     $.ajax({
         url: "/sysCenter/updateEnterprise",
         type: "post",
         dataType: "json",
-        data: {
-
-        },
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (data) {
             alert("修改成功！！");
             window.location.reload();
@@ -189,8 +241,6 @@ function updateEnterprise() {
         }
     });
 }
-
-
 
 
 //验证通过
