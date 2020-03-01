@@ -34,8 +34,8 @@ public class BasicCenterController {
     public boolean addPlace(Parvialfield parvialfield){
 
         Location location = new Location();
-        location.setLatitude(parvialfield.getLatitude())/**/
-                .setLongitude(parvialfield.getLongitude());
+        location.setLatitude(parvialfield.getLatitude());
+        location.setLongitude(parvialfield.getLongitude());
         boolean b = basicCenterService.addPlace(parvialfield,location);
 
         return b;

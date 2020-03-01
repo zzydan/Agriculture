@@ -1,51 +1,136 @@
 package com.agriculture.pojo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @ClassName Parvialfield
- * @Description  分场管理表   TODO
- * @Author Chang
- * @Date 2020/2/21 15:38
- * @Version 1.0
- **/
-/*链式写法：
-Dept dept=new Dept();
-dept.setDeptNo(11).setDname("开发部")*/
-@Data
-@NoArgsConstructor//无参构造
-@Accessors(chain = true)//链式写法
 public class Parvialfield implements Serializable {
     private Integer id;
 
-    private Integer disabled;
+    private Boolean disabled;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createtime;
 
     private String name;
 
     private String address;
 
-    private Integer fieldlengthUser;//厂长id
+    private Integer fieldlengthUser;
 
-    private Integer technicianUser;//技术员id
+    private Integer technicianUser;
 
     private String fieldlengthUserName;//厂长
 
     private String technicianUserName;//技术员
 
-    //private Location location;//关联地理位置表
-
     private String longitude;//经度
 
     private String latitude;//纬度
+
+    public String getFieldlengthUserName() {
+        return fieldlengthUserName;
+    }
+
+    public void setFieldlengthUserName(String fieldlengthUserName) {
+        this.fieldlengthUserName = fieldlengthUserName;
+    }
+
+    public String getTechnicianUserName() {
+        return technicianUserName;
+    }
+
+    public void setTechnicianUserName(String technicianUserName) {
+        this.technicianUserName = technicianUserName;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    private static final long serialVersionUID = 1L;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
+    }
+
+    public Integer getFieldlengthUser() {
+        return fieldlengthUser;
+    }
+
+    public void setFieldlengthUser(Integer fieldlengthUser) {
+        this.fieldlengthUser = fieldlengthUser;
+    }
+
+    public Integer getTechnicianUser() {
+        return technicianUser;
+    }
+
+    public void setTechnicianUser(Integer technicianUser) {
+        this.technicianUser = technicianUser;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", disabled=").append(disabled);
+        sb.append(", createtime=").append(createtime);
+        sb.append(", name=").append(name);
+        sb.append(", address=").append(address);
+        sb.append(", fieldlengthUser=").append(fieldlengthUser);
+        sb.append(", technicianUser=").append(technicianUser);
+        sb.append(", serialVersionUID=").append(serialVersionUID);
+        sb.append("]");
+        return sb.toString();
+    }
 }

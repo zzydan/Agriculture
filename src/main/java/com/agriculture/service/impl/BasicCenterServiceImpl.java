@@ -33,8 +33,8 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
         /*添加地块表主键返回*/
         boolean b=basicCenterMapper.addParvialfield(parvialfield);
-        location.setObjId(parvialfield.getId())
-                .setObjType("zone");
+        location.setObjId(parvialfield.getId());
+        location.setObjType("zone");
 
         /* 添加地理位置表*/
         boolean b1=basicCenterMapper.addLocation(location);

@@ -34,12 +34,29 @@
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!--mapper接口生成位置-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.zhny.dao"
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.agriculture.dao"
                              targetProject="e:\workspace\Agriculture\src\main\java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="sec_pic"/>
+        <table tableName="agricultural"/>
+        <table tableName="crop_growth_cycle"/>
+        <table tableName="crop_growth_cycle_time"/>
+        <table tableName="crop_species"/>
+        <table tableName="crop_variety"/>
+        <table tableName="farm_work"/>
+        <table tableName="location"/>
+        <table tableName="lot"/>
+        <table tableName="parvialfield"/>
+        <table tableName="product"/>
+        <table tableName="template"/>
+        <table tableName="template_plan"/>
+        <table tableName="template_plan_agricultural"/>
+        <table tableName="tour"/>
+        <table tableName="tour_work"/>
+        <table tableName="work"/>
+        <table tableName="work_fertilizer"/>
+
 
 
     </context>

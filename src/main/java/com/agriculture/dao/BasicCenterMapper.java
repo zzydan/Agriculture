@@ -15,7 +15,6 @@ public interface BasicCenterMapper {
      */
     boolean addParvialfield(Parvialfield parvialfield);
 
-    /* */
 
     /**
      * 添加地理位置表

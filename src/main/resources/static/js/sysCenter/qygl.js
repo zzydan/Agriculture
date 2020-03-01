@@ -60,7 +60,7 @@ function enterprise_table() {
                 title: "操作",
                 formatter: function (value, row, index) {
                     var str =
-                        "<a onclick=\"updRoleById(\'" + row.id + "\')\"  class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
+                        "<a onclick=\"updateEnterpriseById(\'" + row.id + "\')\"  class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
                         "<i  class=\"layui-icon layui-icon-edit\">" +
                         "</i>编辑</a> "
                     return str;
@@ -77,7 +77,7 @@ function addEnterpriseInfo() {
 }
 
 //点击打开编辑用户模态框
-function updRoleById(id) {
+function updateEnterpriseById(id) {
     $.ajax({
         url: "/sysCenter/findEnterpriseById/"+id,
         type:"post",

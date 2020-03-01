@@ -1,181 +1,68 @@
 $(function () {
-    //1.初始化Table
-    user_table(null);
-
-    findRole();
-    findEnterprise();
-
-    $("#collapseOne").on('show.bs.collapse', function () {
-        $("#collapseID").val(1);
-    })
-
-    $("#collapseTwo").on('show.bs.collapse', function () {
-        $("#collapseID").val(2);
-        $.ajax({
-            url: "/user/findRes",
-            type: "post",
-            dataType: "json",
-            async: false,
-            data: {},
-            success: function (data) {
-                $("#resParentCheckbox").empty();
-                for (var i = 0; i < data.length; i++) {
-                    $("#resParentCheckbox").append("<div id=" + "resChildCheckbox" + data[i].info + " class='panel-body panel-success'></div>");
-
-                    $("#resChildCheckbox" + data[i].info).append(
-                        "<div><label class='checkbox-inline'>" +
-                        "<input type='checkbox' name='listRes' onchange='checkAll(this)' value=" + data[i].id + ">" + data[i].resname +
-                        "</label></div>");
-                    var list = data[i].resList;
-
-                    $("#resChildCheckbox" + data[i].info).append("<div>");
-                    for (var j = 0; j < list.length; j++) {
-                        $("#resChildCheckbox" + data[i].info).append(
-                            "<label class='checkbox-inline'>" +
-                            "<input type='checkbox' name='listRes' onchange='checkaaa(this)' value=" + list[j].id + ">" + list[j].resname +
-                            "</label>");
-                    }
-                    $("#resParentCheckbox").append("</div></div>");
-                }
-            },
-            error: function () {
-                alert("请求失败");
-            }
-        });
-
-
-    })
+    fenChang_table()
 })
+function addFenChang() {
+    //window.location.href="./addFenChang.jsp"
+    $("#addFenChang_Modal").modal("show");
 
-function findRole() {
-    $.ajax({
-        type: "post",
-        url: "/sysCenter/findRole",
-        data: {},
-        dataType: "json",
-        success: function (data) {
-            var str = "";
-            if (data != null && data.length != 0) {
-                $("#role_select_1").children("option:gt(0)").remove();
-                $("#role_select_1_up").children("option:gt(0)").remove();
-                str = str + "<option value=''>选择角色</option>";
-                for (var i = 0; i < data.length; i++) {
-                    str = str + "<option value=" + data[i].id + ">" + data[i].roleName + "</option>";
-                }
-                $("#role_select_1").append(str);
-                $("#role_select_1_up").append(str);
 
-            }
-        },//请求失败时回调函数
-        error: function () {
-            alert("失败 ");
-        }
-    });
 }
-function findEnterprise() {
-    $.ajax({
-        type: "post",
-        url: "/sysCenter/findEnterprise",
-        data: {},
-        dataType: "json",
-        success: function (data) {
-            var str = "";
-            if (data != null && data.length != 0) {
-                $("#Enterprise_select").children("option:gt(0)").remove();
-                $("#Enterprise_select_1").children("option:gt(0)").remove();
-                str = str + "<option value=''>选择角色</option>";
-                for (var i = 0; i < data.length; i++) {
-                    str = str + "<option value=" + data[i].id + ">" + data[i].name + "</option>";
-                }
-                $("#Enterprise_select").append(str);
-                $("#Enterprise_select_1").append(str);
-
-
-            }
-        },//请求失败时回调函数
-        error: function () {
-            alert("失败 ");
-        }
-    });
-}
-
-
-function user_table(formData) {
-    $("#user_table").bootstrapTable("destroy");
-    $("#user_table").bootstrapTable({ // 对应table标签的id
-        url: "/sysCenter/findManager?"+formData, // 获取表格数据的url
-        method: "get", //请求方式
-        cache: false, //关闭缓存
+//显示分场列表的方法
+function fenChang_table() {
+    $("#fenChang_table").bootstrapTable("destroy");
+    $("#fenChang_table").bootstrapTable({ // 对应table标签的id
+        url: "/basicCenter/getFenChangList", // 获取表格数据的url
+        pagination:true,
         toolbar: '#toolbar', //工具按钮用哪个容器
-        pagination: true, //开启分页
-        sidePagination: "server", //客户端分页client,"server"服务端分页
-        pageNumber: 1, //分页起始行,默认第一行
-        sortName: "id", //排序名
-        sortOrder: "asc", //排序方式
-        pageSize: 10, //每页几行
-        pageList: [10, 20, 30], //设置每页几行的下拉框
         striped: true,       //是否显示行间隔色
         clickToSelect: true, //设置复选框头
         showRefresh: true,   //是否显示刷新按钮
-        //请求参数
-        queryParams: function (params) { //参数
-            return {
-                limit: params.limit,// 每页要显示的数据条数
-                offset: params.offset,// 每页显示数据的开始行号
-                sort: params.sort,// 要排序的字段
-                order: params.order,  // 排序规则
-            };
-        },//返回
-        responseHandler: function (data) {
-            return {
-                "total": data.total,//总页数
-                "rows": data.list //返回数据的集合
-            };
-        },
+        pageNumber:1,
+        pageSize: 7,
+        pageList: [3, 5, 10, 15],
         columns: [//field对应的是entity中的属性 title:列名
             {
                 field: 'id', // 返回json数据中的name
                 title: '序号', // 表格表头显示文字
+                align:"center",
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
                     return index + 1;
                 }
             }, {
-                field: 'truename',
-                title: '用户姓名'
-            }, {
-                field: 'tel',
-                title: "手机号"
-            }, {
                 field: 'name',
-                title: "所属企业"
+                align:"center",
+                valign: "middle",
+                title: '分场名称'
+            }, {
+                field: 'fieldlengthUserName',
+                valign: "middle",
+                align:"center",
+                title: "分场厂长"
+            }, {
+                field: 'technicianUserName',
+                valign: "middle",
+                align:"center",
+                title: "技术员"
             }, {
                 field: 'roleName',
-                title: "用户角色"
+                valign: "middle",
+                align:"center",
+                title: "地块数量"
             }, {
                 field: 'roleType',
-                title: '客户端',
-                formatter: function (value, row, index) {
-                    if (value == 1) {
-                        return 'app'
-                    } else if (value == 2) {
-                        return 'pc'
-                    }else if (value == 3) {
-                        return 'app/pc'
-                    } else {
-                        return '未知'
-                    }
-                }
-            }, {
-                field: 'createtime',
-                title: "创建时间"
-            }, {
+                valign: "middle",
+                align:"center",
+                title: '分场面积(亩)',
+            },{
                 title: "操作",
+                valign: "middle",
+                align:"center",
                 formatter: function (value, row, index) {
                     var str =
-                        "<a onclick=\"updRoleById(\'" + row.id + "\')\"  class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
+                        "<a onclick=\"updateFenChang(\'" + row.id + "\')\" class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
                         "<i  class=\"layui-icon layui-icon-edit\">" +
-                        "</i>编辑</a> "+
-                        "<a onclick=\"deleteManager(\'" + row.id + "\')\"  class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
+                        "</i>编辑</a> " +
+                        "<a onclick=\"deleteManager(\'" + row.id + "\')\" class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
                         "<i class=\"layui-icon layui-icon-delete\">" +
                         "</i>删除</a> ";
                     return str;
@@ -184,149 +71,233 @@ function user_table(formData) {
         ]
     })
 }
+function updateFenChang(id) {
+    $("#id").val(id);
+    $("#updateFenChang_Modal").modal('show')
 
-function user_likeForm_querybtn() {
-    var formData = $("#user_likeForm").serialize();
-    user_table(formData);
-}
-//点击打开新建用户模态框
-function addUserInfo() {
-    $("#addUserInfo_Modal").modal("show");
+    //window.location.href="./updateFenChang.jsp?id="+id;
 }
 
-//点击打开编辑用户模态框
-function updRoleById(id) {
-    $.ajax({
-        url: "/sysCenter/selectUserId/"+id,
-        type:"post",
-        dataType:"json",
-        success:function(data){
-            $("#id_up").val(data.id);
-            $("#username_up").val(data.truename);
-            $("#password_up").val(data.password);
-            $("#tel_up").val(data.tel);
-            $("#role_select_1_up option").each(function(){
-                if($(this).val()==data.roleId){
-                    $(this).attr("selected","selected");
-                }
-            });
-            $("#Enterprise_select_1 option").each(function(){
-                if($(this).val()==data.enterpriseId){
-                    $(this).attr("selected","selected");
-                }
-            });
-            $("#upUserInfo_Modal").modal("show");
-        },error:function(){
-            console.log("出错了！");
+
+//id选择器选中modal框
+$('#addFenChang_Modal').on('show.bs.modal', function () {
+
+    layui.use('form', function(){//form表单预加载样式
+        var form = layui.form;
+        form.render();
+
+        //预加载场长下拉框
+        getLeaderList();
+
+        //预加载技术员下拉框
+        getJiShuList();
+    });
+
+    // 执行一些动作...
+    // 百度地图API功能
+    var map = new BMap.Map("addmap",{mapType: BMAP_HYBRID_MAP});
+    map.enableScrollWheelZoom();//启用滚轮放大缩小
+    var point = new BMap.Point(116.331398,39.897445);
+    $("#longitude1").val(116.331398);
+    $("#latitude1").val(39.897445);
+    map.centerAndZoom(point,18);
+
+    //浏览器定位
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r){
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            var mk = new BMap.Marker(r.point);
+            map.addOverlay(mk);
+            map.panTo(r.point);
+            $("#longitude1").val(r.point.lng);
+            $("#latitude1").val(r.point.lat);
+        }
+        else {
+            console.log('failed'+this.getStatus());
         }
     });
-}
 
-function addUserRole() {
-    var userName=$("#username").val();
-    var password=$("#password").val();
-    var roleId=$("#role_select_1").val();
-    var id=$("#Enterprise_select").val();
-    var tel=$("#tel").val();
-    $.ajax({
-        url: "/sysCenter/addUser",
-        type: "post",
-        dataType: "json",
-        data: {
-            userName:userName,
-            password:password,
-            roleId:roleId,
-            tel:tel,
-            id:id
-        },
-        success: function (data) {
-            alert("创建管理员成功！！");
-            window.location.reload();
-        },
-        error: function () {
-            alert("请求失败");
-        }
-    });
-}
-/*修改用户信息*/
-function upUserRoleId() {
-    var id=$("#id_up").val();
-    var userName=$("#username_up").val();
-    var password=$("#password_up").val();
-    var roleId=$("#role_select_1_up").val();
-    var enterpriseId=$("#Enterprise_select_1").val();
-    var tel=$("#tel_up").val();
-    $.ajax({
-        url: "/sysCenter/upUserId",
-        type: "post",
-        dataType: "json",
-        data: {
-            id:id,
-            userName:userName,
-            password:password,
-            roleId:roleId,
-            tel:tel,
-            enterpriseId:enterpriseId
-        },
-        success: function (data) {
-            alert("修改成功！！");
-            window.location.reload();
-        },
-        error: function () {
-            alert("请求失败");
-        }
-    });
-}
-
-
-//删除
-function deleteManager(id) {
-    if (confirm("确认删除么！！！")) {
-        $.ajax({
-            url: "/sysCenter/deleteUserId/"+id,
-            type: "post",
-            dataType: "json",
-            success: function (data) {
-                if(data>0){
-                    alert("删除成功！！！");
-                    $("#user_table").bootstrapTable("refresh");
-                }
-            },
-            error: function () {
-                alert("请求失败");
+    //地址改变，地图重新根据输入的位置重新加载地图
+    $("#address1").change(function () {
+        var address = $("#address1").val();
+        // 创建地址解析器实例
+        var myGeo = new BMap.Geocoder();
+        // 将地址解析结果显示在地图上,并调整地图视野
+        // "江苏省句容市后白镇徐巷村二圩路杜氏生态农场"
+        //河南省周口市东新区搬口乡贾寨村翔耀生态农业园
+        myGeo.getPoint(address, function(point){
+            if (point) {
+                map.centerAndZoom(point, 18.5);
+                var marker = new BMap.Marker(point);
+                map.addOverlay(marker);
+                //map.addOverlay(new BMap.Marker(point));
+                marker.enableDragging(); //启用标注拖动
+                marker.addEventListener('dragend', function (e) {//拖动标注结束
+                    var pointNew = e.point;
+                    console.log(pointNew);
+                    $("#longitude1").val(pointNew.lng);
+                    $("#latitude1").val(pointNew.lat);
+                });
+            }else{
+                alert("您选择地址没有解析到结果!");
             }
-        });
+        }, "北京市");
+    })
+})
+
+
+
+//添加地块
+function submitAddForm() {
+    $.ajax({
+        url:"${pageContext.request.contextPath}/basicCenter/addPlace",
+        data:$("#fenChang_addForm").serialize(),
+        dataType:"json",
+        type:"post",
+        success:function(data){
+            $("#addFenChang_Modal").modal("hide");
+            $("#fenChang_table").bootstrapTable("refresh");
+        }
+    })
+}
+//查询场长列表
+function getLeaderList() {
+    $.ajax({
+        url:"/basicCenter/getUserListByRole",
+        data:{"roleId":4},
+        dataType:"json",
+        type:"post",
+        success:function(data){
+            var html="<option value=\"\">请选择</option>"
+            if(data){
+                $.each(data,function (a,b) {
+                    html+=" <option value=\""+b.id+"\">"+b.truename+"</option>"
+                })
+            }
+            $("select[name='fieldlengthUser']").append(html)
+            layui.form.render("select");
+        }
+    })
+
+}
+//查询技术员列表
+function getJiShuList() {
+    $.ajax({
+        url:"/basicCenter/getUserListByRole",
+        data:{"roleId":5},
+        dataType:"json",
+        type:"post",
+        success:function(data){
+            var html="<option value=\"\">请选择</option>"
+            if(data){
+                $.each(data,function (a,b) {
+                    html+=" <option value=\""+b.id+"\">"+b.truename+"</option>"
+                })
+            }
+            /*name="technicianUser"*/
+            $("select[name='technicianUser']").append(html)
+            layui.form.render("select");
+        }
+    })
+
+}
+
+/*myGeo.getPoint("江苏省句容市后白镇徐巷村二圩路杜氏生态农场", function(Point){
+    if (Point) {
+        var pointx = Point.lng;
+        //纬度
+        var pointy = Point.lat;
+    }else{
+        alert("您选择地址没有解析到结果!");
     }
-}
+}, "北京市");*/
 
-//复选框全选全不选
-function checkAll(obj) {
-    if ($(obj).prop("checked")) {
-        $(obj).parent().parent().parent().find("input").prop("checked", true);
-    } else {
-        $(obj).parent().parent().parent().find("input").prop("checked", false);
+
+$('#updateFenChang_Modal').on('show.bs.modal', function () {
+    layui.use('form', function(){//form表单预加载样式
+        var form = layui.form;
+        form.render();
+
+        var id= $("#id").val();
+        //回显分厂的详细信息用于修改
+        $.ajax({
+            url:"${pageContext.request.contextPath}/basicCenter/getFenChangById",
+            data:{"id":id},
+            dataType:"json",
+            type:"post",
+            success:function(data){
+                if(data){
+
+                    $("#name").val(data.name)
+                    $("#address").val(data.address)
+
+                    $("#technicianUser").append("<option selected='selected' value='"+data.technicianUser+"'>"+data.technicianUserName+"</option>")
+                    $("#fieldlengthUser").append("<option selected='selected' value='"+data.fieldlengthUser+"'>"+data.fieldlengthUserName+"</option>")
+
+                    layui.form.render("select");
+                    // 百度地图API功能
+                    var map = new BMap.Map("allmap",{mapType: BMAP_HYBRID_MAP});
+                    map.enableScrollWheelZoom();//启用滚轮放大缩小
+                    var point = new BMap.Point(data.longitude,data.latitude);
+                    $("#longitude").val(data.longitude);
+                    $("#latitude").val(data.latitude);
+                    map.centerAndZoom(point,18);
+                    //地址改变，地图重新根据输入的位置重新加载地图
+                    $("#address").change(function () {
+                        var address = $("#address").val();
+                        // 创建地址解析器实例
+                        var myGeo = new BMap.Geocoder();
+                        // 将地址解析结果显示在地图上,并调整地图视野
+                        // "江苏省句容市后白镇徐巷村二圩路杜氏生态农场"
+                        //河南省周口市东新区搬口乡贾寨村翔耀生态农业园
+                        myGeo.getPoint(address, function(point){
+                            if (point) {
+                                map.centerAndZoom(point, 18.5);
+                                var marker = new BMap.Marker(point);
+                                map.addOverlay(marker);
+                                //map.addOverlay(new BMap.Marker(point));
+                                marker.enableDragging(); //启用标注拖动
+                                marker.addEventListener('dragend', function (e) {//拖动标注结束
+                                    var pointNew = e.point;
+                                    console.log(pointNew);
+                                    $("#longitude").val(pointNew.lng);
+                                    $("#latitude").val(pointNew.lat);
+                                });
+                            }else{
+                                alert("您选择地址没有解析到结果!");
+                            }
+                        }, "北京市");
+                    })
+
+
+                }
+            }
+        })
+    })
+
+});
+
+
+
+//编辑地块
+function submitForm() {
+    $.ajax({
+        url:"${pageContext.request.contextPath}/basicCenter/updatePlace",
+        data:$("#order_addForm").serialize(),
+        dataType:"json",
+        type:"post",
+        success:function(data){
+            $("#updateFenChang_Modal").modal("hide");
+            $("#fenChang_table").bootstrapTable("refresh");
+        }
+    })
+}
+/*myGeo.getPoint("江苏省句容市后白镇徐巷村二圩路杜氏生态农场", function(Point){
+    if (Point) {
+        var pointx = Point.lng;
+        //纬度
+        var pointy = Point.lat;
+    }else{
+        alert("您选择地址没有解析到结果!");
     }
-
-}
-//复选框子节点联动父节点
-function checkaaa(obj) {
-    if ($(obj).prop("checked")) {
-        $(obj).parent().parent().find("div").children().children().prop("checked", true);
-    } else if ($(obj).parent().parent().find("input[type='checkbox']:checked").length == 1) {
-        $(obj).parent().parent().find("div").children().children().prop("checked", false);
-    }
-
-}
-//验证通过
-function isOk(obj, text) {
-    obj.parent().parent().removeClass("has-error");
-    obj.parent().parent().addClass("has-success");
-    obj.parent().next().children(":first").html(text);
-
-}
-//验证不通过
-function isError(obj, text) {
-    obj.parent().parent().removeClass("has-success");
-    obj.parent().parent().addClass("has-error");
-    obj.parent().next().children(":first").html(text);
-}
+}, "北京市");*/
