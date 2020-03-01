@@ -90,4 +90,23 @@
         longitude=#{longitude},latitude=#{latitude}
       where obj_id=#{id} and obj_type='zone'
     </update>
+    <!--/**
+     * 查询品种表列表
+     * @param
+     * @return List<CropSpecies>
+     */
+    List<CropSpecies> getSpeciesList();-->
+    <select id="getSpeciesList" resultType="com.agriculture.pojo.CropSpecies">
+        select * from crop_species
+    </select>
+
+    <!--/**
+    * 查询作物品种列表
+    * @param
+    * @return
+    */
+    List<CropVariety> getVarietyList();-->
+    <select id="getVarietyList" resultType="com.agriculture.pojo.CropVariety">
+        select * from crop_variety
+    </select>
 </mapper>

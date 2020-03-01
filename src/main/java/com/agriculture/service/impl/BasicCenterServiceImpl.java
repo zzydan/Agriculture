@@ -1,9 +1,7 @@
 package com.agriculture.service.impl;
 
 import com.agriculture.dao.BasicCenterMapper;
-import com.agriculture.pojo.Location;
-import com.agriculture.pojo.Parvialfield;
-import com.agriculture.pojo.SecUser;
+import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,6 +87,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
      * @return
      */
     @Override
+    @Transactional
     public boolean updatePlace(Parvialfield parvialfield) {
 
         //地块修改基本信息
@@ -97,6 +96,27 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         /* 修改地块地理位置*/
         boolean b1=basicCenterMapper.updateLocation(parvialfield);
         return false;
+    }
+    /**
+     * 查询作物种类列表
+     * @param
+     * @return
+     */
+    @Override
+    public List<CropSpecies> getSpeciesList() {
+        List<CropSpecies> cropSpecies = basicCenterMapper.getSpeciesList();
+        return cropSpecies;
+    }
+
+    /**
+     * 查询作物品种列表
+     * @param
+     * @return
+     */
+    @Override
+    public List<CropVariety> getVarietyList() {
+        List<CropVariety> cropVarieties = basicCenterMapper.getVarietyList();
+        return cropVarieties;
     }
 
 

@@ -1,9 +1,7 @@
 package com.agriculture.controller;
 
 
-import com.agriculture.pojo.Location;
-import com.agriculture.pojo.Parvialfield;
-import com.agriculture.pojo.SecUser;
+import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -95,6 +93,32 @@ public class BasicCenterController {
         Parvialfield parvialfield = basicCenterService.getFenChangById(id);
 
         return parvialfield;
+    }
+    /**
+     * 查询作物种类列表
+     * @param
+     * @return
+     */
+    @RequestMapping("getSpeciesList")
+    @ResponseBody
+    public List<CropSpecies> getSpeciesList(){
+
+        List<CropSpecies> cropSpecies = basicCenterService.getSpeciesList();
+
+        return cropSpecies;
+    }
+    /**
+     * 查询作物品种列表
+     * @param
+     * @return
+     */
+    @RequestMapping("getVarietyList")
+    @ResponseBody
+    public List<CropVariety> getVarietyList(){
+
+        List<CropVariety> cropVarieties = basicCenterService.getVarietyList();
+
+        return cropVarieties;
     }
 
 

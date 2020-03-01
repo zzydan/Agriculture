@@ -1,9 +1,7 @@
 package com.agriculture.dao;
 
 
-import com.agriculture.pojo.Location;
-import com.agriculture.pojo.Parvialfield;
-import com.agriculture.pojo.SecUser;
+import com.agriculture.pojo.*;
 
 import java.util.List;
 
@@ -59,4 +57,18 @@ public interface BasicCenterMapper {
      * @return
      */
     boolean updateLocation(Parvialfield parvialfield);
+
+    /**
+     * 查询作物种类列表
+     * @param
+     * @return
+     */
+    List<CropSpecies> getSpeciesList();
+
+    /**
+     * 查询作物品种列表
+     * @param
+     * @return
+     */
+    List<CropVariety> getVarietyList();
 }
