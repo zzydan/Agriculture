@@ -5,7 +5,7 @@ import com.agriculture.pojo.OrderPageInfo;
 import com.agriculture.pojo.SecRole;
 import com.agriculture.pojo.SecUser;
 import com.github.pagehelper.PageInfo;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -104,16 +104,22 @@ public interface SysCenterService {
     /**
      * 企业管理的新增
      * @param enterprise
+     * @param user1Pic
+     * @param user2Pic
+     * @param user3Pic
      * @return
      */
-    int addEnterprise(Enterprise enterprise);
+    int addEnterprise(Enterprise enterprise, MultipartFile user1Pic, MultipartFile user2Pic, MultipartFile user3Pic);
 
     /**
      * 企业管理的修改
      * @param enterprise
+     * @param user1Pic
+     * @param user2Pic
+     * @param user3Pic
      * @return
      */
-    int updateEnterprise(Enterprise enterprise);
+    int updateEnterprise(Enterprise enterprise, MultipartFile user1Pic, MultipartFile user2Pic, MultipartFile user3Pic);
 
     /**
      * 根据id查询企业所有数据

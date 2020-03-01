@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 
@@ -200,9 +202,13 @@ public class SysCenterController<pu> {
      */
     @RequestMapping("/addEnterprise")
     @ResponseBody
-    public boolean addEnterprise(Enterprise enterprise){
+    public boolean addEnterprise(HttpSession session, Enterprise enterprise, MultipartFile User1Pic, MultipartFile User2Pic, MultipartFile User3Pic){
 
-        int i =  sysCenterServiceImpl.addEnterprise(enterprise);
+
+        SecUser user = (SecUser)session.getAttribute("USER_SESSION");
+
+        enterprise.setCreateuser(user.getId());
+        int i =  sysCenterServiceImpl.addEnterprise(enterprise,User1Pic,User2Pic,User3Pic);
 
         return i>0;
     }
@@ -228,9 +234,9 @@ public class SysCenterController<pu> {
      */
     @RequestMapping("/updateEnterprise")
     @ResponseBody
-    public boolean updateEnterprise(Enterprise enterprise){
+    public boolean updateEnterprise(Enterprise enterprise, MultipartFile User1Pic, MultipartFile User2Pic, MultipartFile User3Pic){
 
-        int i =  sysCenterServiceImpl.updateEnterprise(enterprise);
+        int i =  sysCenterServiceImpl.updateEnterprise(enterprise,User1Pic,User2Pic,User3Pic);
 
         return i>0;
     }

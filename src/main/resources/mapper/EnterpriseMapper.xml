@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.agriculture.dao.EnterpriseMapper" >
+<mapper namespace="com.agriculture.dao.EnterpriseMapper">
     <!-- 下拉框查询所有企业 List<Enterprise> findEnterprise();-->
     <select id="findEnterprise" resultType="com.agriculture.pojo.Enterprise">
         select * from enterprise WHERE disabled = 0
@@ -17,36 +17,44 @@
 
     <!-- 新增企业 int addEnterprise(@Param("enterprise") Enterprise enterprise); -->
     <insert id="addEnterprise" parameterType="com.agriculture.pojo.Enterprise">
-        insert into enterprise (createtime, name, address, intro, longitude, latitude,
-        filiale, mapper_user1, mapper_user1_pic, mapper_user2,
+        insert into enterprise (createtime, createuser,name, address, intro, longitude, latitude,
+        filiale,filialeCenter, mapper_user1, mapper_user1_pic, mapper_user2,
         mapper_user2_pic, mapper_user3, mapper_user3_pic)
-        values (now(),#{enterprise.name},#{enterprise.address},#{enterprise.intro},#{enterprise.longitude},#{enterprise.latitude}
-        ,#{enterprise.filiale},#{enterprise.mapperUser1},#{enterprise.mapperUser1Pic},#{enterprise.mapperUser2}
+        values (now(),#{enterprise.createuser},#{enterprise.name},#{enterprise.address},#{enterprise.intro},#{enterprise.longitude},#{enterprise.latitude}
+        ,#{enterprise.filiale},#{enterprise.filialeCenter},#{enterprise.mapperUser1},#{enterprise.mapperUser1Pic},#{enterprise.mapperUser2}
         ,#{enterprise.mapperUser2Pic},#{enterprise.mapperUser3},#{enterprise.mapperUser3Pic});
     </insert>
 
     <!--  根据id查询企业所有信息  Enterprise findEnterpriseById(Integer id); -->
     <select id="findEnterpriseById" resultType="com.agriculture.pojo.Enterprise">
-        SELECT * FROM enterprise WHERE id = #{id}
+        SELECT enterprise.*,p1.path AS mapperUser1PicPath ,p2.path AS mapperUser2PicPath ,p3.path AS mapperUser3PicPath FROM enterprise
+        LEFT JOIN sec_pic p1 ON enterprise.mapper_user1_pic = p1.id
+        LEFT JOIN sec_pic p2 ON enterprise.mapper_user2_pic = p2.id
+        LEFT JOIN sec_pic p3 ON enterprise.mapper_user3_pic = p3.id
+         WHERE enterprise.id = #{id}
     </select>
 
     <!-- 修改企业 int updateEnterprise(@Param("enterprise") Enterprise enterprise); -->
     <update id="updateEnterprise" parameterType="com.agriculture.pojo.Enterprise">
         update enterprise
-          set name = #{enterprise.name},
-          address = #{enterprise.address},
-          intro = #{enterprise.intro},
-          longitude = #{enterprise.longitude},
-          latitude = #{enterprise.latitude},
-          filiale = #{enterprise.filiale},
-          mapper_user1 = #{enterprise.mapperUser1},
-          mapper_user1_pic = #{enterprise.mapperUser1Pic},
-          mapper_user2 = #{enterprise.mapperUser2},
-          mapper_user2_pic = #{enterprise.mapperUser2Pic},
-          mapper_user3 = #{enterprise.mapperUser3},
-          mapper_user3_pic = #{enterprise.mapperUser3Pic}
+        set name = #{enterprise.name},
+        address = #{enterprise.address},
+        intro = #{enterprise.intro},
+        longitude = #{enterprise.longitude},
+        latitude = #{enterprise.latitude},
+        filiale = #{enterprise.filiale},
+        mapper_user1 = #{enterprise.mapperUser1},
+        mapper_user2 = #{enterprise.mapperUser2},
+        mapper_user3 = #{enterprise.mapperUser3}
+        <if test="enterprise.mapperUser1Pic != null">
+            ,mapper_user1_pic = #{enterprise.mapperUser1Pic}
+        </if>
+        <if test="enterprise.mapperUser2Pic != null">
+            ,mapper_user2_pic = #{enterprise.mapperUser2Pic}
+        </if>
+        <if test="enterprise.mapperUser3Pic != null">
+            ,mapper_user3_pic = #{enterprise.mapperUser3Pic}
+        </if>
         where id = #{enterprise.id}
     </update>
-
-
 </mapper>
