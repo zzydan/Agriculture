@@ -357,6 +357,16 @@
                         $("#longitude").val(data.longitude);
                         $("#latitude").val(data.latitude);
                         map.centerAndZoom(point,18);
+                        var marker = new BMap.Marker(point);
+                        map.addOverlay(marker);
+                        marker.setAnimation(BMAP_ANIMATION_BOUNCE);//跳动
+                        marker.enableDragging(); //启用标注拖动
+                        marker.addEventListener('dragend', function (e) {//拖动标注结束
+                            var pointNew = e.point;
+                            console.log(pointNew);
+                            $("#longitude").val(pointNew.lng);
+                            $("#latitude").val(pointNew.lat);
+                        });
                         //地址改变，地图重新根据输入的位置重新加载地图
                         $("#address").change(function () {
                             var address = $("#address").val();
