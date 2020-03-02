@@ -1,8 +1,12 @@
 package com.agriculture.service.impl;
 
+import com.agriculture.dao.AgriculturalMapper;
 import com.agriculture.dao.BasicCenterMapper;
 import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +24,8 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
     @Resource
     private BasicCenterMapper basicCenterMapper;
+    @Autowired
+    private AgriculturalMapper AgriculturalMapper;
 
     /**
      * 添加地块
@@ -117,6 +123,62 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     public List<CropVariety> getVarietyList() {
         List<CropVariety> cropVarieties = basicCenterMapper.getVarietyList();
         return cropVarieties;
+    }
+
+    /**
+     * 查询所有农资
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public PageInfo<Agricultural> SelectAgric(OrderPageInfo pageInfo) {
+        PageHelper.offsetPage(pageInfo.getOffset(), pageInfo.getLimit());
+
+        List<Agricultural> list = AgriculturalMapper.SelectAgric(pageInfo);
+
+        PageInfo info = new PageInfo(list);
+
+        return info;
+    }
+
+    /**
+     * 添加农资信息
+     * @param Agricultural
+     * @return
+     */
+    @Override
+    public int AddAgric(Agricultural Agricultural) {
+        return AgriculturalMapper.AddAgric(Agricultural);
+    }
+
+    /**
+     * 删除农资
+     * @param id
+     * @return
+     */
+    @Override
+    public int DeleteAgricId(Integer id) {
+        return AgriculturalMapper.DeleteAgricId(id);
+    }
+
+    /**
+     * 查询单个
+     * @param id
+     * @return
+     */
+    @Override
+    public Agricultural SelectAgricId(Integer id) {
+        return AgriculturalMapper.SelectAgricId(id);
+    }
+
+    /**
+     * 修改农资
+     * @param Agricultural
+     * @return
+     */
+    @Override
+    public int UpdateAgricId(Agricultural Agricultural) {
+        return AgriculturalMapper.UpdateAgricId(Agricultural);
     }
 
 

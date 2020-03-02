@@ -3,8 +3,10 @@ package com.agriculture.controller;
 
 import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -120,6 +122,58 @@ public class BasicCenterController {
 
         return cropVarieties;
     }
+
+    /**
+     * 查询所有农资
+     * @param pageInfo
+     * @return
+     */
+    @RequestMapping("SelectAgric")
+    @ResponseBody
+    public PageInfo<Agricultural> SelectAgric(OrderPageInfo pageInfo) {
+
+        PageInfo<Agricultural> user = basicCenterService.SelectAgric(pageInfo);
+
+        return user;
+    }
+
+    /**
+     * 添加农资信息
+     * @param Agricultural
+     * @return
+     */
+    @RequestMapping("AddAgric")
+    @ResponseBody
+    public int AddAgric(Agricultural Agricultural){
+        return basicCenterService.AddAgric(Agricultural);
+    }
+    /**
+     * 删除农资
+     * @param id
+     * @return
+     */
+    @RequestMapping("DeleteAgricId/{id}")
+    @ResponseBody
+    public int DeleteAgricId(@PathVariable("id")Integer id){
+        return basicCenterService.DeleteAgricId(id);
+    }
+    /**
+     * 查询单个角色
+     * @return
+     */
+    @RequestMapping("SelectAgricId/{id}")
+    @ResponseBody
+    public Agricultural SelectAgricId(@PathVariable("id")Integer id){
+        Agricultural list=basicCenterService.SelectAgricId(id);
+        return list;
+    }
+    @RequestMapping("Agricultural")
+    @ResponseBody
+    public int UpdateAgricId(Agricultural Agricultural){
+        return basicCenterService.UpdateAgricId(Agricultural);
+    }
+
+
 
 
 
