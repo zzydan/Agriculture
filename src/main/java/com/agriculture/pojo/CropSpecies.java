@@ -14,7 +14,27 @@ public class CropSpecies implements Serializable {
 
     private Integer picId;
 
+    private Integer userId;
+
+    private String truename;
+
     private static final long serialVersionUID = 1L;
+
+    public String getTruename() {
+        return truename;
+    }
+
+    public void setTruename(String truename) {
+        this.truename = truename;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public Integer getId() {
         return id;
