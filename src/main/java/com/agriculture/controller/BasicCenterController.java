@@ -3,8 +3,6 @@ package com.agriculture.controller;
 
 import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
-
-import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +42,7 @@ public class BasicCenterController {
     }
 
     /**
-     * 修改分场信息
+     * 修改地块信息
      * @param parvialfield
      * @return
      */
@@ -59,7 +57,6 @@ public class BasicCenterController {
 
     /**
      * 查询分场列表
-     * @param
      * @return
      */
     @RequestMapping("getFenChangList")
@@ -68,19 +65,6 @@ public class BasicCenterController {
 
         List<Parvialfield> parvialfields = basicCenterService.getFenChangList();
 
-        return parvialfields;
-    }
-    /**
-     * 查询分场列表vo,一个分场对多个地块，一个地块有对应多个经纬度
-     * @param
-     * @return
-     */
-        @RequestMapping("getFenChangListVo")
-    @ResponseBody
-    public List<ParvialfieldVo> getFenChangListVo(){
-
-        List<ParvialfieldVo> parvialfields = basicCenterService.getFenChangListVo();
-        System.out.println(parvialfields);
         return parvialfields;
     }
 
@@ -152,6 +136,67 @@ public class BasicCenterController {
         return b;
     }
 
+    /**
+     * 查询所有农资
+     * @param pageInfo
+     * @return
+     */
+    @RequestMapping("SelectAgric")
+    @ResponseBody
+    public PageInfo<Agricultural> SelectAgric(OrderPageInfo pageInfo) {
+
+        PageInfo<Agricultural> user = basicCenterService.SelectAgric(pageInfo);
+
+        return user;
+    }
+
+    /**
+     * 添加农资信息
+     * @param Agricultural
+     * @return
+     */
+    @RequestMapping("AddAgric")
+    @ResponseBody
+    public int AddAgric(Agricultural Agricultural){
+        return basicCenterService.AddAgric(Agricultural);
+    }
+    /**
+     * 删除农资
+     * @param id
+     * @return
+     */
+    @RequestMapping("DeleteAgricId/{id}")
+    @ResponseBody
+    public int DeleteAgricId(@PathVariable("id")Integer id){
+        return basicCenterService.DeleteAgricId(id);
+    }
+    /**
+     * 查询单个角色
+     * @return
+     */
+    @RequestMapping("SelectAgricId/{id}")
+    @ResponseBody
+    public Agricultural SelectAgricId(@PathVariable("id")Integer id){
+        Agricultural list=basicCenterService.SelectAgricId(id);
+        return list;
+    }
+    @RequestMapping("Agricultural")
+    @ResponseBody
+    public int UpdateAgricId(Agricultural Agricultural){
+        return basicCenterService.UpdateAgricId(Agricultural);
+    }
+
+    /**
+     * 查询所有模板
+     * @param pageInfo
+     * @return
+     */
+    @RequestMapping("findTemplate")
+    @ResponseBody
+    public PageInfo<Template> findTemplate(OrderPageInfo pageInfo) {
+        PageInfo<Template> template = basicCenterService.findTemplate(pageInfo);
+        return template;
+    }
 
 
 

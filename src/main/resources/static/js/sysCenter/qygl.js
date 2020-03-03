@@ -87,6 +87,8 @@ function updateEnterpriseById(id) {
             $("#enterprisename_up").val(data.name);
             $("#enterpriseaddress_up").val(data.address);
             $("#enterpriseintro_up").val(data.intro);
+            $("#longitude_up").val(data.longitude);
+            $("#latitude_up").val(data.latitude);
             $("#enterprisefiliale_up").val(data.filiale);
             $("#enterprisefilialeCenter_up").val(data.filialeCenter);
             $("#enterprisemapperUser1_up").val(data.mapperUser1);
@@ -97,17 +99,42 @@ function updateEnterpriseById(id) {
             $("#enterprisemapperUser3Pic_up").attr("src",data.mapperUser3PicPath);
 
             $("#upEnterpriseInfo_Modal").modal("show");
+            uploadMap();
+
         },error:function(){
             console.log("出错了！");
         }
     });
 }
+//加载地图
+function uploadMap(){
+    var lon = $("#longitude_up").val();
+    var lat = $("#latitude_up").val();
+    console.log(lon);
+    console.log(lat);
 
+    // 执行一些动作...
+    // 百度地图API功能
+    var map = new BMap.Map("enterpriselot_up",{mapType: BMAP_HYBRID_MAP});
+    map.enableScrollWheelZoom();//启用滚轮放大缩小
+
+    var point = new BMap.Point(lon,lat);
+
+    map.centerAndZoom(point,18);
+    var marker = new BMap.Marker(point);
+    map.addOverlay(marker);
+    //map.addOverlay(new BMap.Marker(point));
+    marker.enableDragging(); //启用标注拖动
+    marker.addEventListener('dragend', function (e) {//拖动标注结束
+        var pointNew = e.point;
+        console.log(pointNew);
+        $("#longitude_up").val(pointNew.lng);
+        $("#latitude_up").val(pointNew.lat);
+    });
+}
 
 /*添加用户信息*/
 function addEnterprise() {
-
-
     var name=$("#enterprisename_add").val();
     var address=$("#enterpriseaddress_add").val();
     var intro=$("#enterpriseintro_add").val();

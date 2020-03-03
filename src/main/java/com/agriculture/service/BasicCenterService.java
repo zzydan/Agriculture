@@ -1,6 +1,8 @@
 package com.agriculture.service;
 
 import com.agriculture.pojo.*;
+import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -44,7 +46,7 @@ public interface BasicCenterService {
     Parvialfield getFenChangById(Integer id);
 
     /**
-     * 修改分场信息
+     * 修改地块信息
      * @param parvialfield
      * @return
      */
@@ -61,6 +63,44 @@ public interface BasicCenterService {
      * @return
      */
     List<CropVariety> getVarietyList();
+    /**
+     * 模糊查询农资
+     * @param pageInfo
+     * @return
+     */
+    PageInfo<Agricultural> SelectAgric(OrderPageInfo pageInfo);
+    /**
+     * 添加农资
+     * @param Agricultural
+     * @return
+     */
+    int AddAgric(Agricultural Agricultural);
+    /**
+     * 删除农资
+     * @param id
+     * @return
+     */
+    int DeleteAgricId(Integer id);
+
+    /**
+     * 查询单个农资信息
+     * @param id
+     * @return
+     */
+    Agricultural SelectAgricId(Integer id);
+    /**
+     * 修改农资
+     * @param Agricultural
+     * @return
+     */
+    int UpdateAgricId(Agricultural Agricultural);
+
+    /**
+     * 查询所有模板
+     * @param pageInfo
+     * @return
+     */
+    PageInfo<Template> findTemplate(OrderPageInfo pageInfo);
 
     /**
      * 添加地块

@@ -1,8 +1,14 @@
 package com.agriculture.service.impl;
 
+import com.agriculture.dao.AgriculturalMapper;
+import com.agriculture.dao.BasicCenterMapper;
+import com.agriculture.dao.TemplateMapper;
 import com.agriculture.dao.*;
 import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +41,11 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
     @Resource
     private LotMapper lotMapper;
+    private BasicCenterMapper basicCenterMapper;
+    @Autowired
+    private AgriculturalMapper AgriculturalMapper;
+    @Autowired
+    private TemplateMapper templateMapper;
 
     /**
      * 添加地块
@@ -47,12 +58,12 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     public boolean addPlace(Parvialfield parvialfield, Location location) {
 
         /*添加地块表主键返回*/
-        boolean b=parvialfieldMapper.addParvialfield(parvialfield);
+        boolean b=basicCenterMapper.addParvialfield(parvialfield);
         location.setObjId(parvialfield.getId());
         location.setObjType("zone");
 
         /* 添加地理位置表*/
-        boolean b1=locationMapper.addLocation(location);
+        boolean b1=basicCenterMapper.addLocation(location);
 
         return b&b1;
     }
@@ -65,7 +76,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Override
     public List<Parvialfield> getFenChangList() {
 
-        List<Parvialfield> parvialfields = parvialfieldMapper.getFenChangList();
+        List<Parvialfield> parvialfields = basicCenterMapper.getFenChangList();
 
         return parvialfields;
     }
@@ -79,7 +90,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Override
     public List<SecUser> getUserListByRole(Integer roleId) {
 
-        List<SecUser> secUsers = secUserMapper.getUserListByRole(roleId);
+        List<SecUser> secUsers = basicCenterMapper.getUserListByRole(roleId);
 
         return secUsers;
     }
@@ -92,13 +103,13 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Override
     public Parvialfield getFenChangById(Integer id) {
 
-        Parvialfield parvialfield = parvialfieldMapper.getFenChangById(id);
+        Parvialfield parvialfield = basicCenterMapper.getFenChangById(id);
 
         return parvialfield;
     }
 
     /**
-     * 修改分场信息
+     * 修改地块信息
      * @param parvialfield
      * @return
      */
@@ -106,11 +117,11 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Transactional
     public boolean updatePlace(Parvialfield parvialfield) {
 
-        //分场修改基本信息
-        boolean b=parvialfieldMapper.updateParvialfield(parvialfield);
+        //地块修改基本信息
+        boolean b=basicCenterMapper.updateParvialfield(parvialfield);
 
         /* 修改地块地理位置*/
-        boolean b1=locationMapper.updateLocation(parvialfield);
+        boolean b1=basicCenterMapper.updateLocation(parvialfield);
         return false;
     }
     /**
@@ -120,7 +131,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
      */
     @Override
     public List<CropSpecies> getSpeciesList() {
-        List<CropSpecies> cropSpecies = cropSpeciesMapper.getSpeciesList();
+        List<CropSpecies> cropSpecies = basicCenterMapper.getSpeciesList();
         return cropSpecies;
     }
 
@@ -131,7 +142,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
      */
     @Override
     public List<CropVariety> getVarietyList() {
-        List<CropVariety> cropVarieties = cropVarietyMapper.getVarietyList();
+        List<CropVariety> cropVarieties = basicCenterMapper.getVarietyList();
         return cropVarieties;
     }
     /**
@@ -168,5 +179,76 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         return parvialfields;
     }
 
+    /**
+     * 查询所有农资
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public PageInfo<Agricultural> SelectAgric(OrderPageInfo pageInfo) {
+        PageHelper.offsetPage(pageInfo.getOffset(), pageInfo.getLimit());
 
+        List<Agricultural> list = AgriculturalMapper.SelectAgric(pageInfo);
+
+        PageInfo info = new PageInfo(list);
+
+        return info;
+    }
+
+    /**
+     * 添加农资信息
+     * @param Agricultural
+     * @return
+     */
+    @Override
+    public int AddAgric(Agricultural Agricultural) {
+        return AgriculturalMapper.AddAgric(Agricultural);
+    }
+
+    /**
+     * 删除农资
+     * @param id
+     * @return
+     */
+    @Override
+    public int DeleteAgricId(Integer id) {
+        return AgriculturalMapper.DeleteAgricId(id);
+    }
+
+    /**
+     * 查询单个
+     * @param id
+     * @return
+     */
+    @Override
+    public Agricultural SelectAgricId(Integer id) {
+        return AgriculturalMapper.SelectAgricId(id);
+    }
+
+    /**
+     * 修改农资
+     * @param Agricultural
+     * @return
+     */
+    @Override
+    public int UpdateAgricId(Agricultural Agricultural) {
+        return AgriculturalMapper.UpdateAgricId(Agricultural);
+    }
+
+    /**
+     * 查询所有模板
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public PageInfo<Template> findTemplate(OrderPageInfo pageInfo) {
+
+        PageHelper.offsetPage(pageInfo.getOffset(),pageInfo.getLimit());
+
+        List<Template> list = templateMapper.findTemplate(pageInfo);
+
+        PageInfo info = new PageInfo(list);
+
+        return info;
+    }
 }

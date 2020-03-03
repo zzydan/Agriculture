@@ -27,6 +27,36 @@ public class OrderPageInfo implements Serializable {
     private String username;
     private String roleId;
     private String tel;
+    private String name;
+
+    //作物种类
+    private Integer category;
+    //作物品种
+    private Integer variety;
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
+
+    public Integer getVariety() {
+        return variety;
+    }
+
+    public void setVariety(Integer variety) {
+        this.variety = variety;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getTel() {
         return tel;

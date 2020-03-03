@@ -233,6 +233,66 @@
     </div><!-- /.modal -->
 </div>
 
+<script type="text/javascript">
+
+    //id选择器选中modal框
+    $('#addEnterpriseInfo_Modal').on('show.bs.modal', function () {
+        // 执行一些动作...
+        // 百度地图API功能
+        var map = new BMap.Map("enterpriselot_add",{mapType: BMAP_HYBRID_MAP});
+        map.enableScrollWheelZoom();//启用滚轮放大缩小
+
+        var point = new BMap.Point(116.331398,39.897445);
+        $("#longitude_add").val(116.331398);
+        $("#latitude_add").val(39.897445);
+
+        map.centerAndZoom(point,18);
+
+        //浏览器定位
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                var mk = new BMap.Marker(r.point);
+                $("#longitude_add").val(r.point.lng);
+                $("#latitude_add").val(r.point.lat);
+            }
+            else {
+                console.log('failed'+this.getStatus());
+            }
+        });
+
+        //地址改变，地图重新根据输入的位置重新加载地图
+        $("#enterpriseaddress_add").change(function () {
+            var address = $("#enterpriseaddress_add").val();
+            // 创建地址解析器实例
+            var myGeo = new BMap.Geocoder();
+            // 将地址解析结果显示在地图上,并调整地图视野
+            // "江苏省句容市后白镇徐巷村二圩路杜氏生态农场"
+            //河南省周口市东新区搬口乡贾寨村翔耀生态农业园
+            myGeo.getPoint(address, function(point){
+                if (point) {
+                    map.centerAndZoom(point, 18.5);
+                    var marker = new BMap.Marker(point);
+                    map.addOverlay(marker);
+                    //map.addOverlay(new BMap.Marker(point));
+
+                    marker.enableDragging(); //启用标注拖动
+
+                    marker.addEventListener('dragend', function (e) {//拖动标注结束
+                        var pointNew = e.point;
+                        console.log(pointNew);
+                        $("#longitude_add").val(pointNew.lng);
+                        $("#latitude_add").val(pointNew.lat);
+                    });
+                }else{
+                    alert("您选择地址没有解析到结果!");
+                }
+            }, "北京市");
+        })
+    })
+</script>
+
+
 
 <!-- 模态框（Modal） -->
 <div class="modal" id="upEnterpriseInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
