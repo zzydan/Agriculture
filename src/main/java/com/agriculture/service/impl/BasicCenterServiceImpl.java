@@ -1,6 +1,6 @@
 package com.agriculture.service.impl;
 
-import com.agriculture.dao.BasicCenterMapper;
+import com.agriculture.dao.*;
 import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,22 @@ import java.util.List;
 public class BasicCenterServiceImpl implements BasicCenterService {
 
     @Resource
-    private BasicCenterMapper basicCenterMapper;
+    private CropVarietyMapper cropVarietyMapper;
+
+    @Resource
+    private CropSpeciesMapper cropSpeciesMapper;
+
+    @Resource
+    private LocationMapper locationMapper;
+
+    @Resource
+    private ParvialfieldMapper parvialfieldMapper;
+
+    @Resource
+    private SecUserMapper secUserMapper;
+
+    @Resource
+    private LotMapper lotMapper;
 
     /**
      * 添加地块
@@ -32,24 +47,25 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     public boolean addPlace(Parvialfield parvialfield, Location location) {
 
         /*添加地块表主键返回*/
-        boolean b=basicCenterMapper.addParvialfield(parvialfield);
+        boolean b=parvialfieldMapper.addParvialfield(parvialfield);
         location.setObjId(parvialfield.getId());
         location.setObjType("zone");
 
         /* 添加地理位置表*/
-        boolean b1=basicCenterMapper.addLocation(location);
+        boolean b1=locationMapper.addLocation(location);
 
         return b&b1;
     }
 
     /**
      * 查询分场列表
+     * @param
      * @return
      */
     @Override
     public List<Parvialfield> getFenChangList() {
 
-        List<Parvialfield> parvialfields = basicCenterMapper.getFenChangList();
+        List<Parvialfield> parvialfields = parvialfieldMapper.getFenChangList();
 
         return parvialfields;
     }
@@ -63,7 +79,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Override
     public List<SecUser> getUserListByRole(Integer roleId) {
 
-        List<SecUser> secUsers = basicCenterMapper.getUserListByRole(roleId);
+        List<SecUser> secUsers = secUserMapper.getUserListByRole(roleId);
 
         return secUsers;
     }
@@ -76,13 +92,13 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Override
     public Parvialfield getFenChangById(Integer id) {
 
-        Parvialfield parvialfield = basicCenterMapper.getFenChangById(id);
+        Parvialfield parvialfield = parvialfieldMapper.getFenChangById(id);
 
         return parvialfield;
     }
 
     /**
-     * 修改地块信息
+     * 修改分场信息
      * @param parvialfield
      * @return
      */
@@ -90,11 +106,11 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Transactional
     public boolean updatePlace(Parvialfield parvialfield) {
 
-        //地块修改基本信息
-        boolean b=basicCenterMapper.updateParvialfield(parvialfield);
+        //分场修改基本信息
+        boolean b=parvialfieldMapper.updateParvialfield(parvialfield);
 
         /* 修改地块地理位置*/
-        boolean b1=basicCenterMapper.updateLocation(parvialfield);
+        boolean b1=locationMapper.updateLocation(parvialfield);
         return false;
     }
     /**
@@ -104,7 +120,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
      */
     @Override
     public List<CropSpecies> getSpeciesList() {
-        List<CropSpecies> cropSpecies = basicCenterMapper.getSpeciesList();
+        List<CropSpecies> cropSpecies = cropSpeciesMapper.getSpeciesList();
         return cropSpecies;
     }
 
@@ -115,8 +131,41 @@ public class BasicCenterServiceImpl implements BasicCenterService {
      */
     @Override
     public List<CropVariety> getVarietyList() {
-        List<CropVariety> cropVarieties = basicCenterMapper.getVarietyList();
+        List<CropVariety> cropVarieties = cropVarietyMapper.getVarietyList();
         return cropVarieties;
+    }
+    /**
+     * 添加地块
+     * @param lot,overlay
+     * @return
+     */
+    @Transactional
+    @Override
+    public boolean addLot(Lot lot, List<Location> locations) {
+
+        //添加地块表
+        boolean b = lotMapper.addLot(lot);
+
+        //添加地理位置表
+        for (int i = 0; i <locations.size() ; i++) {
+            locations.get(i).setObjId(lot.getId())
+                            .setObjType("lot");
+        }
+        boolean b1=locationMapper.addLocations(locations);
+
+        return b&b1;
+    }
+
+    /**
+     * 查询分场列表vo,一个分场对多个地块，一个地块有对应多个经纬度
+     * @param
+     * @return
+     */
+    @Override
+    public List<ParvialfieldVo> getFenChangListVo() {
+
+        List<ParvialfieldVo> parvialfields = parvialfieldMapper.getFenChangListVo();
+        return parvialfields;
     }
 
 

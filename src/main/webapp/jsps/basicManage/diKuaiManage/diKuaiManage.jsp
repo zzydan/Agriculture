@@ -43,26 +43,75 @@
     再在输入分场地址的时候添加change事件来改变地图中心位置坐标，
     最后在手动微调拖拽标志具体位置来获取坐标存到数据库。
 --%>
-
+<%--
+      难点：只有在地图初始化之后才能在地图上加上自定义下拉框控件，而重新加载地图就要重新加载下拉框。
+    下拉框选择分场的实现：在进入这个页面之后预加载到所有的分场信息，并存到全局变量fenChangList中，给默认选中的分场的id
+    也存到全局变量中fenChangId 用于更新下拉框的值，在获得List的成功回调函数里第一次调用地图方法初始化地图，在下拉框的change
+    事件中重新调用地图的方法并给下拉框赋值
+--%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/GeoUtils.js"></script>
 <script type="text/javascript">
-    // 百度地图API功能
-    var map1 = new BMap.Map("container",{mapType: BMAP_HYBRID_MAP});
-    map1.enableScrollWheelZoom();//启用滚轮放大缩小
-    map1.addControl(new BMap.NavigationControl());  //添加鱼骨控件
-    map1.addControl(new BMap.MapTypeControl());          //添加地图类型控件
-    map1.setCurrentCity("襄阳");          // 设置3D地图显示的城市 此项是必须设置的
-    var point = new BMap.Point(119.17727607665722,31.864854683156516);
-    map1.centerAndZoom(point,19);
+        var fenChangId=1;//存放下拉框选中的分场id默认id为1
+        var fenChangList=null;//存放所有分场的数据
+        var lids=[];//存放回显的多边形的id
+        var map1=null;
     $(function () {
+        $.ajax({
+            url:"/basicCenter/getFenChangListVo",
+            dataType:"json",
+            type:"post",
+            success:function(data){
+
+                if(data){
+                    fenChangList=data;
+                    getMap(fenChangList[0].longitude,fenChangList[0].latitude);
+                }
+
+            }
+        })
+
+
+    })
+        //初始化地图
+    function getMap(lng,lat){
+        // 百度地图API功能
+        map1 = new BMap.Map("container",{mapType: BMAP_HYBRID_MAP});
+        map1.enableScrollWheelZoom();//启用滚轮放大缩小
+        map1.addControl(new BMap.NavigationControl());  //添加鱼骨控件
+        map1.addControl(new BMap.MapTypeControl());          //添加地图类型控件
+        map1.setCurrentCity("襄阳");          // 设置3D地图显示的城市 此项是必须设置的
+        var point = new BMap.Point(lng,lat);
+        map1.centerAndZoom(point,19);
         //调用自定义控件方法，实现地图上出现提示文字
         var searchCtrl=new SearchControl(0,50,50);
         map1.addControl(searchCtrl);
-    })
+        for (let i = 0; i <fenChangList.length ; i++) {
+            if(fenChangId==fenChangList[i].id){
+              var  lotVoList =fenChangList[i].lotVoList//当前分场的所有地块的集合
+
+                for (let j = 0; j < lotVoList.length; j++) {
+                    var lid=lotVoList[j].lid //地块的id
+                    lids.push(lid)//存进全局变量数组
+                    var  locationVoList =lotVoList[j].locationVoList//id为lotVoList[j].lid所有地块的经纬度集合
+                    var arr=new Array();//新建一个数组
+                    var str=""
+                    for (let k= 0; k< locationVoList.length; k++) {
+                        if(k==0){
+                            str+="new BMap.Point("+locationVoList[k].lng+","+locationVoList[k].lat+"),"
+                        }else if(k==locationVoList.length-1){
+                            str+="new BMap.Point("+locationVoList[k].lng+","+locationVoList[k].lat+")"
+                            fun(lid,str) //调用方法回显地块
+                        }else {
+                            str+="new BMap.Point("+locationVoList[k].lng+","+locationVoList[k].lat+"),"
+                        }
+
+                    }
+                }
 
 
-
-
+            }
+        }
+    }
 
 
     /**
@@ -78,12 +127,28 @@
     SearchControl.prototype=new BMap.Control();
     SearchControl.prototype.initialize=function(map){
         var div=document.createElement("div");
+        //拼接下拉框内容
+        var html="<select id=\"fenChangSelect\" style=\"height:35px;width:77px\" name=\"technicianUser\" lay-filter=\"technicianUser\" >"
 
-        $(div).html("<select id=\"technicianUser\" style=\"height:35px;width:77px\" name=\"technicianUser\" lay-filter=\"technicianUser\" ><option>请选择</option> </select>\n" +
-            "            <button onclick=\"huaDiKuai()\" style=\"margin-left: 10px\" class=\"layui-btn\">画地块</button>")
+            $.each(fenChangList,function (a,b) {
+                if(b.id==fenChangId){
+                    html+=" <option selected value=\""+b.id+"\">"+b.name+"</option>"
+                }else {
+                    html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                }
+            })
+        html+= "</select>\n <button onclick=\"huaDiKuai()\" style=\"margin-left: 10px\" class=\"layui-btn\">画地块</button>"
+        $(div).html(html)
+        layui.form.render("select");
         map.getContainer().appendChild(div);
         return div;
     }
+    $("#container").on("change","#fenChangSelect",function () {
+        fenChangId=$("#fenChangSelect").val();
+        //根据选择的分场重新加载地图
+        getMap(fenChangList[fenChangId-1].longitude,fenChangList[fenChangId-1].latitude);
+    })
+
 
     function huaDiKuai() {
            // window.location.href="./huaDiKuai2.jsp"
@@ -91,41 +156,42 @@
     }
 
     //变量名,标签坐标,多边形坐标,文本,边框颜色
-    /*function fun(i,xy,arr,wb,ys) {
+    function fun(lid,arr) {
         //创建经纬度数组
-        eval("var secRingCenter" + i+" = new BMap.Point("+xy+")");
-        eval("var secRing"+i+" = ["+arr+"]");
+        eval("var secRing"+lid+" = ["+arr+"]");
         //创建多边形
-        eval("var secRingPolygon" + i + "= new BMap.Polygon(secRing" + i + ", { strokeColor: \"" + ys + "\", strokeWeight: 4})");
-        //eval("var secRingPolygon" + i + "= new BMap.Polygon(secRing" + i + ", { FillColor:\"red\", strokeColor: \"blue\", strokeWeight: 2, strokeOpacity: 0.3 })");
+        eval("var secRingPolygon" + lid + "= new BMap.Polygon(secRing" + lid + ", { strokeColor: 'green', strokeWeight: 4})");
 
         //添加多边形到地图上
-        map.addOverlay(eval("secRingPolygon"+i));
+        map1.addOverlay(eval("secRingPolygon"+lid));
 
-        var resultArea = BMapLib.GeoUtils.getPolygonArea(eval("secRingPolygon" + i)); //计算多边形的面积（单位米）
 
         //给多边形添加鼠标事件
-        eval("secRingPolygon"+i).addEventListener("mouseover", function () {//鼠标经过时
-            eval("secRingPolygon" + i).setStrokeColor("red"); //多边形边框为红色
-            //eval("secRingPolygon" + i).setFillColor(ys);
-            map.addOverlay(eval("secRingLabel"+i)); //添加多边形遮照
-            //map.panTo(eval("secRingCenter"+i)); //将地图移动到指定点
+        eval("secRingPolygon"+lid).addEventListener("click", function () {//单击
+
+
+            eval("secRingPolygon" + lid).setStrokeColor("blue"); //多边形边框为蓝色
+
+
+            map1.addOverlay(eval("secRingLabel" + lid)); //添加多边形遮照
+        })
+        eval("secRingPolygon"+lid).addEventListener("dblclick", function () {//单击
+
+
+                eval("secRingPolygon" + lid).setStrokeColor("green"); //多边形边框为蓝色
+                map1.addOverlay(eval("secRingLabel"+lid)); //添加多边形遮照
+
+            //eval("secRingPolygon" + lid).setFillColor(ys);
+            //map1.addOverlay(eval("secRingLabel"+lid)); //添加多边形遮照
+            //map.panTo(eval("secRingCenter"+lid)); //将地图移动到指定点
         });
-        eval("secRingPolygon"+i).addEventListener("mouseout", function () {
-            eval("secRingPolygon" + i).setStrokeColor(ys);
-            //eval("secRingPolygon" + i).setFillColor("");
-            map.removeOverlay(eval("secRingLabel"+i));
-        });
-        eval("secRingPolygon"+i).addEventListener("click", function () {
+       /* eval("secRingPolygon"+lid).addEventListener("click", function () {
             map.zoomIn();
-            eval("secRingPolygon" + i).setStrokeColor(ys);
-            //eval("secRingPolygon" + i).setFillColor("");
-            map.setCenter(eval("secRingCenter"+i));
-        });
-        //创建标签
-        eval("var secRingLabel" + i + "= new BMap.Label(\"<b>" + wb + " 面积(㎡)：" + Math.floor(resultArea) + "</b>\", { offset: new BMap.Size(0, 0), position: secRingCenter" + i + "})");
-        eval("secRingLabel"+i).setStyle({ "z-index": "999999", "padding": "2px",  "border": "1px solid #ccff00" });
-    }*/
+            eval("secRingPolygon" + lid).setStrokeColor(ys);
+            //eval("secRingPolygon" + lid).setFillColor("");
+            map.setCenter(eval("secRingCenter"+lid));
+        });*/
+    }
 </script>
 <%--
 画地块模态框
@@ -164,7 +230,6 @@
     var searchCtrl = null;//自定义控件变量
     var area = null;//多边形面积
     var overlays = [];//所有多边形经纬度的集合
-    var overlay = null;//当前这一个多边形的经纬度
     var girth = null; //选取的多边形的周长
     var map=null;
 
@@ -232,7 +297,14 @@
         $("#dkzc").val(girth)
         var path =overlays[overlays.length-1].getPath();
         var str = path[0].lng.toFixed(4)+"E"+"  "+path[0].lat.toFixed(4)+"N"
+        var overlay=[];
+        for (let i = 0; i <path.length ; i++) {
+            var over={"longitude":path[i].lng,"latitude":path[i].lat}
+            overlay.push(over)
+        }
 
+        var overla = JSON.stringify(overlay);
+        $("#overlay").val(overla)
         $("#location").val(str)
         /*//将获取到的courseid传入到session
 
@@ -327,13 +399,13 @@
                             <label class="layui-form-label">地块名称</label>
                             <div class="layui-input-block" style="width:300px">
                                 <input type="text" name="name" placeholder="请输入"
-                                       autocomplete="off" class="layui-input">
+                                       lay-verify="required" autocomplete="on" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">所属分场</label>
                             <div class="layui-input-block">
-                                <select name="ssfc" lay-filter="" >
+                                <select name="ssfc" lay-filter="" lay-verify="required"  >
 
                                 </select>
                             </div>
@@ -343,7 +415,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">土壤质地</label>
                             <div class="layui-input-block">
-                                <select name="trzd" lay-filter="" >
+                                <select name="trzd" lay-filter="" lay-verify="required" >
                                     <option value="">请选择</option>
                                     <option value="沙土">沙土</option>
                                     <option value="壤土">壤土</option>
@@ -359,7 +431,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">作物种类</label>
                             <div class="layui-input-block">
-                                <select id="zwzl" name="zwzl" lay-filter="zwzl">
+                                <select id="zwzl" name="zwzl" lay-filter="zwzl" lay-verify="required">
 
                                 </select>
                             </div>
@@ -367,7 +439,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">作物品种</label>
                             <div class="layui-input-block">
-                                <select id="zwpz" name="zwpz" lay-filter="zwpz" >
+                                <select id="zwpz" name="zwpz" lay-filter="zwpz" lay-verify="required" >
 
                                 </select>
                             </div>
@@ -377,14 +449,14 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">地块组长</label>
                         <div class="layui-inline" style="width: 300px">
-                            <select name="dkzz" lay-filter="" >
+                            <select name="dkzz" lay-filter=""  lay-verify="required">
 
                             </select>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">地块技术员</label>
                             <div class="layui-input-block" style="width:300px">
-                                <input type="text" name="dkjsy" placeholder="请输入"
+                                <input type="text" name="dkjsy" placeholder="请输入" lay-verify="required"
                                        autocomplete="off" class="layui-input">
                             </div>
                         </div>
@@ -392,7 +464,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">犁地方向</label>
                         <div class="layui-inline" style="width: 300px">
-                            <select id="ldfx" name="ldfx" lay-filter="province">
+                            <select id="ldfx" name="ldfx" lay-filter="province" lay-verify="required">
                                 <option value="">请选择</option>
                                 <option value="东向西">东向西</option>
                                 <option value="西向东">西向东</option>
@@ -406,7 +478,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">地块面积(亩)</label>
                             <div class="layui-input-block" style="width:300px">
-                                <input id="dkmj" type="text" name="dkmj" placeholder="请输入"
+                                <input id="dkmj" type="text" name="dkmj" readonly
                                        autocomplete="off" class="layui-input">
                             </div>
                         </div>
@@ -414,7 +486,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">地块周长(米)</label>
                             <div class="layui-input-block" style="width:300px">
-                                <input  id="dkzc" type="text" name="dkzc" placeholder="请输入"
+                                <input  id="dkzc" type="text" name="dkzc" readonly
                                        autocomplete="off" class="layui-input">
                             </div>
                         </div>
@@ -423,18 +495,20 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">经度纬度</label>
                             <div class="layui-input-block" style="width:300px">
-                                <input type="text" name="location" id="location" placeholder="请输入"
+                                <input type="text" name="location" id="location" readonly
                                        autocomplete="off" class="layui-input">
+                                <input id="overlay" name="overlay" >
                             </div>
                         </div>
                     </div>
-                </form>
+
                 <div class="panel-body">
                     <div class="form-group">
-                        <button onclick="addDiKuai()" class="layui-btn" style="margin-left: 40%;">添加</button>
-                        <button data-dismiss="modal" aria-hidden="true" class="layui-btn" style="margin-left: 5%;">取消</button>
+                        <button lay-submit="" lay-filter="addDiKuai" class="layui-btn" style="margin-left: 20%;margin-top: 20%">添加</button>
+                        <button data-dismiss="modal" aria-hidden="true" class="layui-btn" style="margin-left: 30%;margin-top: 20%">取消</button>
                     </div>
                 </div>
+                </form>
             </div><!-- /.modal-content -->
         </div>
     </div><!-- /.modal -->
@@ -512,8 +586,22 @@
                 $("select[name='zwzl']").append(html)
                 layui.form.render("select");
             });
+            // 监听提交
+            form.on('submit(addDiKuai)', function(data) {
+                $.ajax({
+                    type : "POST",
+                    url : "/basicCenter/addLot",
+                    data : $("#diKuai_addForm").serialize(),
+                    dataType : "json",
+                    success : function(data) {
+                        window.location.reload()//刷新当前页面.
 
-        })
+                    }
+                });
+                return false;
+            });
+            form.render(); // 更新全部
+        });
 
     })
 
@@ -540,7 +628,7 @@
     //查询分场列表
     function getFenChangList() {
         $.ajax({
-            url:"/basicCenter/getFenChangList",
+            url:"/basicCenter/getFenChangListVo",
             dataType:"json",
             type:"post",
             success:function(data){
@@ -596,4 +684,5 @@
         })
 
     }
+
 </script>

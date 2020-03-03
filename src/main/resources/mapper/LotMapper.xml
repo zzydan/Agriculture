@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.LotMapper" >
-
+    <!--/**
+    * 添加地块
+    * @param lot
+    * @return
+    */
+    boolean addLot(Lot lot);-->
+    <insert id="addLot" useGeneratedKeys="true" keyProperty="id">
+        insert into lot
+          (createtime, name, ssfc, trzd, dkzz, zwzl, zwpz, dkjsy, ldfx, dkmj, dkzc)
+        values
+          (now(),#{name},#{ssfc},#{trzd},#{dkzz},#{zwzl},#{zwpz},#{dkjsy},#{ldfx},#{dkmj},#{dkzc})
+    </insert>
 </mapper>

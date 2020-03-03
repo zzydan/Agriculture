@@ -6,10 +6,11 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
- * @ClassName CropVariety
+ * @ClassName Lot 地块表
  * @Description TODO
  * @Author Chang
  * @Date 2020/2/28 23:07
@@ -18,14 +19,12 @@ import java.util.Date;
 @Data
 @NoArgsConstructor//无参构造
 @Accessors(chain = true)//链式写法
-public class CropVariety implements Serializable {
-    private int id;
-    private Boolean disabled;
-    private Date createtime;
-    private String name;
-    private Integer userId;
-    private String species;
-    private String zwswxld;
+public class LotVo implements Serializable {
+    private int lId;
+
+    private String lName;
+
+    private List<LocationVo> locationVoList;
 
 
 }

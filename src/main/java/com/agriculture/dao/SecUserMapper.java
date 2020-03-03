@@ -50,4 +50,12 @@ public interface SecUserMapper {
      */
     int upUserId(SecUser SecUser);
 
+
+    /**
+     * 查询角色id查询人员列表
+     * @param roleId
+     * @return
+     */
+    List<SecUser> getUserListByRole(Integer roleId);
+
 }

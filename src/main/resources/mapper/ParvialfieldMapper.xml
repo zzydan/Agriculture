@@ -1,5 +1,115 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.ParvialfieldMapper" >
+    <!--/*添加地块表主键返回*/
+         boolean addParvialfield(Parvialfield parvialfield);-->
+    <insert id="addParvialfield" keyProperty="id" useGeneratedKeys="true">
+        insert into parvialfield (createtime,name,address,fieldlength_user,technician_user)
+        values (now(),#{name},#{address},#{fieldlengthUser},#{technicianUser});
+    </insert>
 
+
+    <!--/*查询分场列表*/
+    List<Parvialfield> getFenChangList();-->
+    <select id="getFenChangList" resultType="com.agriculture.pojo.Parvialfield">
+        SELECT
+            parvialfield.id,
+            parvialfield.NAME,
+            parvialfield.address,
+            a.trueName AS technicianUserName,
+            b.trueName AS fieldlengthUserName,
+            location.latitude,
+            location.longitude
+        FROM
+            parvialfield,
+            sec_user a,
+            sec_user b,
+            location
+        WHERE
+            parvialfield.technician_user = a.id
+            AND parvialfield.fieldlength_user = b.id
+            and location.obj_id=parvialfield.id
+            and location.obj_type="zone"
+
+    </select>
+
+
+
+    <!--/*根据分场id查询分场详情信息*/
+    Parvialfield getFenChangById(Integer id);-->
+
+    <select id="getFenChangById" resultType="com.agriculture.pojo.Parvialfield">
+        SELECT
+            parvialfield.id,
+            parvialfield.NAME,
+            parvialfield.address,
+            parvialfield.technician_user,
+            parvialfield.fieldlength_user,
+            a.trueName AS technicianUserName,
+            b.trueName AS fieldlengthUserName,
+            location.longitude,
+            location.latitude
+        FROM
+            parvialfield,
+            sec_user a,
+            sec_user b,
+            location
+        WHERE
+            parvialfield.technician_user = a.id
+            and location.obj_id=parvialfield.id
+            and location.obj_type='zone'
+            AND parvialfield.fieldlength_user = b.id
+            AND parvialfield.id =#{id}
+    </select>
+
+    <!--/*分场修改基本信息*/
+    boolean updateParvialfield(Parvialfield parvialfield);-->
+    <update id="updateParvialfield">
+        update
+            parvialfield
+        set
+            name=#{name},address=#{address},
+            fieldlength_user=#{fieldlengthUser},
+            technician_user=#{technicianUser}
+        where id=#{id}
+
+    </update>
+    <!--/**
+    * 查询分场列表vo,一个分场对多个地块，一个地块有对应多个经纬度
+    * @param
+    * @return
+    */
+    List<Parvialfield> getFenChangListVo();-->
+    <resultMap id="FenChangListVo" type="com.agriculture.pojo.ParvialfieldVo">
+        <id property="id" column="id" ></id>
+        <result property="name" column="name"></result>
+        <result property="longitude" column="longitude"></result>
+        <result property="latitude" column="latitude"></result>
+        <collection property="lotVoList" ofType="com.agriculture.pojo.LotVo">
+            <id column="lId" property="lId"></id>
+            <result column="lName" property="lName"></result>
+            <collection property="locationVoList" ofType="com.agriculture.pojo.LocationVo">
+                <result property="lng" column="lng"></result>
+                <result property="lat" column="lat"></result>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="getFenChangListVo" resultMap="FenChangListVo" >
+      SELECT
+        p.id id,
+        p.NAME name,
+        b.longitude longitude,
+        b.latitude latitude,
+        lot.id lId,
+        lot.name lName,
+        a.longitude as lng,
+        a.latitude as lat
+      FROM
+        parvialfield p
+        LEFT JOIN location b on b.obj_id = p.id
+        AND b.obj_type = 'zone'
+        LEFT JOIN lot ON p.id = lot.ssfc
+        LEFT JOIN location a ON a.obj_id = lot.id
+        AND a.obj_type = 'lot'
+    </select>
 </mapper>

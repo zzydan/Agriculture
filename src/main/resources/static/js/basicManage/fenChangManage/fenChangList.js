@@ -149,6 +149,7 @@ $('#addFenChang_Modal').on('show.bs.modal', function () {
 
 //添加地块
 function submitAddForm() {
+
     $.ajax({
         url:"${pageContext.request.contextPath}/basicCenter/addPlace",
         data:$("#fenChang_addForm").serialize(),

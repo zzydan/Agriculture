@@ -24,6 +24,7 @@ public interface BasicCenterService {
 
     /**
      * 查询分场列表
+     * @param
      * @return
      */
     List<Parvialfield> getFenChangList();
@@ -43,7 +44,7 @@ public interface BasicCenterService {
     Parvialfield getFenChangById(Integer id);
 
     /**
-     * 修改地块信息
+     * 修改分场信息
      * @param parvialfield
      * @return
      */
@@ -60,4 +61,18 @@ public interface BasicCenterService {
      * @return
      */
     List<CropVariety> getVarietyList();
+
+    /**
+     * 添加地块
+     * @param lot,overlay
+     * @return
+     */
+    boolean addLot(Lot lot, List<Location> locations);
+
+    /**
+     * 查询分场列表vo,一个分场对多个地块，一个地块有对应多个经纬度
+     * @param
+     * @return
+     */
+    List<ParvialfieldVo> getFenChangListVo();
 }

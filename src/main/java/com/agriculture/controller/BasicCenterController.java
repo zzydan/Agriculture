@@ -3,6 +3,8 @@ package com.agriculture.controller;
 
 import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
+
+import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +44,7 @@ public class BasicCenterController {
     }
 
     /**
-     * 修改地块信息
+     * 修改分场信息
      * @param parvialfield
      * @return
      */
@@ -57,6 +59,7 @@ public class BasicCenterController {
 
     /**
      * 查询分场列表
+     * @param
      * @return
      */
     @RequestMapping("getFenChangList")
@@ -65,6 +68,19 @@ public class BasicCenterController {
 
         List<Parvialfield> parvialfields = basicCenterService.getFenChangList();
 
+        return parvialfields;
+    }
+    /**
+     * 查询分场列表vo,一个分场对多个地块，一个地块有对应多个经纬度
+     * @param
+     * @return
+     */
+        @RequestMapping("getFenChangListVo")
+    @ResponseBody
+    public List<ParvialfieldVo> getFenChangListVo(){
+
+        List<ParvialfieldVo> parvialfields = basicCenterService.getFenChangListVo();
+        System.out.println(parvialfields);
         return parvialfields;
     }
 
@@ -119,6 +135,21 @@ public class BasicCenterController {
         List<CropVariety> cropVarieties = basicCenterService.getVarietyList();
 
         return cropVarieties;
+    }
+    /**
+     * 添加地块
+     * @param lot,overlay
+     * @return
+     */
+    @RequestMapping("addLot")
+    @ResponseBody
+    public boolean addLot(Lot lot,String overlay){
+
+        //把js对象数组转化为对象集合
+        List<Location> locations = (List<Location>)JSONArray.parseArray(overlay, Location.class);
+        boolean b = basicCenterService.addLot(lot,locations);
+
+        return b;
     }
 
 

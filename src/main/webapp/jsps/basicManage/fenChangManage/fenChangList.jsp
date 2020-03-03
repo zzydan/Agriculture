@@ -55,14 +55,14 @@
                                     <label class="layui-form-label">分场名称</label>
                                     <div class="layui-input-block">
                                         <input type="text" name="name" placeholder="请输入"
-                                               autocomplete="off" class="layui-input">
+                                               lay-verify="required" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
                                     <label class="layui-form-label">分场地址</label>
                                     <div class="layui-input-block">
                                         <input type="text" name="address" placeholder="请输入" id="address1"
-                                               autocomplete="off" class="layui-input">
+                                               autocomplete="off" lay-verify="required" class="layui-input">
                                     </div>
                                 </div>
                             </div>
@@ -70,14 +70,14 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">分场厂长</label>
                                     <div class="layui-input-block">
-                                        <select  name="fieldlengthUser" lay-filter="fieldlengthUser" >
+                                        <select  name="fieldlengthUser" lay-verify="required" lay-filter="fieldlengthUser" >
                                         </select>
                                     </div>
                                 </div>
                                 <div class="layui-inline">
                                     <label class="layui-form-label">技术员</label>
                                     <div class="layui-input-block">
-                                        <select name="technicianUser" lay-filter="technicianUser" >
+                                        <select name="technicianUser" lay-verify="required" lay-filter="technicianUser" >
 
                                         </select>
                                     </div>
@@ -130,7 +130,7 @@
 
         // 执行一些动作...
         // 百度地图API功能
-        var map = new BMap.Map("addmap",{mapType: BMAP_HYBRID_MAP});
+        var map = new BMap.Map("addmap");
         map.enableScrollWheelZoom();//启用滚轮放大缩小
         var point = new BMap.Point(116.331398,39.897445);
         $("#longitude1").val(116.331398);
@@ -351,7 +351,7 @@
 
                         layui.form.render("select");
                         // 百度地图API功能
-                        var map = new BMap.Map("allmap",{mapType: BMAP_HYBRID_MAP});
+                        var map = new BMap.Map("allmap");
                         map.enableScrollWheelZoom();//启用滚轮放大缩小
                         var point = new BMap.Point(data.longitude,data.latitude);
                         $("#longitude").val(data.longitude);

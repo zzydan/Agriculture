@@ -43,4 +43,6 @@ public interface SecRoleMapper {
      */
     int deleteRoleId(@Param("id")Integer id);
 
+
+
 }

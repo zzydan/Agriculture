@@ -11,27 +11,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor//无参构造
 @Accessors(chain = true)//链式写法
-public class Parvialfield implements Serializable {
+public class ParvialfieldVo implements Serializable {
     private Integer id;
 
-    private Boolean disabled;
-
-    private Date createtime;
-
     private String name;
-
-    private String address;
-
-    private Integer fieldlengthUser;
-
-    private Integer technicianUser;
-
-    private String fieldlengthUserName;//厂长
-
-    private String technicianUserName;//技术员
 
     private String longitude;//分场经度
 
     private String latitude;//分场纬度
+
+    private List<LotVo> lotVoList;//分场包含的地块集合
 
 }

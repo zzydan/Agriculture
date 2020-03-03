@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.CropSpeciesMapper" >
-
+    <!--/**
+         * 查询品种表列表
+         * @param
+         * @return List<CropSpecies>
+         */
+        List<CropSpecies> getSpeciesList();-->
+    <select id="getSpeciesList" resultType="com.agriculture.pojo.CropSpecies">
+        select * from crop_species
+    </select>
 </mapper>

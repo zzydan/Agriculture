@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.LocationMapper" >
-
+    <!--/* 修改地块地理位置*/
+    boolean updateLocation(Parvialfield parvialfield);-->
+    <!--insert into location (createtime,obj_id,obj_type,longitude,latitude)
+    values (now(),#{objId},#{objType},#{longitude},#{latitude});-->
+    <update id="updateLocation">
+      update
+        location
+      set
+        longitude=#{longitude},latitude=#{latitude}
+      where obj_id=#{id} and obj_type='zone'
+    </update>
+    <!--/* 添加地理位置表*/
+   boolean addLocation(Location location);-->
+    <insert id="addLocation">
+        insert into location (createtime,obj_id,obj_type,longitude,latitude)
+        values (now(),#{objId},#{objType},#{longitude},#{latitude});
+    </insert>
+    <!--/**
+    * 添加地块地理位置批量
+    * @param locations
+    * @return
+    */
+    Boolean addLocations(List<Location> locations);-->
+    <insert id="addLocations">
+        insert into location (createtime, obj_id, obj_type, longitude, latitude) values
+        <foreach collection="locations" item="location" separator=",">
+            (now(),#{location.objId},#{location.objType},#{location.longitude},#{location.latitude})
+        </foreach>
+    </insert>
 </mapper>
