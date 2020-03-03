@@ -14,7 +14,27 @@ public class Template implements Serializable {
 
     private Integer category;
 
+    private Integer categoryName;
+
     private Integer variety;
+
+    private Integer varietyName;
+
+    public Integer getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(Integer categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Integer getVarietyName() {
+        return varietyName;
+    }
+
+    public void setVarietyName(Integer varietyName) {
+        this.varietyName = varietyName;
+    }
 
     private static final long serialVersionUID = 1L;
 

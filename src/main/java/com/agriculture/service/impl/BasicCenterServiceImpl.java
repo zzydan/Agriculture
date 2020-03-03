@@ -2,6 +2,7 @@ package com.agriculture.service.impl;
 
 import com.agriculture.dao.AgriculturalMapper;
 import com.agriculture.dao.BasicCenterMapper;
+import com.agriculture.dao.TemplateMapper;
 import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
 import com.github.pagehelper.PageHelper;
@@ -26,6 +27,8 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     private BasicCenterMapper basicCenterMapper;
     @Autowired
     private AgriculturalMapper AgriculturalMapper;
+    @Autowired
+    private TemplateMapper templateMapper;
 
     /**
      * 添加地块
@@ -181,5 +184,20 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         return AgriculturalMapper.UpdateAgricId(Agricultural);
     }
 
+    /**
+     * 查询所有模板
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public PageInfo<Template> findTemplate(OrderPageInfo pageInfo) {
 
+        PageHelper.offsetPage(pageInfo.getOffset(),pageInfo.getLimit());
+
+        List<Template> list = templateMapper.findTemplate(pageInfo);
+
+        PageInfo info = new PageInfo(list);
+
+        return info;
+    }
 }

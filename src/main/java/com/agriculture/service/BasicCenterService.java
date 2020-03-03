@@ -93,4 +93,11 @@ public interface BasicCenterService {
      * @return
      */
     int UpdateAgricId(Agricultural Agricultural);
+
+    /**
+     * 查询所有模板
+     * @param pageInfo
+     * @return
+     */
+    PageInfo<Template> findTemplate(OrderPageInfo pageInfo);
 }

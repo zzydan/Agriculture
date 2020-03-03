@@ -173,8 +173,17 @@ public class BasicCenterController {
         return basicCenterService.UpdateAgricId(Agricultural);
     }
 
-
-
+    /**
+     * 查询所有模板
+     * @param pageInfo
+     * @return
+     */
+    @RequestMapping("findTemplate")
+    @ResponseBody
+    public PageInfo<Template> findTemplate(OrderPageInfo pageInfo) {
+        PageInfo<Template> template = basicCenterService.findTemplate(pageInfo);
+        return template;
+    }
 
 
 
