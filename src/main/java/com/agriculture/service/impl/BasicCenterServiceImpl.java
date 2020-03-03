@@ -1,14 +1,12 @@
 package com.agriculture.service.impl;
 
 import com.agriculture.dao.AgriculturalMapper;
-import com.agriculture.dao.BasicCenterMapper;
 import com.agriculture.dao.TemplateMapper;
 import com.agriculture.dao.*;
 import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,10 +39,10 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
     @Resource
     private LotMapper lotMapper;
-    private BasicCenterMapper basicCenterMapper;
-    @Autowired
+    @Resource
     private AgriculturalMapper AgriculturalMapper;
-    @Autowired
+
+    @Resource
     private TemplateMapper templateMapper;
 
     /**
@@ -58,12 +56,12 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     public boolean addPlace(Parvialfield parvialfield, Location location) {
 
         /*添加地块表主键返回*/
-        boolean b=basicCenterMapper.addParvialfield(parvialfield);
+        boolean b=parvialfieldMapper.addParvialfield(parvialfield);
         location.setObjId(parvialfield.getId());
         location.setObjType("zone");
 
         /* 添加地理位置表*/
-        boolean b1=basicCenterMapper.addLocation(location);
+        boolean b1=locationMapper.addLocation(location);
 
         return b&b1;
     }
@@ -76,7 +74,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Override
     public List<Parvialfield> getFenChangList() {
 
-        List<Parvialfield> parvialfields = basicCenterMapper.getFenChangList();
+        List<Parvialfield> parvialfields = parvialfieldMapper.getFenChangList();
 
         return parvialfields;
     }
@@ -90,7 +88,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Override
     public List<SecUser> getUserListByRole(Integer roleId) {
 
-        List<SecUser> secUsers = basicCenterMapper.getUserListByRole(roleId);
+        List<SecUser> secUsers = secUserMapper.getUserListByRole(roleId);
 
         return secUsers;
     }
@@ -103,7 +101,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Override
     public Parvialfield getFenChangById(Integer id) {
 
-        Parvialfield parvialfield = basicCenterMapper.getFenChangById(id);
+        Parvialfield parvialfield = parvialfieldMapper.getFenChangById(id);
 
         return parvialfield;
     }
@@ -118,10 +116,10 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     public boolean updatePlace(Parvialfield parvialfield) {
 
         //地块修改基本信息
-        boolean b=basicCenterMapper.updateParvialfield(parvialfield);
+        boolean b=parvialfieldMapper.updateParvialfield(parvialfield);
 
         /* 修改地块地理位置*/
-        boolean b1=basicCenterMapper.updateLocation(parvialfield);
+        boolean b1=locationMapper.updateLocation(parvialfield);
         return false;
     }
     /**
@@ -131,7 +129,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
      */
     @Override
     public List<CropSpecies> getSpeciesList() {
-        List<CropSpecies> cropSpecies = basicCenterMapper.getSpeciesList();
+        List<CropSpecies> cropSpecies = cropSpeciesMapper.getSpeciesList();
         return cropSpecies;
     }
 
@@ -142,7 +140,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
      */
     @Override
     public List<CropVariety> getVarietyList() {
-        List<CropVariety> cropVarieties = basicCenterMapper.getVarietyList();
+        List<CropVariety> cropVarieties = cropVarietyMapper.getVarietyList();
         return cropVarieties;
     }
     /**
