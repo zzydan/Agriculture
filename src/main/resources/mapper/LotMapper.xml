@@ -13,4 +13,63 @@
         values
           (now(),#{name},#{ssfc},#{trzd},#{dkzz},#{zwzl},#{zwpz},#{dkjsy},#{ldfx},#{dkmj},#{dkzc})
     </insert>
+
+    <!--/**
+    * 根据地块id查询地块详情
+    * @param lotId
+    * @return
+    */
+    Lot getLotById(Integer lotId);-->
+    <select id="getLotById" resultType="com.agriculture.pojo.Lot">
+      SELECT
+        lot.id,
+        lot.NAME,
+        parvialfield.`name` AS ssfc,
+        a.trueName AS dkzz,
+        crop_species.`name` AS zwzl,
+        crop_variety.`name` AS zwpz,
+        b.trueName AS dkjsy,
+        lot.ldfx,
+        lot.dkmj,
+        lot.dkzc,
+        lot.trzd
+      FROM
+        lot
+        LEFT JOIN parvialfield ON ssfc = parvialfield.id
+        LEFT JOIN sec_user a ON dkzz = a.id
+        LEFT JOIN crop_species ON zwzl = crop_species.id
+        LEFT JOIN crop_variety ON zwpz = crop_variety.id
+        LEFT JOIN sec_user b ON dkjsy = b.id
+      WHERE
+        lot.id = #{lotId}
+    </select>
+    <!--/**
+    * 根据分场id查询所有地块详情
+    * @param fenChangId
+    * @return
+    */
+    List<Lot> getLotByFenChangId(Integer fenChangId);-->
+    <select id="getLotByFenChangId" resultType="com.agriculture.pojo.Lot">
+      SELECT
+        lot.id,
+        lot.NAME,
+        parvialfield.`name` AS ssfc,
+        a.trueName AS dkzz,
+        crop_species.`name` AS zwzl,
+        crop_variety.`name` AS zwpz,
+        b.trueName AS dkjsy,
+        lot.ldfx,
+        lot.dkmj,
+        lot.dkzc,
+        lot.trzd
+      FROM
+        lot
+        LEFT JOIN parvialfield ON ssfc = parvialfield.id
+        LEFT JOIN sec_user a ON dkzz = a.id
+        LEFT JOIN crop_species ON zwzl = crop_species.id
+        LEFT JOIN crop_variety ON zwpz = crop_variety.id
+        LEFT JOIN sec_user b ON dkjsy = b.id
+      WHERE
+        lot.ssfc = #{fenChangId}
+    </select>
 </mapper>

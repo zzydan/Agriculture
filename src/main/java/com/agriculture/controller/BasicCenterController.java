@@ -28,7 +28,7 @@ public class BasicCenterController {
     private BasicCenterService basicCenterService;
 
     /**
-     * 添加地块
+     * 添加分场
      * @param parvialfield
      * @return
      */
@@ -45,7 +45,7 @@ public class BasicCenterController {
     }
 
     /**
-     * 修改地块信息
+     * 修改分场信息
      * @param parvialfield
      * @return
      */
@@ -70,7 +70,45 @@ public class BasicCenterController {
 
         return parvialfields;
     }
+    /**
+     * 查询分场列表vo
+     * @return
+     */
+    @RequestMapping("getFenChangListVo")
+    @ResponseBody
+    public List<ParvialfieldVo> getFenChangListVo(){
 
+        List<ParvialfieldVo> parvialfields = basicCenterService.getFenChangListVo();
+
+        return parvialfields;
+    }
+
+    /**
+     * 根据地块id查询地块详情
+     * @param lotId
+     * @return
+     */
+    @RequestMapping("getLotById")
+    @ResponseBody
+    public Lot getLotById(Integer lotId){
+
+        Lot lot = basicCenterService.getLotById(lotId);
+
+        return lot;
+    }
+    /**
+     * 根据分场id查询所有地块详情
+     * @param fenChangId
+     * @return
+     */
+    @RequestMapping("getLotByFenChangId")
+    @ResponseBody
+    public List<Lot> getLotByFenChangId(Integer fenChangId){
+
+        List<Lot> lots = basicCenterService.getLotByFenChangId(fenChangId);
+
+        return lots;
+    }
     /**
      * 查询角色id查询人员列表
      * @param roleId

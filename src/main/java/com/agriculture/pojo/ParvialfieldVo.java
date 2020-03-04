@@ -20,6 +20,10 @@ public class ParvialfieldVo implements Serializable {
 
     private String latitude;//分场纬度
 
+    private String technicianUser;//技术员id
+
+    private String technicianUserName;//技术员name
+
     private List<LotVo> lotVoList;//分场包含的地块集合
 
 }

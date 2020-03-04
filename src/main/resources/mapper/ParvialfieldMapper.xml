@@ -83,6 +83,8 @@
     <resultMap id="FenChangListVo" type="com.agriculture.pojo.ParvialfieldVo">
         <id property="id" column="id" ></id>
         <result property="name" column="name"></result>
+        <result property="technicianUser" column="technicianUser"></result>
+        <result property="technicianUserName" column="technicianUserName"></result>
         <result property="longitude" column="longitude"></result>
         <result property="latitude" column="latitude"></result>
         <collection property="lotVoList" ofType="com.agriculture.pojo.LotVo">
@@ -97,6 +99,8 @@
     <select id="getFenChangListVo" resultMap="FenChangListVo" >
       SELECT
         p.id id,
+        sec_user.id as technicianUser,
+        sec_user.trueName as technicianUserName,
         p.NAME name,
         b.longitude longitude,
         b.latitude latitude,
@@ -108,6 +112,7 @@
         parvialfield p
         LEFT JOIN location b on b.obj_id = p.id
         AND b.obj_type = 'zone'
+        left join sec_user on sec_user.id=p.technician_user
         LEFT JOIN lot ON p.id = lot.ssfc
         LEFT JOIN location a ON a.obj_id = lot.id
         AND a.obj_type = 'lot'

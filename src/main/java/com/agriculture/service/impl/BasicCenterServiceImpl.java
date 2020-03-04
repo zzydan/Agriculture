@@ -46,7 +46,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     private TemplateMapper templateMapper;
 
     /**
-     * 添加地块
+     * 添加分场
      * @param parvialfield
      * @param location
      * @return
@@ -107,7 +107,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     }
 
     /**
-     * 修改地块信息
+     * 修改分场信息
      * @param parvialfield
      * @return
      */
@@ -115,10 +115,10 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Transactional
     public boolean updatePlace(Parvialfield parvialfield) {
 
-        //地块修改基本信息
+        //分场修改基本信息
         boolean b=parvialfieldMapper.updateParvialfield(parvialfield);
 
-        /* 修改地块地理位置*/
+        /* 修改分场地理位置*/
         boolean b1=locationMapper.updateLocation(parvialfield);
         return false;
     }
@@ -175,6 +175,27 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
         List<ParvialfieldVo> parvialfields = parvialfieldMapper.getFenChangListVo();
         return parvialfields;
+    }
+
+    /**
+     * 根据地块id查询地块详情
+     * @param lotId
+     * @return
+     */
+    @Override
+    public Lot getLotById(Integer lotId) {
+        Lot lot = lotMapper.getLotById(lotId);
+        return lot;
+    }
+    /**
+     * 根据分场id查询所有地块详情
+     * @param fenChangId
+     * @return
+     */
+    @Override
+    public List<Lot> getLotByFenChangId(Integer fenChangId) {
+        List<Lot> lots = lotMapper.getLotByFenChangId(fenChangId);
+        return lots;
     }
 
     /**

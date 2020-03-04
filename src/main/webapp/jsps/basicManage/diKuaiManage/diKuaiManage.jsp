@@ -53,8 +53,12 @@
 <script type="text/javascript">
         var fenChangId=1;//存放下拉框选中的分场id默认id为1
         var fenChangList=null;//存放所有分场的数据
-        var lids=[];//存放回显的多边形的id
+        var arr=new Array();//新建一个数组存放回显的经纬度数据[{lid:1,str:str},{...}]
         var map1=null;
+        var lotId=null;//选中的地块id
+        var lots;//选中的分场的所有地块信息
+        var technicianUser
+        var technicianUserName
     $(function () {
         $.ajax({
             url:"/basicCenter/getFenChangListVo",
@@ -85,22 +89,30 @@
         //调用自定义控件方法，实现地图上出现提示文字
         var searchCtrl=new SearchControl(0,50,50);
         map1.addControl(searchCtrl);
+        getLotByFenChangId();//根据分场查询所有的地块详情
         for (let i = 0; i <fenChangList.length ; i++) {
             if(fenChangId==fenChangList[i].id){
+                technicianUserName=fenChangList[i].technicianUserName
+                technicianUser=fenChangList[i].technicianUser
+
               var  lotVoList =fenChangList[i].lotVoList//当前分场的所有地块的集合
 
                 for (let j = 0; j < lotVoList.length; j++) {
                     var lid=lotVoList[j].lid //地块的id
-                    lids.push(lid)//存进全局变量数组
+
                     var  locationVoList =lotVoList[j].locationVoList//id为lotVoList[j].lid所有地块的经纬度集合
-                    var arr=new Array();//新建一个数组
+
                     var str=""
                     for (let k= 0; k< locationVoList.length; k++) {
+                        var obj={}
                         if(k==0){
                             str+="new BMap.Point("+locationVoList[k].lng+","+locationVoList[k].lat+"),"
                         }else if(k==locationVoList.length-1){
                             str+="new BMap.Point("+locationVoList[k].lng+","+locationVoList[k].lat+")"
-                            fun(lid,str) //调用方法回显地块
+                            obj.lid=lid;
+                            obj.str=str;
+                            arr.push(obj);
+                            fun(lid,str,'green') //调用方法回显地块
                         }else {
                             str+="new BMap.Point("+locationVoList[k].lng+","+locationVoList[k].lat+"),"
                         }
@@ -146,6 +158,7 @@
     $("#container").on("change","#fenChangSelect",function () {
         fenChangId=$("#fenChangSelect").val();
         //根据选择的分场重新加载地图
+
         getMap(fenChangList[fenChangId-1].longitude,fenChangList[fenChangId-1].latitude);
     })
 
@@ -156,11 +169,11 @@
     }
 
     //变量名,标签坐标,多边形坐标,文本,边框颜色
-    function fun(lid,arr) {
+    function fun(lid,str,color) {
         //创建经纬度数组
-        eval("var secRing"+lid+" = ["+arr+"]");
+        eval("var secRing"+lid+" = ["+str+"]");
         //创建多边形
-        eval("var secRingPolygon" + lid + "= new BMap.Polygon(secRing" + lid + ", { strokeColor: 'green', strokeWeight: 4})");
+        eval("var secRingPolygon" + lid + "= new BMap.Polygon(secRing" + lid + ", { strokeColor: '"+color+"', strokeWeight: 4})");
 
         //添加多边形到地图上
         map1.addOverlay(eval("secRingPolygon"+lid));
@@ -168,30 +181,186 @@
 
         //给多边形添加鼠标事件
         eval("secRingPolygon"+lid).addEventListener("click", function () {//单击
+            map1.clearOverlays()//移除所有多边形
+            //重新加载多边形当lid一样时为选中状态变色
+            for (let i = 0; i <arr.length ; i++) {
+                if(arr[i].lid==lid){
+                    fun(arr[i].lid,arr[i].str,'blue')
+                    lotId=lid
+                    var searchCtrl=new SearchControl2(1,0,0);
+                    map1.addControl(searchCtrl);
 
+                }else {
 
-            eval("secRingPolygon" + lid).setStrokeColor("blue"); //多边形边框为蓝色
+                    fun(arr[i].lid,arr[i].str,'green')
+                }
+            }
 
-
-            map1.addOverlay(eval("secRingLabel" + lid)); //添加多边形遮照
         })
-        eval("secRingPolygon"+lid).addEventListener("dblclick", function () {//单击
 
-
-                eval("secRingPolygon" + lid).setStrokeColor("green"); //多边形边框为蓝色
-                map1.addOverlay(eval("secRingLabel"+lid)); //添加多边形遮照
-
-            //eval("secRingPolygon" + lid).setFillColor(ys);
-            //map1.addOverlay(eval("secRingLabel"+lid)); //添加多边形遮照
-            //map.panTo(eval("secRingCenter"+lid)); //将地图移动到指定点
-        });
-       /* eval("secRingPolygon"+lid).addEventListener("click", function () {
-            map.zoomIn();
-            eval("secRingPolygon" + lid).setStrokeColor(ys);
-            //eval("secRingPolygon" + lid).setFillColor("");
-            map.setCenter(eval("secRingCenter"+lid));
-        });*/
     }
+        /**
+         * 自定义的control2 点击地块弹出的地块详情
+         * 需要依赖的 文件有http://fontawesome.io/assets/font-awesome/css/font-awesome.css
+         */
+        //生成自定义控件的方法
+        //生成自定义控件的方法
+        function SearchControl2(posIndex,left,top){
+            var position=[BMAP_ANCHOR_TOP_LEFT,BMAP_ANCHOR_TOP_RIGHT,BMAP_ANCHOR_BOTTOM_LEFT,BMAP_ANCHOR_BOTTOM_RIGHT];
+            this.defaultAnchor=position[posIndex];
+            this.defaultOffset=new BMap.Size(left,top);
+        }
+        SearchControl2.prototype=new BMap.Control();
+        SearchControl2.prototype.initialize=function(map){
+            var div=document.createElement("div");
+            $(div).css({
+                height:"735px",
+                width:"300px",
+                overflow:"auto",
+                border:"1px solid #aaa",
+                backgroundColor:"#fff",
+            });
+            for (let i = 0; i <lots.length ; i++) {
+                if(lots[i].id==lotId){
+                    var lot=lots[i];
+                    $(div).html("<div class=\"layui-card\">\n" +
+                "        <div style=\"font-size: 22px\" class=\"layui-card-header\">"+lot.name+"<button onclick='closeDiv(this)'  style=\"margin-top: 10px\" class=\"close\">X</button></div>\n" +
+                "        <div class=\"layui-card-body\">\n" +
+                "\t\t\t<h4>地块信息</h4>\n" +
+                "\t\t\t<table class=\"layui-table\" lay-skin=\"nob\">\n" +
+                "\t\t\t\t<colgroup>\n" +
+                "\t\t\t\t  <col width=\"150\">\n" +
+                "\t\t\t\t  <col width=\"150\">\n" +
+                "\t\t\t\t</colgroup>\n" +
+                "\t\t\t\t<tbody>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>所属分场</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">"+lot.ssfc+"</td>\n" +
+                "\t\t\t\t \n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>土壤质地</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">"+lot.trzd+"</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>种植种类</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">"+lot.zwzl+"</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>种植品种</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">"+lot.zwpz+"</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>地块组长</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">"+lot.dkzz+"</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>地块技术员</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">"+lot.dkjsy+"</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>犁地方向</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">"+lot.ldfx+"</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>地块面积(亩)</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">"+lot.dkmj+"</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>地块周长(m)</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">"+lot.dkzc+"</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t</tbody>\n" +
+                "\t\t\t</table>\n" +
+                "\t\t  \n" +
+                "        </div>\n" +
+                "   </div>")
+
+                    map.getContainer().appendChild(div);
+                    return div;
+                }
+            }
+            /*$(div).html(" \n" +
+                "   <div class=\"layui-card\">\n" +
+                "        <div class=\"layui-card-header\" style=\"font-size: 22px\">地块-1 <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button></div>\n" +
+                "        <div class=\"layui-card-body\">\n" +
+                "\t\t\t<h4>地块信息</h4>\n" +
+                "\t\t\t<table class=\"layui-table\" lay-skin=\"nob\">\n" +
+                "\t\t\t\t<colgroup>\n" +
+                "\t\t\t\t  <col width=\"150\">\n" +
+                "\t\t\t\t  <col width=\"150\">\n" +
+                "\t\t\t\t</colgroup>\n" +
+                "\t\t\t\t<tbody>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>所属分场</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">九分场</td>\n" +
+                "\t\t\t\t \n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>土壤质地</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">壤土</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>种植品种</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">中棉所01</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>地块组长</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">李逵</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>地块技术员</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">宋江</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>犁地方向</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">东向西</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>地块面积(亩)</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">50</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t  <tr>\n" +
+                "\t\t\t\t\t<td>地块周长(m)</td>\n" +
+                "\t\t\t\t\t<td align=\"right\">18</td>\n" +
+                "\t\t\t\t  </tr>\n" +
+                "\t\t\t\t</tbody>\n" +
+                "\t\t\t</table>\n" +
+                "\t\t  \n" +
+                "        </div>\n" +
+                "   </div>")*/
+
+
+                
+
+
+
+
+
+
+        }
+        //点击右上角X删除div
+        function closeDiv(obj) {
+            map1.getContainer().removeChild(obj.parentNode.parentNode.parentNode);
+
+        }
+        //根据地块id查询地块详情
+        function getLotByFenChangId() {
+
+            $.ajax({
+                url:"/basicCenter/getLotByFenChangId",
+                dataType:"json",
+                data:{"fenChangId":fenChangId},
+                type:"post",
+                success:function(data){
+                    if(data){
+                       lots=data;
+
+                    }
+                }
+            })
+
+        }
 </script>
 <%--
 画地块模态框
@@ -456,8 +625,9 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">地块技术员</label>
                             <div class="layui-input-block" style="width:300px">
-                                <input type="text" name="dkjsy" placeholder="请输入" lay-verify="required"
+                                <input type="text" id="technicianUserName" readonly lay-verify="required"
                                        autocomplete="off" class="layui-input">
+                                <input hidden id="dkjsy" name="dkjsy">
                             </div>
                         </div>
                     </div>
@@ -497,7 +667,7 @@
                             <div class="layui-input-block" style="width:300px">
                                 <input type="text" name="location" id="location" readonly
                                        autocomplete="off" class="layui-input">
-                                <input id="overlay" name="overlay" >
+                                <input hidden id="overlay" name="overlay" >
                             </div>
                         </div>
                     </div>
@@ -519,6 +689,9 @@
     var varietyList=null;//品种集合
     $('#basicDiKUai_Modal').on('show.bs.modal', function () {
         layui.use('form', function () {//form表单预加载样式
+           /* technicianUserName*/
+            $("#technicianUserName").val(technicianUserName)
+            $("#dkjsy").val(technicianUser)
             var form = layui.form;
             form.render();
 
