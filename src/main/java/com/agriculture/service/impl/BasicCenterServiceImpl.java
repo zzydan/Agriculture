@@ -197,6 +197,31 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         List<Lot> lots = lotMapper.getLotByFenChangId(fenChangId);
         return lots;
     }
+    /**
+     * 查询所有地块详情
+     * @param
+     * @param fenChangId
+     * @param diKuaiName
+     * @return
+     */
+    @Override
+    public List<Lot> getLotListAll(Integer fenChangId, String diKuaiName) {
+        List<Lot> lots = lotMapper.getLotListAll(fenChangId,diKuaiName);
+        return lots;
+    }
+
+    /**
+     * 根据地块id修改地块详情
+     * @param lot
+     * @return
+     */
+    @Override
+    public boolean updateLot(Lot lot) {
+
+        boolean b = lotMapper.updateLot(lot);
+
+        return b;
+    }
 
     /**
      * 查询所有农资

@@ -9,9 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.util.Date;
 
-@Data
-@NoArgsConstructor//无参构造
-@Accessors(chain = true)//链式写法
 public class LocationVo implements Serializable {
     private Integer id;
 
@@ -19,5 +16,27 @@ public class LocationVo implements Serializable {
 
     private String lat;
 
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
 }

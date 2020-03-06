@@ -138,6 +138,22 @@ public interface BasicCenterService {
     List<Lot> getLotByFenChangId(Integer fenChangId);
 
     /**
+     * 查询所有地块详情
+     * @param
+     * @param fenChangId
+     * @param diKuaiName
+     * @return
+     */
+    List<Lot> getLotListAll(Integer fenChangId, String diKuaiName);
+
+    /**
+     * 根据地块id修改地块详情
+     * @param lot
+     * @return
+     */
+    boolean updateLot(Lot lot);
+
+    /**
      * 删除模板
      * @param templateId
      * @return

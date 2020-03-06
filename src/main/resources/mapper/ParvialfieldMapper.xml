@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.ParvialfieldMapper" >
+   <!--获取所有分厂-->
+    <select id="getAll" resultType="com.agriculture.pojo.Parvialfield">
+       SELECT *
+FROM `parvialfield`
+    </select>
     <!--/*添加地块表主键返回*/
          boolean addParvialfield(Parvialfield parvialfield);-->
     <insert id="addParvialfield" keyProperty="id" useGeneratedKeys="true">

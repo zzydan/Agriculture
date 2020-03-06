@@ -40,7 +40,6 @@ public class BasicCenterController {
         location.setLatitude(parvialfield.getLatitude());
         location.setLongitude(parvialfield.getLongitude());
         boolean b = basicCenterService.addPlace(parvialfield,location);
-
         return b;
     }
 
@@ -97,6 +96,19 @@ public class BasicCenterController {
         return lot;
     }
     /**
+     * 根据地块id修改地块详情
+     * @param lot
+     * @return
+     */
+    @RequestMapping("updateLot")
+    @ResponseBody
+    public boolean updateLot(Lot lot){
+
+      boolean b = basicCenterService.updateLot(lot);
+
+        return b;
+    }
+    /**
      * 根据分场id查询所有地块详情
      * @param fenChangId
      * @return
@@ -106,6 +118,19 @@ public class BasicCenterController {
     public List<Lot> getLotByFenChangId(Integer fenChangId){
 
         List<Lot> lots = basicCenterService.getLotByFenChangId(fenChangId);
+
+        return lots;
+    }
+    /**
+     * 查询所有地块详情
+     * @param fenChangId,diKuaiName
+     * @return
+     */
+    @RequestMapping("getLotListAll")
+    @ResponseBody
+    public List<Lot> getLotListAll(Integer fenChangId,String diKuaiName){
+
+        List<Lot> lots = basicCenterService.getLotListAll(fenChangId,diKuaiName);
 
         return lots;
     }

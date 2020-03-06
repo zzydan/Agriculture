@@ -11,6 +11,12 @@
     #diKuai_addForm {
         margin-left: 150px;
     }
+    #diKuai_updateForm .layui-input-block{
+        width: 300px;
+    }
+    #diKuai_updateForm {
+        margin-left: 150px;
+    }
 </style>
 <%--选项卡--%>
 <div class="layui-tab layui-tab-card">
@@ -29,7 +35,61 @@
 
 
         <%--列表--%>
-        <div class="layui-tab-item">2</div>
+        <div class="layui-tab-item">
+            <div class="layui-card">
+                <div class="panel-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">查询条件</div>
+                        <div class="panel-body">
+                            <form id="user_likeForm" class="form-horizontal">
+                                <div class="form-group" style="margin-top:15px">
+                                    <label class="control-label col-sm-1">选择分场</label>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" name="fenChangId" id="fenChangId">
+
+                                        </select>
+                                    </div>
+                                    <label class="control-label col-sm-1">地块名称</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" name="name" id="diKuaiName">
+                                    </div>
+                                    <div class="col-sm-2" style="text-align:left;">
+                                        <button type="button" style="margin-left:50px" onclick="diKuai_table()"
+                                                class="layui-btn">查询
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="toolbar" class="btn-group">
+                        <button id="btn_add" type="button" class="btn btn-default" onclick="addUserInfo()">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                        </button>
+                    </div>
+                    <style>
+                        #diKuai_table tr th {
+                            padding: 1px;
+                            height: 37px;
+                            font-size: 14px;
+                            text-align: center;
+                            vertical-align: middle;
+                        }
+
+                        #diKuai_table tr td {
+                            padding: 1px;
+                            height: 37px;
+                            font-size: 14px;
+                            text-align: center;
+                            vertical-align: middle;
+                        }
+                    </style>
+                    <table id="diKuai_table"></table>
+                </div>
+            </div>
+
+        </div>
 
     </div>
 </div>
@@ -60,6 +120,8 @@
         var technicianUser
         var technicianUserName
     $(function () {
+
+        //预加载查询分场信息
         $.ajax({
             url:"/basicCenter/getFenChangListVo",
             dataType:"json",
@@ -68,14 +130,96 @@
 
                 if(data){
                     fenChangList=data;
+                    var html=" <option value='0'>请选择</option>"
                     getMap(fenChangList[0].longitude,fenChangList[0].latitude);
+                    $.each(data,function (a,b) {
+                        html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                    })
+                    $("#fenChangId").append(html);//分场列表条件查询
+                    $("#ssfc").append(html);//添加地块，详情页面下拉框赋值
+                    layui.form.render("select");
                 }
 
             }
         })
 
-
+        diKuai_table();
     })
+        //显示分场列表的方法
+        function diKuai_table() {
+            var fenChangId= $("#fenChangId").val();
+            if(fenChangId==null){
+                fenChangId=0;
+            }
+            var diKuaiName= $("#diKuaiName").val();
+            $("#diKuai_table").bootstrapTable("destroy");
+            $("#diKuai_table").bootstrapTable({ // 对应table标签的id
+                url: "/basicCenter/getLotListAll?fenChangId="+fenChangId+"&diKuaiName="+diKuaiName, // 获取表格数据的url
+                pagination:true,
+                toolbar: '#toolbar', //工具按钮用哪个容器
+                striped: true,       //是否显示行间隔色
+                clickToSelect: true, //设置复选框头
+                showRefresh: true,   //是否显示刷新按钮
+                pageNumber:1,
+
+                pageSize: 7,
+                pageList: [3, 5, 10, 15],
+                columns: [//field对应的是entity中的属性 title:列名
+                    {
+                        field: 'id', // 返回json数据中的name
+                        title: '序号', // 表格表头显示文字
+                        align:"center",
+                        formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                            return index + 1;
+                        }
+                    }, {
+                        field: 'name',
+                        align:"center",
+                        valign: "middle",
+                        title: '地块名称'
+                    }, {
+                        field: 'ssfc',
+                        valign: "middle",
+                        align:"center",
+                        title: "分场名称"
+                    }, {
+                        field: 'dkmj',
+                        valign: "middle",
+                        align:"center",
+                        title: "面积(亩)"
+                    }, {
+                        field: 'trzd',
+                        valign: "middle",
+                        align:"center",
+                        title: "土壤质地"
+                    }, {
+                        field: 'zwpz',
+                        valign: "middle",
+                        align:"center",
+                        title: '种植品种',
+                    }, {
+                        field: 'createtime',
+                        valign: "middle",
+                        align:"center",
+                        title: '创建时间',
+                    },{
+                        title: "操作",
+                        valign: "middle",
+                        align:"center",
+                        formatter: function (value, row, index) {
+                            var str =
+                                "<a onclick=\"showDiKuaiDetail(\'" + row.id + "\')\" class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
+                                "<i  class=\"layui-icon layui-icon-edit\">" +
+                                "</i>查看</a> " +
+                                "<a onclick=\"updateDiKuaiDetail(\'" + row.id + "\')\" class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
+                                "<i class=\"layui-icon layui-icon-delete\">" +
+                                "</i>修改</a> ";
+                            return str;
+                        }
+                    }
+                ]
+            })
+        }
         //初始化地图
     function getMap(lng,lat){
         // 百度地图API功能
@@ -158,13 +302,12 @@
     $("#container").on("change","#fenChangSelect",function () {
         fenChangId=$("#fenChangSelect").val();
         //根据选择的分场重新加载地图
-
         getMap(fenChangList[fenChangId-1].longitude,fenChangList[fenChangId-1].latitude);
     })
 
 
     function huaDiKuai() {
-           // window.location.href="./huaDiKuai2.jsp"
+
         $("#huaDiKUai_Modal").modal("show")
     }
 
@@ -181,8 +324,10 @@
 
         //给多边形添加鼠标事件
         eval("secRingPolygon"+lid).addEventListener("click", function () {//单击
+            getMap(fenChangList[fenChangId-1].longitude,fenChangList[fenChangId-1].latitude);
             map1.clearOverlays()//移除所有多边形
             //重新加载多边形当lid一样时为选中状态变色
+
             for (let i = 0; i <arr.length ; i++) {
                 if(arr[i].lid==lid){
                     fun(arr[i].lid,arr[i].str,'blue')
@@ -224,7 +369,7 @@
                 if(lots[i].id==lotId){
                     var lot=lots[i];
                     $(div).html("<div class=\"layui-card\">\n" +
-                "        <div style=\"font-size: 22px\" class=\"layui-card-header\">"+lot.name+"<button onclick='closeDiv(this)'  style=\"margin-top: 10px\" class=\"close\">X</button></div>\n" +
+                "        <div style=\"font-size: 22px\" class=\"layui-card-header\">"+lot.name+"<button onclick='closeDiv(this)'  style=\"margin-top: 10px;width:15px;height: 15px\" class=\"close\">X</button></div>\n" +
                 "        <div class=\"layui-card-body\">\n" +
                 "\t\t\t<h4>地块信息</h4>\n" +
                 "\t\t\t<table class=\"layui-table\" lay-skin=\"nob\">\n" +
@@ -280,63 +425,6 @@
                     return div;
                 }
             }
-            /*$(div).html(" \n" +
-                "   <div class=\"layui-card\">\n" +
-                "        <div class=\"layui-card-header\" style=\"font-size: 22px\">地块-1 <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button></div>\n" +
-                "        <div class=\"layui-card-body\">\n" +
-                "\t\t\t<h4>地块信息</h4>\n" +
-                "\t\t\t<table class=\"layui-table\" lay-skin=\"nob\">\n" +
-                "\t\t\t\t<colgroup>\n" +
-                "\t\t\t\t  <col width=\"150\">\n" +
-                "\t\t\t\t  <col width=\"150\">\n" +
-                "\t\t\t\t</colgroup>\n" +
-                "\t\t\t\t<tbody>\n" +
-                "\t\t\t\t  <tr>\n" +
-                "\t\t\t\t\t<td>所属分场</td>\n" +
-                "\t\t\t\t\t<td align=\"right\">九分场</td>\n" +
-                "\t\t\t\t \n" +
-                "\t\t\t\t  </tr>\n" +
-                "\t\t\t\t  <tr>\n" +
-                "\t\t\t\t\t<td>土壤质地</td>\n" +
-                "\t\t\t\t\t<td align=\"right\">壤土</td>\n" +
-                "\t\t\t\t  </tr>\n" +
-                "\t\t\t\t  <tr>\n" +
-                "\t\t\t\t\t<td>种植品种</td>\n" +
-                "\t\t\t\t\t<td align=\"right\">中棉所01</td>\n" +
-                "\t\t\t\t  </tr>\n" +
-                "\t\t\t\t  <tr>\n" +
-                "\t\t\t\t\t<td>地块组长</td>\n" +
-                "\t\t\t\t\t<td align=\"right\">李逵</td>\n" +
-                "\t\t\t\t  </tr>\n" +
-                "\t\t\t\t  <tr>\n" +
-                "\t\t\t\t\t<td>地块技术员</td>\n" +
-                "\t\t\t\t\t<td align=\"right\">宋江</td>\n" +
-                "\t\t\t\t  </tr>\n" +
-                "\t\t\t\t  <tr>\n" +
-                "\t\t\t\t\t<td>犁地方向</td>\n" +
-                "\t\t\t\t\t<td align=\"right\">东向西</td>\n" +
-                "\t\t\t\t  </tr>\n" +
-                "\t\t\t\t  <tr>\n" +
-                "\t\t\t\t\t<td>地块面积(亩)</td>\n" +
-                "\t\t\t\t\t<td align=\"right\">50</td>\n" +
-                "\t\t\t\t  </tr>\n" +
-                "\t\t\t\t  <tr>\n" +
-                "\t\t\t\t\t<td>地块周长(m)</td>\n" +
-                "\t\t\t\t\t<td align=\"right\">18</td>\n" +
-                "\t\t\t\t  </tr>\n" +
-                "\t\t\t\t</tbody>\n" +
-                "\t\t\t</table>\n" +
-                "\t\t  \n" +
-                "        </div>\n" +
-                "   </div>")*/
-
-
-                
-
-
-
-
-
 
         }
         //点击右上角X删除div
@@ -361,10 +449,49 @@
             })
 
         }
+        //打开地块查看模态框
+            function showDiKuaiDetail(lotId) {
+                $("#showDiKuaiDetail_Modal").modal("show")
+                $.ajax({
+                    url:"/basicCenter/getLotById",
+                    dataType:"json",
+                    data:{"lotId":lotId},
+                    type:"post",
+                    success:function(data){
+                        $("#d1").html(data.name);
+                        $("#d2").html(data.ssfc);
+                        $("#d3").html(data.trzd);
+                        $("#d4").html(data.ldfx);
+                        $("#d5").html(data.zwzl);
+                        $("#d6").html(data.zwpz);
+                        $("#d7").html(data.dkzz);
+                        $("#d8").html(data.dkjsy);
+                        $("#d9").html(data.dkmj);
+                        $("#d10").html(data.dkzc);
+                    }
+                })
+        }
+        //打开地块详情模态框
+        var updateLotDetail ;
+            function updateDiKuaiDetail(lotId) {
+
+                $.ajax({
+                    url:"/basicCenter/getLotById",
+                    dataType:"json",
+                    data:{"lotId":lotId},
+                    type:"post",
+                    success:function(data){
+
+                       if(data){
+                           updateLotDetail=data;
+                           $("#updateDiKUai_Modal").modal("show")
+
+                       }
+                    }
+                })
+        }
 </script>
-<%--
-画地块模态框
---%>
+
 <!-- 画地块模态框（Modal） -->
 <div class="modal" id="huaDiKUai_Modal" tabindex="-1" aria-labelledby="myModalLabel" style="margin-left: -700px;">
     <div class="modal-dialog">
@@ -446,9 +573,7 @@
                 ]
 
             },
-            /*circleOptions: styleOptions, //圆的样式
-            polylineOptions: styleOptions, //线的样式
-            rectangleOptions: styleOptions, //矩形的样式,*/
+
 
             polygonOptions: styleOptions //多边形的样式
         })
@@ -475,13 +600,7 @@
         var overla = JSON.stringify(overlay);
         $("#overlay").val(overla)
         $("#location").val(str)
-        /*//将获取到的courseid传入到session
 
-        sessionStorage.setItem("overlay",overlay);
-        sessionStorage.setItem("area",area);
-        sessionStorage.setItem("girth",girth);
-        //跳转到修改页面
-        window.location.href="./huaDiKuai3.jsp";*/
     }
     //清除覆盖物
     function clearAll() {
@@ -551,7 +670,6 @@
         return div;
     }
 </script>
-
 <!-- 添加地块基本信息模态框（Modal） -->
 <div class="modal" id="basicDiKUai_Modal" tabindex="-1" aria-labelledby="myModalLabel" style="margin-left: -700px;">
     <div class="modal-dialog">
@@ -567,14 +685,14 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">地块名称</label>
                             <div class="layui-input-block" style="width:300px">
-                                <input type="text" name="name" placeholder="请输入"
+                                <input type="text" name="name" id="name" placeholder="请输入"
                                        lay-verify="required" autocomplete="on" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">所属分场</label>
                             <div class="layui-input-block">
-                                <select name="ssfc" lay-filter="" lay-verify="required"  >
+                                <select name="ssfc" lay-filter="" id="ssfc" lay-verify="required"  >
 
                                 </select>
                             </div>
@@ -584,7 +702,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">土壤质地</label>
                             <div class="layui-input-block">
-                                <select name="trzd" lay-filter="" lay-verify="required" >
+                                <select name="trzd" lay-filter="" id="trzd" lay-verify="required" >
                                     <option value="">请选择</option>
                                     <option value="沙土">沙土</option>
                                     <option value="壤土">壤土</option>
@@ -618,7 +736,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">地块组长</label>
                         <div class="layui-inline" style="width: 300px">
-                            <select name="dkzz" lay-filter=""  lay-verify="required">
+                            <select name="dkzz" lay-filter="" id="dkzz"  lay-verify="required">
 
                             </select>
                         </div>
@@ -698,8 +816,6 @@
             //预加载组长下拉框
             getLeaderList();
 
-            //预加载分场名
-            getFenChangList();
 
             //预加载物种种类
             getSpeciesList();
@@ -723,8 +839,8 @@
                         html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
                     })
                 }
-                $("select[name='zwpz']").empty()
-                $("select[name='zwpz']").append(html)
+                $("#zwpz").empty()
+                $("#zwpz").append(html)
                 form.render("select");
             });
 
@@ -755,8 +871,8 @@
                     })
 
                 }
-                $("select[name='zwzl']").empty()
-                $("select[name='zwzl']").append(html)
+                $("#zwzl").empty()
+                $("#zwzl").append(html)
                 layui.form.render("select");
             });
             // 监听提交
@@ -792,26 +908,7 @@
                         html+=" <option value=\""+b.id+"\">"+b.truename+"</option>"
                     })
                 }
-                $("select[name='dkzz']").append(html)
-                layui.form.render("select");
-            }
-        })
-
-    }
-    //查询分场列表
-    function getFenChangList() {
-        $.ajax({
-            url:"/basicCenter/getFenChangListVo",
-            dataType:"json",
-            type:"post",
-            success:function(data){
-                var html="<option value=\"\">请选择</option>"
-                if(data){
-                    $.each(data,function (a,b) {
-                        html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
-                    })
-                }
-                $("select[name='ssfc']").append(html)
+                $("#dkzz").append(html)
                 layui.form.render("select");
             }
         })
@@ -831,7 +928,7 @@
                         html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
                     })
                 }
-                $("select[name='zwzl']").append(html)
+                $("#zwzl").append(html)
                 layui.form.render("select");
             }
         })
@@ -851,7 +948,7 @@
                         html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
                     })
                 }
-                $("select[name='zwpz']").append(html)
+                $("#zwpz").append(html)
                 layui.form.render("select");
             }
         })
@@ -859,3 +956,362 @@
     }
 
 </script>
+<!-- 修改地块基本信息模态框（Modal） -->
+<div class="modal" id="updateDiKUai_Modal" tabindex="-1" aria-labelledby="myModalLabel" style="margin-left: -700px;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 1200px;height:800px;margin-right: 250px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" >修改分场基本信息</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="diKuai_updateForm" class="layui-form">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">地块名称</label>
+                            <div class="layui-input-block" style="width:300px">
+                                <input type="text" name="name" placeholder="请输入" id="name1"
+                                       lay-verify="required" autocomplete="on" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所属分场</label>
+                            <div class="layui-input-block">
+                                <select name="ssfc" lay-filter="" id= "ssfc1" lay-verify="required"  >
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">土壤质地</label>
+                            <div class="layui-input-block">
+                                <select name="trzd" lay-filter="" id= "trzd1"  lay-verify="required" >
+                                    <option value="">请选择</option>
+                                    <option value="沙土">沙土</option>
+                                    <option value="壤土">壤土</option>
+                                    <option value="沙壤土">沙壤土</option>
+                                    <option value="中壤土">中壤土</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">作物种类</label>
+                            <div class="layui-input-block">
+                                <select name="zwzl" lay-filter="zwzl1"  id= "zwzl1"  lay-verify="required">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">作物品种</label>
+                            <div class="layui-input-block">
+                                <select name="zwpz" lay-filter="zwpz1" id= "zwpz1"   lay-verify="required" >
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">地块组长</label>
+                        <div class="layui-inline" style="width: 300px">
+                            <select name="dkzz" lay-filter="" id="dkzz1"  lay-verify="required">
+
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">地块技术员</label>
+                            <div class="layui-input-block" style="width:300px">
+                                <input type="text"  readonly lay-verify="required"  id="dkjsy1"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">犁地方向</label>
+                        <div class="layui-inline" style="width: 300px">
+                            <select name="ldfx" lay-filter="province" id="ldfx1" lay-verify="required">
+                                <option value="">请选择</option>
+                                <option value="东向西">东向西</option>
+                                <option value="西向东">西向东</option>
+                                <option value="南向北">南向北</option>
+                                <option value="北向南">北向南</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">地块面积(亩)</label>
+                            <div class="layui-input-block" style="width:300px">
+                                <input  type="text" name="dkmj" readonly id="dkmj1"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">地块周长(米)</label>
+                            <div class="layui-input-block" style="width:300px">
+                                <input type="text" name="dkzc" readonly id="dkzc1"
+                                       autocomplete="off" class="layui-input">
+                                <input id="id1" name="id" hidden>
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="panel-body">
+                    <div class="form-group">
+                        <button lay-submit="" lay-filter="updateDiKuai" class="layui-btn" style="margin-left: 20%;margin-top: 20%">修改</button>
+                        <button data-dismiss="modal" aria-hidden="true" class="layui-btn" style="margin-left: 30%;margin-top: 20%">取消</button>
+                    </div>
+                </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div>
+    </div><!-- /.modal -->
+</div>
+<script>
+
+    $('#updateDiKUai_Modal').on('show.bs.modal', function () {
+        layui.use('form', function () {//form表单预加载样式
+            $("#name1").val(updateLotDetail.name)
+            $("#ssfc1").val(updateLotDetail.ssfc)
+            $("#trzd1").val(updateLotDetail.trzd)
+            $("#dkjsy1").val(updateLotDetail.dkjsy)
+            $("#ldfx1").val(updateLotDetail.ldfx)
+            $("#dkmj1").val(updateLotDetail.dkmj)
+            $("#dkzc1").val(updateLotDetail.dkzc)
+            $("#id1").val(updateLotDetail.id)
+            var form = layui.form;
+            form.render();
+
+            //预加载组长下拉框
+            getLeaderList1(updateLotDetail.dkzz);
+
+
+            //预加载物种种类
+            getSpeciesList1(updateLotDetail.zwzl);
+
+            //查询物种品种
+            getVarietyList1(updateLotDetail.zwpz)
+
+            //查询所属分场
+            getFenChangList(updateLotDetail.ssfc)
+
+            //物种下拉框改变，品种的选项相应的变化
+            form.on('select(zwpz1)', function(data){
+                var html="<option value=\"\">请选择</option>"
+                if(data.value!=null &&data.value!=""){
+
+                    $.each(varietyList,function (a,b) {
+                        if(data.value==b.species){
+                            html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                        }
+                    })
+
+                }else {
+                    $.each(varietyList,function (a,b) {
+                        html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                    })
+                }
+                $("#zwzl1").empty()
+                $("#zwzl1").append(html)
+                form.render("select");
+            });
+
+
+            //品种变化相应的物种跟着变化
+            //lay-filter="zwpz"
+            form.on('select(zwpz1)', function(data){
+                var html="<option value=\"\">请选择</option>"
+                if(data.value!=null &&data.value!=""){
+                    var zwpz=null;
+                    for (let i = 0; i < varietyList.length; i++) {
+                        if(data.value==varietyList[i].id){
+                            zwpz=varietyList[i].species
+                        }
+                    }
+
+                    $.each(speciesList,function (a,b) {
+                        if(zwpz==b.id){
+                            html+=" <option selected value=\""+b.id+"\">"+b.name+"</option>"
+                        }else {
+                            html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                        }
+                    })
+
+                }else{
+                    $.each(speciesList,function (a,b) {
+                            html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
+                    })
+
+                }
+                $("#zwzl1").empty()
+                $("#zwzl1").append(html)
+                layui.form.render("select");
+            });
+            // 监听提交
+            form.on('submit(updateDiKuai)', function(data) {
+                $.ajax({
+                    type : "POST",
+                    url : "/basicCenter/updateLot",
+                    data : $("#diKuai_updateForm").serialize(),
+                    dataType : "json",
+                    success : function(data) {
+                        window.location.reload()//刷新当前页面.
+
+                    }
+                });
+                return false;
+            });
+            form.render(); // 更新全部
+        });
+
+    })
+
+    //查询组长列表
+    function getLeaderList1(dkzz) {
+        $.ajax({
+            url:"/basicCenter/getUserListByRole",
+            data:{"roleId":6},
+            dataType:"json",
+            type:"post",
+            success:function(data){
+                var html="<option value=\"\">请选择</option>"
+                if(data){
+                    $.each(data,function (a,b) {
+                        if(b.truename==dkzz){
+                            html+=" <option selected value=\""+b.id+"\">"+b.truename+"</option>"
+                        }else {
+                            html+=" <option value=\""+b.id+"\">"+b.truename+"</option>"
+                        }
+                    })
+                }
+                $("#dkzz1").append(html)
+                layui.form.render("select");
+            }
+        })
+
+    }
+    //查询种类列表
+    function getSpeciesList1(zwzl) {
+        $.ajax({
+            url:"/basicCenter/getSpeciesList",
+            dataType:"json",
+            type:"post",
+            success:function(data){
+                var html="<option value=\"\">请选择</option>"
+                if(data){
+                    speciesList=data;
+                    $.each(data,function (a,b) {
+                        if (b.name == zwzl) {
+                            html += " <option selected value=\"" + b.id + "\">" + b.name + "</option>"
+                        } else {
+                            html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
+                        }
+                    })
+                }
+                $("#zwzl1").append(html)
+                layui.form.render("select");
+            }
+        })
+
+    }
+    //查询品种列表
+    function getVarietyList1(zwpz) {
+        $.ajax({
+            url:"/basicCenter/getVarietyList",
+            dataType:"json",
+            type:"post",
+            success:function(data){
+                var html="<option value=\"\">请选择</option>"
+                if(data){
+                    varietyList=data;
+                    $.each(data,function (a,b) {
+                        if (b.name == zwpz) {
+                            html += " <option selected value=\"" + b.id + "\">" + b.name + "</option>"
+                        } else {
+                            html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
+                        }
+                    })
+                }
+                $("#zwpz1").append(html)
+                layui.form.render("select");
+            }
+        })
+
+    }
+    function getFenChangList(ssfc) {
+        $.ajax({
+            url:"/basicCenter/getFenChangListVo",
+            dataType:"json",
+            type:"post",
+            success:function(data){
+
+                if(data){
+
+                    var html=" <option value='0'>请选择</option>"
+
+                    $.each(data,function (a,b) {
+                        if (b.name == ssfc) {
+                            html += " <option selected value=\"" + b.id + "\">" + b.name + "</option>"
+                        } else {
+                            html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
+                        }
+                    })
+
+                    $("#ssfc1").append(html);//添加地块，详情页面下拉框赋值
+                    layui.form.render("select");
+                }
+
+            }
+        })
+    }
+</script>
+<!-- 查看地块基本信息模态框（Modal） -->
+<div class="modal" id="showDiKuaiDetail_Modal" tabindex="-1" aria-labelledby="myModalLabel" style="margin-left: -700px;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 800px;height:400px;margin-right: 350px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" >地块详情</h4>
+            </div>
+
+            <div class="modal-body">
+                <table class="layui-table" lay-skin="nob">
+                    <colgroup> <col width="150"><col width="150"></colgroup>
+                    <tr>
+                        <td>地块名称：<text id="d1"></text></td>
+                        <td>所属分场：<text id="d2"></text></td>
+                    </tr>
+                    <tr>
+                        <td>土壤质地：<text id="d3"></text></td>
+                        <td>犁地方向：<text id="d4"></text></td>
+                    </tr>
+                    <tr>
+                        <td>作物种类：<text id="d5"></text></td>
+                        <td>作物品种：<text id="d6"></text></td>
+                    </tr>
+                    <tr>
+                        <td>地块组长：<text id="d7"></text></td>
+                        <td>地块技术员：<text id="d8"></text></td>
+                    </tr>
+                    <tr>
+
+                        <td>地块面积(亩)：<text id="d9"></text></td>
+                        <td>地块周长：<text id="d10"></text></td>
+                    </tr>
+
+                </table>
+
+            </div><!-- /.modal-content -->
+        </div>
+    </div><!-- /.modal -->
+</div>

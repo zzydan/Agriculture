@@ -2,9 +2,17 @@ package com.agriculture.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 public class FarmWork implements Serializable {
+    private String unitmeasurement;
+    private String lotname;
+    private String cropspeciesname;
+    private String parvialfieldname;
+    private double weight;
+    private String agriculturalname;
     private Integer id;
+    private int lotid;
 
     private Boolean disabled;
 
@@ -24,7 +32,76 @@ public class FarmWork implements Serializable {
 
     private String result;
 
-    private static final long serialVersionUID = 1L;
+    @Override
+    public String toString() {
+        return "FarmWork{" +
+                "unitmeasurement='" + unitmeasurement + '\'' +
+                ", lotname='" + lotname + '\'' +
+                ", cropspeciesname='" + cropspeciesname + '\'' +
+                ", parvialfieldname='" + parvialfieldname + '\'' +
+                ", weight=" + weight +
+                ", agriculturalname='" + agriculturalname + '\'' +
+                ", id=" + id +
+                ", lotid=" + lotid +
+                ", disabled=" + disabled +
+                ", createtime=" + createtime +
+                ", name='" + name + '\'' +
+                ", userId=" + userId +
+                ", lotId=" + lotId +
+                ", workId=" + workId +
+                ", finishTime=" + finishTime +
+                ", text='" + text + '\'' +
+                ", result='" + result + '\'' +
+                '}';
+    }
+
+    public String getUnitmeasurement() {
+        return unitmeasurement;
+    }
+
+    public void setUnitmeasurement(String unitmeasurement) {
+        this.unitmeasurement = unitmeasurement;
+    }
+
+    public String getLotname() {
+        return lotname;
+    }
+
+    public void setLotname(String lotname) {
+        this.lotname = lotname;
+    }
+
+    public String getCropspeciesname() {
+        return cropspeciesname;
+    }
+
+    public void setCropspeciesname(String cropspeciesname) {
+        this.cropspeciesname = cropspeciesname;
+    }
+
+    public String getParvialfieldname() {
+        return parvialfieldname;
+    }
+
+    public void setParvialfieldname(String parvialfieldname) {
+        this.parvialfieldname = parvialfieldname;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public String getAgriculturalname() {
+        return agriculturalname;
+    }
+
+    public void setAgriculturalname(String agriculturalname) {
+        this.agriculturalname = agriculturalname;
+    }
 
     public Integer getId() {
         return id;
@@ -32,6 +109,14 @@ public class FarmWork implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public int getLotid() {
+        return lotid;
+    }
+
+    public void setLotid(int lotid) {
+        this.lotid = lotid;
     }
 
     public Boolean getDisabled() {
@@ -55,7 +140,7 @@ public class FarmWork implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public Integer getUserId() {
@@ -95,7 +180,7 @@ public class FarmWork implements Serializable {
     }
 
     public void setText(String text) {
-        this.text = text == null ? null : text.trim();
+        this.text = text;
     }
 
     public String getResult() {
@@ -103,27 +188,30 @@ public class FarmWork implements Serializable {
     }
 
     public void setResult(String result) {
-        this.result = result == null ? null : result.trim();
+        this.result = result;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", disabled=").append(disabled);
-        sb.append(", createtime=").append(createtime);
-        sb.append(", name=").append(name);
-        sb.append(", userId=").append(userId);
-        sb.append(", lotId=").append(lotId);
-        sb.append(", workId=").append(workId);
-        sb.append(", finishTime=").append(finishTime);
-        sb.append(", text=").append(text);
-        sb.append(", result=").append(result);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+    public FarmWork() {
+    }
+
+    public FarmWork(String unitmeasurement, String lotname, String cropspeciesname, String parvialfieldname, double weight, String agriculturalname, Integer id, int lotid, Boolean disabled, Date createtime, String name, Integer userId, Integer lotId, Integer workId, Date finishTime, String text, String result) {
+
+        this.unitmeasurement = unitmeasurement;
+        this.lotname = lotname;
+        this.cropspeciesname = cropspeciesname;
+        this.parvialfieldname = parvialfieldname;
+        this.weight = weight;
+        this.agriculturalname = agriculturalname;
+        this.id = id;
+        this.lotid = lotid;
+        this.disabled = disabled;
+        this.createtime = createtime;
+        this.name = name;
+        this.userId = userId;
+        this.lotId = lotId;
+        this.workId = workId;
+        this.finishTime = finishTime;
+        this.text = text;
+        this.result = result;
     }
 }

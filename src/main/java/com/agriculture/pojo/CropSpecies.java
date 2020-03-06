@@ -15,9 +15,6 @@ import java.util.Date;
  * @Date 2020/2/28 23:07
  * @Version 1.0
  **/
-@Data
-@NoArgsConstructor//无参构造
-@Accessors(chain = true)//链式写法
 public class CropSpecies implements Serializable {
     private Integer id;
 

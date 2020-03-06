@@ -5,10 +5,9 @@ import com.agriculture.pojo.Parvialfield;
 import java.util.List;
 
 import com.agriculture.pojo.ParvialfieldVo;
-import org.apache.ibatis.annotations.Param;
 
 public interface ParvialfieldMapper {
-
+    List<Parvialfield> getAll();
     /**
      * 添加地块表主键返回
      * @param parvialfield
