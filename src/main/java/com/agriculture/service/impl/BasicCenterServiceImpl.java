@@ -157,8 +157,8 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
         //添加地理位置表
         for (int i = 0; i <locations.size() ; i++) {
-            locations.get(i).setObjId(lot.getId())
-                            .setObjType("lot");
+            locations.get(i).setObjId(lot.getId());
+            locations.get(i).setObjType("lot");
         }
         boolean b1=locationMapper.addLocations(locations);
 
