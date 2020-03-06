@@ -2,7 +2,6 @@ package com.agriculture.service;
 
 import com.agriculture.pojo.*;
 import com.github.pagehelper.PageInfo;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -129,4 +128,20 @@ public interface BasicCenterService {
      * @return
      */
     List<Lot> getLotByFenChangId(Integer fenChangId);
+
+    /**
+     * 查询所有地块详情
+     * @param
+     * @param fenChangId
+     * @param diKuaiName
+     * @return
+     */
+    List<Lot> getLotListAll(Integer fenChangId, String diKuaiName);
+
+    /**
+     * 根据地块id修改地块详情
+     * @param lot
+     * @return
+     */
+    boolean updateLot(Lot lot);
 }

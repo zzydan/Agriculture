@@ -1,9 +1,9 @@
 package com.agriculture.dao;
 
 import com.agriculture.pojo.Lot;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface LotMapper {
     /**
@@ -26,4 +26,19 @@ public interface LotMapper {
      * @return
      */
     List<Lot> getLotByFenChangId(Integer fenChangId);
+    /**
+     * 查询所有地块详情
+     * @param
+     * @param fenChangId
+     * @param diKuaiName
+     * @return
+     */
+    List<Lot> getLotListAll(@Param("fenChangId") Integer fenChangId,@Param("diKuaiName") String diKuaiName);
+
+    /**
+     * 根据地块id修改地块详情
+     * @param lot
+     * @return
+     */
+    boolean updateLot(Lot lot);
 }
