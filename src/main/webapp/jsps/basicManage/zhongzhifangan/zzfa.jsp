@@ -10,7 +10,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">查询条件</div>
                 <div class="panel-body">
-                    <form id="user_likeForm" class="form-horizontal">
+                    <form id="template_likeForm" class="form-horizontal">
                         <div class="form-group" style="margin-top:15px">
                             <label class="control-label col-sm-1">作物种类</label>
                             <div class="col-sm-2">
@@ -39,7 +39,7 @@
             </div>
 
             <div id="toolbar" class="btn-group">
-                <button id="btn_add" type="button" class="btn btn-default" onclick="addUserInfo()">
+                <button id="btn_add" type="button" class="btn btn-default" onclick="addTemplateInfo()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
                 </button>
             </div>
@@ -66,21 +66,58 @@
 </div>
 
 
-
 <!-- 添加的模态框（Modal） -->
-<div class="modal" id="addUserInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
+<div class="modal" id="addTemplateInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
      style=" margin-left: -560px;">
     <div class="modal-dialog">
         <div class="modal-content" style="width: 1100px;margin-right: 300px">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">新增人员</h4>
+                <h4 class="modal-title" id="myModalLabel">新增模板</h4>
             </div>
 
             <div class="modal-body">
-
                 <div class="panel-body">
+                    <form id="template_Form" class="form-horizontal">
+                        <div class="form-group" style="margin-top:15px">
+                            <label class="control-label col-sm-2">种植模板方案名称</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" name="name">
+                            </div>
+                            <label class="control-label col-sm-1">作物种类</label>
+                            <div class="col-sm-2">
+                                <select class="form-control" name="category">
 
+                                </select>
+                            </div>
+                            <label class="control-label col-sm-1">作物品种</label>
+                            <div class="col-sm-2">
+                                <select class="form-control" name="variety">
+
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="layui-card" style="height: 600px">
+                        <style>
+                            #templatePlan_table tr th {
+                                padding: 1px;
+                                height: 37px;
+                                font-size: 14px;
+                                text-align: center;
+                                vertical-align: middle;
+                            }
+
+                            #templatePlan_table tr td {
+                                padding: 1px;
+                                height: 37px;
+                                font-size: 14px;
+                                text-align: center;
+                                vertical-align: middle;
+                            }
+                        </style>
+                        <table id="templatePlan_table"></table>
+                    </div>
                 </div>
             </div>
             <div class="panel-body">
@@ -94,7 +131,7 @@
 <!-- /.modal -->
 
 <!-- 编辑模态框（Modal） -->
-<div class="modal" id="upUserInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
+<div class="modal" id="upTemplateInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
      style=" margin-left: -560px;">
     <div class="modal-dialog">
         <div class="modal-content" style="width: 1100px;margin-right: 300px">

@@ -239,7 +239,32 @@ public class BasicCenterController {
         return template;
     }
 
+    /**
+     * 查询单个模板详情
+     * @param templateId
+     * @return
+     */
+    @RequestMapping("findTemplateById")
+    @ResponseBody
+    public Template findTemplateById(Integer templateId) {
 
+        Template template = basicCenterService.findTemplateById(templateId);
 
+        return template;
+    }
+
+    /**
+     * 删除模板
+     * @param templateId
+     * @return
+     */
+    @RequestMapping("deleteTemplate")
+    @ResponseBody
+    public int deleteTemplate(Integer templateId) {
+
+        int i = basicCenterService.deleteTemplate(templateId);
+
+        return i;
+    }
 }
 

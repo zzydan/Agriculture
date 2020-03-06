@@ -13,4 +13,18 @@ public interface TemplateMapper {
      * @return
      */
     List<Template> findTemplate(@Param("info") OrderPageInfo pageInfo);
+
+    /**
+     * 查询单个模板详情
+     * @param templateId
+     * @return
+     */
+    Template findTemplateById(Integer templateId);
+
+    /**
+     * 删除模板
+     * @param templateId
+     * @return
+     */
+    int deleteTemplate(Integer templateId);
 }

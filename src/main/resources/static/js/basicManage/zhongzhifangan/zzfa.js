@@ -3,18 +3,18 @@ $(function () {
     getSpeciesList();
     //查询品种列表
     getVarietyList();
-
+    //加载表
     template_table(null);
+
 })
 
 
 function template_likeForm_querybtn() {
-    var formData = $("#user_likeForm").serialize();
+    var formData = $("#template_likeForm").serialize();
 
     template_table(formData);
-
 }
-
+//模板表格
 function template_table(formData) {
     $("#template_table").bootstrapTable("destroy");
     $("#template_table").bootstrapTable({ // 对应table标签的id
@@ -67,7 +67,7 @@ function template_table(formData) {
                 title: "操作",
                 formatter: function (value, row, index) {
                     var str =
-                        "<a href='javascript:updateTemplate(" + row.id + ")' class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
+                        "<a href='javascript:findTemplateById(" + row.id + ")' class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
                         "<i  class=\"layui-icon layui-icon-edit\">" +
                         "</i>编辑</a> " +
                         "<a href='javascript:deleteTemplate(" + row.id + ")' class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
@@ -79,10 +79,124 @@ function template_table(formData) {
         ]
     })
 }
+//模板计划表
+function templatePlan_table() {
+    $("#templatePlan_table").bootstrapTable("destroy");
+    $("#templatePlan_table").bootstrapTable({ // 对应table标签的id
+        cache: false, //关闭缓存
+        pagination: true, //开启分页
+        sidePagination: "client", //客户端分页client,"server"服务端分页
+        pageNumber: 1, //分页起始行,默认第一行
+        pageSize: 10, //每页几行
+        pageList: [10], //设置每页几行的下拉框
+        striped: true,       //是否显示行间隔色
+        columns: [//field对应的是entity中的属性 title:列名
+            {
+                field: 'index', // 返回json数据中的name
+                title: '序号', // 表格表头显示文字
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    row.index = index;
+                    return index + 1;
+                }
+            }, {
+                field: 'sysq',
+                title: '生育时期',
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    return "<select class='form-control' name='sysq'></select>";
+                }
+            }, {
+                field: 'ns',
+                title: '农事',
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    return "<select class='form-control' name='ns'></select>";
+                }
+            }, {
+                field: 'nzNumber',
+                title: '农资',
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    return "<input type='button' name='nzNumber' value='" + value + "' class='layui-input'>";
+                }
+            }, {
+                field: 'title',
+                title: '农事操作说明',
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    return "<input type='text' name='title' value='" + value + "' placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+                }
+            }, {
+                title: "操作",
+                formatter: function (value, row, index) {
+                    var str =
+                        "<a href='javascript:addPlanToTable()' class=\"layui-btn layui-btn-info layui-btn-xs\" lay-event=\"edit\">" +
+                        "<i  class=\"layui-icon layui-icon-add-1\">" +
+                        "</i>新增</a> " +
+                        "<a href='javascript:deletePlan(" + index + ")' class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
+                        "<i class=\"layui-icon layui-icon-delete\">" +
+                        "</i>删除</a> ";
+                    return str;
+                }
+            }
+        ]
+    })
+}
+
+//创建一个全新table对象
+function createPlans(index, sysq, ns, nzNumber, title) {
+    var obj = new Object();
+    obj.index = index;
+    obj.sysq = sysq;
+    obj.ns = ns;
+    obj.nzNumber = nzNumber;
+    obj.title = title;
+    return obj;
+}
+
+// 关闭弹出层 并将商品加载到订单上
+function addPlanToTable() {
+    var obj = createPlans('', '', '', '', '');
+    $("#templatePlan_table").bootstrapTable("append", obj);
+}
+
+//删除
+function deletePlan(index) {
+    // 声明一个数组
+    var arrays = new Array();
+    arrays.push(parseInt(index));
+    //根据id移除数据
+    $("#templatePlan_table").bootstrapTable("remove", {field: 'index', values: arrays});
+}
 
 
-//修改
+//打开添加模板模态框
+function addTemplateInfo() {
+
+    $("#addTemplateInfo_Modal").modal("show");
+
+    templatePlan_table();
+    addPlanToTable();
+}
+
+//回显数据
+function findTemplateById(id) {
+    $.ajax({
+        url: "/basicCenter/findTemplateById",
+        type: "post",
+        dataType: "json",
+        async: false,
+        data: {'templateId': id},
+        success: function (data) {
+
+
+        },
+        error: function () {
+            alert("请求失败");
+        }
+    });
+}
+
+//修改保存
 function updateTemplate(id) {
+
+
     $.ajax({
         url: "/basicCenter/updateTemplate",
         type: "post",
@@ -90,6 +204,7 @@ function updateTemplate(id) {
         async: false,
         data: {'userId': id},
         success: function (data) {
+
 
         },
         error: function () {
@@ -106,11 +221,11 @@ function deleteTemplate(id) {
             type: "post",
             dataType: "json",
             async: false,
-            data: {'userId': id},
+            data: {'templateId': id},
             success: function (data) {
                 if (data > 0) {
                     alert("删除成功！！！");
-                    $("#user_table").bootstrapTable("refresh");
+                    $("#template_table").bootstrapTable("refresh");
                 }
             },
             error: function () {

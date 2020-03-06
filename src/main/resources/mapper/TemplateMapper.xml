@@ -17,4 +17,14 @@
             and variety = #{info.variety}
         </if>
     </select>
+
+    <!-- Template findTemplateById(Integer templateId); -->
+    <select id="" resultType="com.agriculture.pojo.Template">
+        select * from template WHERE id= #{templateId}
+    </select>
+
+    <!-- int deleteTemplate(Integer templateId); -->
+    <update id="deleteTemplate">
+        update template set disabled = 1 where id = #{templateId}
+    </update>
 </mapper>

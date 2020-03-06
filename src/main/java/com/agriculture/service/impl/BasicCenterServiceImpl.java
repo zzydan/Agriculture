@@ -270,4 +270,27 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
         return info;
     }
+
+    /**
+     * 查询单个模板详情
+     * @param templateId
+     * @return
+     */
+    @Override
+    public Template findTemplateById(Integer templateId) {
+
+        return templateMapper.findTemplateById(templateId);
+    }
+
+    /**
+     * 查询单个模板详情
+     * @param templateId
+     * @return
+     */
+    @Override
+    public int deleteTemplate(Integer templateId) {
+
+        return templateMapper.deleteTemplate(templateId);
+    }
+
 }

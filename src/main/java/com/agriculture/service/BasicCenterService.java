@@ -103,6 +103,13 @@ public interface BasicCenterService {
     PageInfo<Template> findTemplate(OrderPageInfo pageInfo);
 
     /**
+     * 查询单个模板详情
+     * @param templateId
+     * @return
+     */
+    Template findTemplateById(Integer templateId);
+
+    /**
      * 添加地块
      * @param lot,overlay
      * @return
@@ -129,4 +136,11 @@ public interface BasicCenterService {
      * @return
      */
     List<Lot> getLotByFenChangId(Integer fenChangId);
+
+    /**
+     * 删除模板
+     * @param templateId
+     * @return
+     */
+    int deleteTemplate(Integer templateId);
 }
