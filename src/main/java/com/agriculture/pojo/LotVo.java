@@ -16,9 +16,7 @@ import java.util.List;
  * @Date 2020/2/28 23:07
  * @Version 1.0
  **/
-@Data
-@NoArgsConstructor//无参构造
-@Accessors(chain = true)//链式写法
+
 public class LotVo implements Serializable {
     private int lId;
 
@@ -26,5 +24,15 @@ public class LotVo implements Serializable {
 
     private List<LocationVo> locationVoList;
 
+    public void setlId(int lId) {
+        this.lId = lId;
+    }
 
+    public void setlName(String lName) {
+        this.lName = lName;
+    }
+
+    public void setLocationVoList(List<LocationVo> locationVoList) {
+        this.locationVoList = locationVoList;
+    }
 }

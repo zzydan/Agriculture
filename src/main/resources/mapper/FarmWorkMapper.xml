@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.FarmWorkMapper" >
+    <select id="getAll" resultType="com.agriculture.pojo.FarmWork">
+SELECT `parvialfield`.`name` AS parvialfieldname,`lot`.`name` AS lotname,`lot`.`id` AS lotid,
+`farm_work`.`id`,
+`crop_species`.`name` AS cropspeciesname,
+`farm_work`.`name` ,
+`agricultural`.`name` AS agriculturalname,
+ `work_fertilizer`.`weight`AS weight,
+`agricultural`.`unit_measurement` AS unitmeasurement,
+`farm_work`.`finish_time` AS finishTime,
+`farm_work`.`text`,
+`farm_work`.`result`
+FROM `parvialfield`,`lot`,`farm_work`,`agricultural`,`work`,`work_fertilizer`,`crop_species`
+WHERE `parvialfield`.`id`=#{id}
+AND `parvialfield`.`id`=`lot`.`ssfc`
+AND `lot`.`zwzl`=`crop_species`.`id`
+AND `lot`.`id`=`farm_work`.`lot_id`
+AND `farm_work`.`work_id`=`work`.`work_id`
+AND `work_fertilizer`.`farm_work_id`=`work`.`work_id`
+AND `work_fertilizer`.`id`=`agricultural`.`id`
+    </select>
 
+
+
+    <select id="getxq" resultType="com.agriculture.pojo.FarmWork">
+SELECT `parvialfield`.`name` AS parvialfieldname,`lot`.`name` AS lotname,
+`farm_work`.`id`,
+`crop_species`.`name` AS cropspeciesname,
+`farm_work`.`name` ,
+`agricultural`.`name` AS agriculturalname,
+ `work_fertilizer`.`weight`AS weight,
+`agricultural`.`unit_measurement` AS unitmeasurement,
+`farm_work`.`finish_time` AS finishTime,
+`farm_work`.`text`,
+`farm_work`.`result`
+FROM `parvialfield`,`lot`,`farm_work`,`agricultural`,`work`,`work_fertilizer`,`crop_species`
+WHERE `parvialfield`.`id`=#{id}
+AND `lot`.id=#{lotid}
+AND `parvialfield`.`id`=`lot`.`ssfc`
+AND `lot`.`zwzl`=`crop_species`.`id`
+AND `lot`.`id`=`farm_work`.`lot_id`
+AND `farm_work`.`work_id`=`work`.`work_id`
+AND `work_fertilizer`.`farm_work_id`=`work`.`work_id`
+AND `work_fertilizer`.`id`=`agricultural`.`id`
+    </select>
 </mapper>

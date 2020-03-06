@@ -208,6 +208,7 @@ public class SysCenterController<pu> {
         SecUser user = (SecUser)session.getAttribute("USER_SESSION");
 
         enterprise.setCreateuser(user.getId());
+
         int i =  sysCenterServiceImpl.addEnterprise(enterprise,User1Pic,User2Pic,User3Pic);
 
         return i>0;

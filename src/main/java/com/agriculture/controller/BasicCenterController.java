@@ -40,7 +40,6 @@ public class BasicCenterController {
         location.setLatitude(parvialfield.getLatitude());
         location.setLongitude(parvialfield.getLongitude());
         boolean b = basicCenterService.addPlace(parvialfield,location);
-
         return b;
     }
 
