@@ -1,8 +1,8 @@
+var form = layui.form;
+
 $(function () {
     //查询种类列表
     getSpeciesList();
-    //查询品种列表
-    getVarietyList();
     //加载表
     template_table(null);
 
@@ -249,19 +249,24 @@ function getSpeciesList() {
                 })
             }
             $("select[name='category']").append(html)
-            layui.form.render("select");
         }
     })
 
 }
 
 //查询品种列表
-function getVarietyList() {
+function getVarietyList_like() {
+
+    var id = $("#category_like").children("option:selected").val();
+
     $.ajax({
-        url: "/basicCenter/getVarietyList",
+        url: "/basicCenter/getVarietyListBySpeciesId",
         dataType: "json",
+        data: {'SpeciesId': id},
         type: "post",
         success: function (data) {
+            $("#variety_like").empty();
+
             var html = "<option value=\"\">请选择</option>"
             if (data) {
                 varietyList = data;
@@ -269,7 +274,33 @@ function getVarietyList() {
                     html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
                 })
             }
-            $("select[name='variety']").append(html)
+            $("#variety_like").append(html)
+            layui.form.render("select");
+        }
+    })
+
+}
+//查询品种列表
+function getVarietyList_add() {
+
+    var id = $("#category_add").children("option:selected").val();
+
+    $.ajax({
+        url: "/basicCenter/getVarietyListBySpeciesId",
+        dataType: "json",
+        data: {'SpeciesId': id},
+        type: "post",
+        success: function (data) {
+            $("#variety_add").empty();
+
+            var html = "<option value=\"\">请选择</option>"
+            if (data) {
+                varietyList = data;
+                $.each(data, function (a, b) {
+                    html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
+                })
+            }
+            $("#variety_add").append(html)
             layui.form.render("select");
         }
     })
@@ -278,23 +309,29 @@ function getVarietyList() {
 
 //查询作物品种的周期
 function getCrop_growth_cycle() {
+    var category_id = $("#category_add").children("option:selected").val();
+    var variety_id = $("#variety_add").children("option:selected").val();
+
     $.ajax({
-        url: "/basicCenter/getVarietyList",
+        url: "/basicCenter/getCropGrowthCycleList",
         dataType: "json",
         type: "post",
+        data: {'speciesId': category_id,'varietyId': variety_id},
         success: function (data) {
-            var html = "<option value=\"\">请选择</option>"
-            if (data) {
-                varietyList = data;
-                $.each(data, function (a, b) {
-                    html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
-                })
-            }
-            $("select[name='variety']").append(html)
-            layui.form.render("select");
+
         }
     })
 }
 
 
 //查询所有农事
+function getWork() {
+    $.ajax({
+        url: "/basicCenter/getVarietyList",
+        dataType: "json",
+        type: "post",
+        success: function (data) {
+
+        }
+    })
+}

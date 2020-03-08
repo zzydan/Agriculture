@@ -143,6 +143,23 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         List<CropVariety> cropVarieties = cropVarietyMapper.getVarietyList();
         return cropVarieties;
     }
+
+    /**
+     * 查询作物品种列表 根据种类id
+     * @param SpeciesId
+     * @return
+     */
+    @Override
+    public List<CropVariety> getVarietyListBySpeciesId(Integer SpeciesId) {
+        List<CropVariety> cropVarieties = cropVarietyMapper.getVarietyListBySpeciesId(SpeciesId);
+        return cropVarieties;
+    }
+
+    @Override
+    public List<CropGrowthCycleTime> getCropGrowthCycleList(Integer speciesId, Integer varietyId) {
+        return null;
+    }
+
     /**
      * 添加地块
      * @param lot,overlay

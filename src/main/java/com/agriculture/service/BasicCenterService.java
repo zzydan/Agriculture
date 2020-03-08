@@ -63,6 +63,13 @@ public interface BasicCenterService {
      * @return
      */
     List<CropVariety> getVarietyList();
+
+    /**
+     * 查询作物品种列表 根据种类id
+     * @param SpeciesId
+     * @return
+     */
+    List<CropVariety> getVarietyListBySpeciesId(Integer SpeciesId);
     /**
      * 模糊查询农资
      * @param pageInfo
@@ -166,4 +173,12 @@ public interface BasicCenterService {
      * @return
      */
     int addTemplate(Template template);
+
+    /**
+     *
+     * @param speciesId
+     * @param varietyId
+     * @return
+     */
+    List<CropGrowthCycleTime> getCropGrowthCycleList(Integer speciesId, Integer varietyId);
 }

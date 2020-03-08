@@ -10,4 +10,9 @@
     <select id="getVarietyList" resultType="com.agriculture.pojo.CropVariety">
         select * from crop_variety
     </select>
+
+    <!-- List<CropVariety> getVarietyListBySpeciesId(@Param("SpeciesId") Integer SpeciesId); -->
+    <select id="getVarietyListBySpeciesId" resultType="com.agriculture.pojo.CropVariety">
+        select * from crop_variety WHERE 1=1 AND species = #{SpeciesId}
+    </select>
 </mapper>

@@ -187,6 +187,35 @@ public class BasicCenterController {
 
         return cropVarieties;
     }
+
+    /**
+     * 查询作物品种列表 根据种类id
+     * @param
+     * @return
+     */
+    @RequestMapping("getVarietyListBySpeciesId")
+    @ResponseBody
+    public List<CropVariety> getVarietyListBySpeciesId(Integer SpeciesId){
+
+        List<CropVariety> cropVarieties = basicCenterService.getVarietyListBySpeciesId(SpeciesId);
+
+        return cropVarieties;
+    }
+
+    /**
+     * 根据种类id 查询作物生育周期
+     * @param
+     * @return
+     */
+    @RequestMapping("getVarietyListBySpeciesId")
+    @ResponseBody
+    public List<CropGrowthCycleTime> getCropGrowthCycleList(Integer speciesId,Integer varietyId){
+
+        List<CropGrowthCycleTime> cropGrowthCycleTimes = basicCenterService.getCropGrowthCycleList(speciesId,varietyId);
+
+        return cropGrowthCycleTimes;
+    }
+
     /**
      * 添加地块
      * @param lot,overlay

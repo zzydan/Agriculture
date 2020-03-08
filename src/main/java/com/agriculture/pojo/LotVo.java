@@ -24,6 +24,18 @@ public class LotVo implements Serializable {
 
     private List<LocationVo> locationVoList;
 
+    public int getlId() {
+        return lId;
+    }
+
+    public String getlName() {
+        return lName;
+    }
+
+    public List<LocationVo> getLocationVoList() {
+        return locationVoList;
+    }
+
     public void setlId(int lId) {
         this.lId = lId;
     }

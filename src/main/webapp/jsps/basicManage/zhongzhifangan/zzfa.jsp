@@ -14,13 +14,13 @@
                         <div class="form-group" style="margin-top:15px">
                             <label class="control-label col-sm-1">作物种类</label>
                             <div class="col-sm-2">
-                                <select class="form-control" name="category">
+                                <select class="form-control" name="category" id="category_like" onchange="getVarietyList_like()">
 
                                 </select>
                             </div>
                             <label class="control-label col-sm-1">作物品种</label>
                             <div class="col-sm-2">
-                                <select class="form-control" name="variety">
+                                <select class="form-control" name="variety" id="variety_like">
 
                                 </select>
                             </div>
@@ -86,13 +86,13 @@
                             </div>
                             <label class="control-label col-sm-1">作物种类</label>
                             <div class="col-sm-2">
-                                <select class="form-control" name="category">
+                                <select class="form-control" name="category" id="category_add" onchange="getVarietyList_add()">
 
                                 </select>
                             </div>
                             <label class="control-label col-sm-1">作物品种</label>
                             <div class="col-sm-2">
-                                <select class="form-control" name="variety">
+                                <select class="form-control" name="variety" id="variety_add" onchange="getCrop_growth_cycle()">
 
                                 </select>
                             </div>
