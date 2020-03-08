@@ -159,4 +159,11 @@ public interface BasicCenterService {
      * @return
      */
     int deleteTemplate(Integer templateId);
+
+    /**
+     * 添加模板
+     * @param template
+     * @return
+     */
+    int addTemplate(Template template);
 }

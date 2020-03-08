@@ -308,7 +308,17 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     }
 
     /**
-     * 查询单个模板详情
+     * 添加模板
+     * @param template
+     * @return
+     */
+    @Override
+    public int addTemplate(Template template) {
+        return 0;
+    }
+
+    /**
+     * 删除模板
      * @param templateId
      * @return
      */

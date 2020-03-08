@@ -8,6 +8,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -279,6 +280,20 @@ public class BasicCenterController {
     }
 
     /**
+     * 添加模板
+     * @param template
+     * @return
+     */
+    @RequestMapping("addTemplate")
+    @ResponseBody
+    public int addTemplate(Template template) {
+
+        int i = basicCenterService.addTemplate(template);
+
+        return i;
+    }
+
+    /**
      * 删除模板
      * @param templateId
      * @return
@@ -291,5 +306,7 @@ public class BasicCenterController {
 
         return i;
     }
+
+
 }
 

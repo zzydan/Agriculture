@@ -2,6 +2,7 @@ package com.agriculture.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Template implements Serializable {
     private Integer id;
@@ -19,6 +20,16 @@ public class Template implements Serializable {
     private Integer variety;
 
     private Integer varietyName;
+
+    private List<TemplatePlan> templatePlanList;
+
+    public List<TemplatePlan> getTemplatePlanList() {
+        return templatePlanList;
+    }
+
+    public void setTemplatePlanList(List<TemplatePlan> templatePlanList) {
+        this.templatePlanList = templatePlanList;
+    }
 
     public Integer getCategoryName() {
         return categoryName;

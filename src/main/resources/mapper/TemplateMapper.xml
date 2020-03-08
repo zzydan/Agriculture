@@ -19,8 +19,11 @@
     </select>
 
     <!-- Template findTemplateById(Integer templateId); -->
-    <select id="" resultType="com.agriculture.pojo.Template">
-        select * from template WHERE id= #{templateId}
+    <select id="findTemplateById" resultType="com.agriculture.pojo.Template">
+        select * from template as t
+        left join template_plan as tp on t.id =tp. template_id
+        LEFT JOIN template_plan_agricultural as tpa ON tp.id = tpa.plan_id
+        WHERE t.id= #{templateId}
     </select>
 
     <!-- int deleteTemplate(Integer templateId); -->

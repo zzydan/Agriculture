@@ -8,7 +8,6 @@ $(function () {
 
 })
 
-
 function template_likeForm_querybtn() {
     var formData = $("#template_likeForm").serialize();
 
@@ -235,7 +234,6 @@ function deleteTemplate(id) {
     }
 }
 
-
 //查询种类列表
 function getSpeciesList() {
     $.ajax({
@@ -277,3 +275,26 @@ function getVarietyList() {
     })
 
 }
+
+//查询作物品种的周期
+function getCrop_growth_cycle() {
+    $.ajax({
+        url: "/basicCenter/getVarietyList",
+        dataType: "json",
+        type: "post",
+        success: function (data) {
+            var html = "<option value=\"\">请选择</option>"
+            if (data) {
+                varietyList = data;
+                $.each(data, function (a, b) {
+                    html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
+                })
+            }
+            $("select[name='variety']").append(html)
+            layui.form.render("select");
+        }
+    })
+}
+
+
+//查询所有农事
