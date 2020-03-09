@@ -62,7 +62,7 @@ function fenChang_table() {
                         "<a onclick=\"updateFenChang(\'" + row.id + "\')\" class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
                         "<i  class=\"layui-icon layui-icon-edit\">" +
                         "</i>编辑</a> " +
-                        "<a onclick=\"deleteManager(\'" + row.id + "\')\" class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
+                        "<a onclick=\"deleteFenChang(\'" + row.id + "\')\" class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
                         "<i class=\"layui-icon layui-icon-delete\">" +
                         "</i>删除</a> ";
                     return str;
@@ -71,6 +71,29 @@ function fenChang_table() {
         ]
     })
 }
+//删除分场
+function deleteFenChang(id) {
+    var r=confirm("请确认要删除所选分场"); //在页面上弹出确认对话框
+    if(r==true){
+        deleteAjax(id)
+    }
+
+}
+//delete具体方法
+function deleteAjax(id) {
+    $.ajax({
+        url:"/basicCenter/deleteFenChangById",
+        dataType:"json",
+        data:{"id":id},
+        type:"post",
+        success:function(data){
+            if(data){
+                $("#fenChang_table").bootstrapTable("refresh");
+            }
+        }
+    })
+}
+//修改分场
 function updateFenChang(id) {
     $("#id").val(id);
     $("#updateFenChang_Modal").modal('show')
