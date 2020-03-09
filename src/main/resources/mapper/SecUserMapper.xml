@@ -50,4 +50,13 @@
     <select id="getUserListByRole" resultType="com.agriculture.pojo.SecUser">
         select * from sec_user where role_id=#{roleId}
     </select>
+    <!--/**
+    * 查询手机号查询用户信息
+    * @param tel
+    * @return
+    */
+    SecUser login(String tel);-->
+    <select id="login" resultType="com.agriculture.pojo.SecUser">
+        select * from sec_user where tel=#{tel}
+    </select>
 </mapper>

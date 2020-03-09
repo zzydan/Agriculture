@@ -41,4 +41,12 @@ public interface LotMapper {
      * @return
      */
     boolean updateLot(Lot lot);
+
+    /**
+     * 删除分场之删除地块
+     * @param id
+     * @return
+     */
+    boolean deleteLotByParvialfiledId(Integer id);
+
 }

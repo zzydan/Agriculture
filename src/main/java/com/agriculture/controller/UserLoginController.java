@@ -54,7 +54,6 @@ public class UserLoginController {
         session.setAttribute("USER_SESSION",user);
 
         map.put("flag","true");
-
         return map;
     }
 
@@ -86,6 +85,36 @@ public class UserLoginController {
         SecUser user = (SecUser)session.getAttribute("USER_SESSION");
         List<SecRes> list = loginServiceImpl.loading_res(user.getRoleId());
         return list;
+    }
+
+
+    /**
+     * app密码登录
+     * @param tel,password
+     * @return
+     */
+    @RequestMapping("/login_app")
+    @ResponseBody
+    public SecUser login (String tel,String password){
+        SecUser user=loginServiceImpl.loginApp(tel,password);
+        System.out.println(user);
+        return user;
+    }
+    /**
+     * app验证码登录
+     * @param phone
+     * @return
+     */
+    @RequestMapping("/getCode")
+    @ResponseBody
+    public Integer getCode (String phone){
+        SecUser user=loginServiceImpl.loginApp(phone);
+        if(user!=null){
+            Integer code=(int)((Math.random()*9+1)*1000);
+            System.out.println(code);
+            return code;
+        }
+        return null;
     }
 }
 

@@ -42,6 +42,7 @@
         LEFT JOIN sec_user b ON dkjsy = b.id
       WHERE
         lot.id = #{lotId}
+        and lot.disabled=0
     </select>
     <!--/**
     * 根据分场id查询所有地块详情
@@ -52,6 +53,7 @@
     <select id="getLotByFenChangId" resultType="com.agriculture.pojo.Lot">
       SELECT
         lot.id,
+        lot.createtime,
         lot.NAME,
         parvialfield.`name` AS ssfc,
         a.trueName AS dkzz,
@@ -71,5 +73,61 @@
         LEFT JOIN sec_user b ON dkjsy = b.id
       WHERE
         lot.ssfc = #{fenChangId}
+        and lot.disabled=0
     </select>
+  <!--/**
+  * 查询所有地块详情
+  * @param
+  * @return
+  */
+  List<Lot> getLotListAll(@Param("fenChangId") Integer fenChangId,@Param("diKuaiName") String diKuaiName);-->
+  <select id="getLotListAll" resultType="com.agriculture.pojo.Lot" >
+    SELECT
+        lot.id,
+        lot.createtime,
+        lot.NAME,
+        parvialfield.`name` AS ssfc,
+        a.trueName AS dkzz,
+        crop_species.`name` AS zwzl,
+        crop_variety.`name` AS zwpz,
+        b.trueName AS dkjsy,
+        lot.ldfx,
+        lot.dkmj,
+        lot.dkzc,
+        lot.trzd
+      FROM
+        lot
+        LEFT JOIN parvialfield ON ssfc = parvialfield.id
+        LEFT JOIN sec_user a ON dkzz = a.id
+        LEFT JOIN crop_species ON zwzl = crop_species.id
+        LEFT JOIN crop_variety ON zwpz = crop_variety.id
+        LEFT JOIN sec_user b ON dkjsy = b.id
+    where lot.disabled=0
+    <if test="fenChangId!= 0">
+      and lot.ssfc=#{fenChangId}
+    </if>
+    <if test="diKuaiName!=null">
+      and lot.name like '%${diKuaiName}%'
+    </if>
+  </select>
+    <!--/**
+    * 根据地块id修改地块详情
+    * @param lot
+    * @return
+    */
+    boolean updateLot(Lot lot);-->
+    <update id="updateLot">
+        update lot set name=#{name},ssfc=#{ssfc},trzd=#{trzd},dkzz=#{dkzz},zwzl=#{zwzl},zwpz=#{zwpz},
+        ldfx=#{ldfx} where id=#{id}
+
+    </update>
+   <!-- /**
+    * 删除分场之删除地块
+    * @param id
+    * @return
+    */
+    boolean deleteLotByParvialfiledId(Integer id)-->
+    <update id="deleteLotByParvialfiledId">
+        update lot set disabled=1 where ssfc=#{id}
+    </update>
 </mapper>

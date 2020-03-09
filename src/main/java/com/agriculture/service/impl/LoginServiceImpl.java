@@ -63,5 +63,32 @@ public class LoginServiceImpl implements LoginService {
         }
         return resList;
     }
+
+
+    /**
+     * app密码登录
+     * @param tel,password
+     * @return
+     */
+    @Override
+    public SecUser loginApp(String tel, String password) {
+        SecUser user=secUserMapper.login(tel);
+        if(password.equals(user.getPassword())){
+            return user;
+        }
+        return null;
+    }
+
+    /**
+     * app验证码登录
+     * @param tel
+     * @return
+     */
+    @Override
+    public SecUser loginApp(String tel) {
+        SecUser user=secUserMapper.login(tel);
+
+            return user;
+    }
 }
 

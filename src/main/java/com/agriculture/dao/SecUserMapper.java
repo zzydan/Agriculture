@@ -58,4 +58,10 @@ public interface SecUserMapper {
      */
     List<SecUser> getUserListByRole(Integer roleId);
 
+    /**
+     * 查询手机号查询用户信息
+     * @param tel
+     * @return
+     */
+    SecUser login(String tel);
 }

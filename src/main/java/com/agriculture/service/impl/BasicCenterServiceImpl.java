@@ -161,6 +161,21 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     }
 
     /**
+     * 删除分场
+     * @param id
+     * @return
+     */
+    @Transactional
+    @Override
+    public boolean deleteFenChangById(Integer id) {
+        //删除分场表
+        boolean b=parvialfieldMapper.deleteFenChangById(id);
+        //删除地块表
+        boolean b1=lotMapper.deleteLotByParvialfiledId(id);
+        return b&&b1;
+    }
+
+    /**
      * 添加地块
      * @param lot,overlay
      * @return

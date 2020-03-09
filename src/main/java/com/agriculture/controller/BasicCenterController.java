@@ -57,6 +57,19 @@ public class BasicCenterController {
 
         return b;
     }
+    /**
+     * 删除分场
+     * @param id
+     * @return
+     */
+    @RequestMapping("deleteFenChangById")
+    @ResponseBody
+    public boolean deleteFenChangById(Integer id){
+
+        boolean b = basicCenterService.deleteFenChangById(id);
+
+        return b;
+    }
 
     /**
      * 查询分场列表
@@ -207,7 +220,7 @@ public class BasicCenterController {
      * @param
      * @return
      */
-    @RequestMapping("getVarietyListBySpeciesId")
+    @RequestMapping("getCropGrowthCycleList")
     @ResponseBody
     public List<CropGrowthCycleTime> getCropGrowthCycleList(Integer speciesId,Integer varietyId){
 

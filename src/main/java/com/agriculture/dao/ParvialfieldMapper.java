@@ -44,4 +44,13 @@ public interface ParvialfieldMapper {
      * @return
      */
     List<ParvialfieldVo> getFenChangListVo();
+
+    /**
+     * 删除分场
+     * @param id
+     * @return
+     */
+    boolean deleteFenChangById(Integer id);
+
+
 }

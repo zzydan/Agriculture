@@ -181,4 +181,11 @@ public interface BasicCenterService {
      * @return
      */
     List<CropGrowthCycleTime> getCropGrowthCycleList(Integer speciesId, Integer varietyId);
+
+    /**
+     * 删除分场
+     * @param id
+     * @return
+     */
+    boolean deleteFenChangById(Integer id);
 }

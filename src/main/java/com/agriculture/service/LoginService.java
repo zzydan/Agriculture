@@ -26,4 +26,18 @@ public interface LoginService {
      * @return
      */
     List<SecRes> loading_res(Integer roleId);
+
+    /**
+     * app密码登录
+     * @param tel,password
+     * @return
+     */
+    SecUser loginApp(String tel, String password);
+
+    /**
+     * app验证码登录
+     * @param phone
+     * @return
+     */
+    SecUser loginApp(String phone);
 }

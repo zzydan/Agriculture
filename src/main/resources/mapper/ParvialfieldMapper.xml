@@ -35,7 +35,7 @@ FROM `parvialfield`
             AND parvialfield.fieldlength_user = b.id
             and location.obj_id=parvialfield.id
             and location.obj_type="zone"
-
+            and parvialfield.disabled=0
     </select>
 
 
@@ -121,5 +121,16 @@ FROM `parvialfield`
         LEFT JOIN lot ON p.id = lot.ssfc
         LEFT JOIN location a ON a.obj_id = lot.id
         AND a.obj_type = 'lot'
+      where p.disabled=0
     </select>
+
+    <!--/**
+    * 删除分场
+    * @param id
+    * @return
+    */
+    boolean deleteFenChangById(Integer id);-->
+    <update id="deleteFenChangById">
+      update parvialfield set disabled=1 where id=#{id}
+    </update>
 </mapper>
