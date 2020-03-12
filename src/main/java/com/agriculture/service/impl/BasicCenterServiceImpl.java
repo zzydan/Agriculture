@@ -7,6 +7,7 @@ import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +45,12 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
     @Resource
     private TemplateMapper templateMapper;
+
+    @Autowired
+    private CropGrowthCycleMapper cropGrowthCycleMapper;
+
+    @Autowired
+    private CropGrowthCycleTimeMapper cropGrowthCycleTimeMapper;
 
     /**
      * 添加分场
@@ -157,7 +164,11 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
     @Override
     public List<CropGrowthCycleTime> getCropGrowthCycleList(Integer speciesId, Integer varietyId) {
-        return null;
+
+        //根据作物种类查询作物周期
+        List<CropGrowthCycleTime> cropGrowthCycleTimes = cropGrowthCycleTimeMapper.getCropGrowthCycleTime(speciesId,varietyId);
+
+        return cropGrowthCycleTimes;
     }
 
     /**

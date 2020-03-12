@@ -171,7 +171,7 @@ function addTemplateInfo() {
     $("#addTemplateInfo_Modal").modal("show");
 
     templatePlan_table();
-    addPlanToTable();
+
 }
 
 //回显数据
@@ -305,6 +305,16 @@ function getVarietyList_add() {
         }
     })
 
+}
+
+//加载添加模板表
+function onUploadTable() {
+    //加载作物品种周期
+    getCrop_growth_cycle();
+
+    //更新表格
+    $("#templatePlan_table").bootstrapTable("removeAll");
+    addPlanToTable();
 }
 
 //查询作物品种的周期

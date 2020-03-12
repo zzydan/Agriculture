@@ -92,7 +92,7 @@
                             </div>
                             <label class="control-label col-sm-1">作物品种</label>
                             <div class="col-sm-2">
-                                <select class="form-control" name="variety" id="variety_add" onchange="getCrop_growth_cycle()">
+                                <select class="form-control" name="variety" id="variety_add" onchange="onUploadTable()">
 
                                 </select>
                             </div>
