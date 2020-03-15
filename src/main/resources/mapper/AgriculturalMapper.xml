@@ -9,23 +9,32 @@
             and  `name` like CONCAT('%',#{name},'%')
         </if>
     </select>
+
     <!--int AddAgric(Agricultural Agricultural);-->
     <insert id="AddAgric" parameterType="com.agriculture.pojo.Agricultural">
        INSERT INTO agricultural (createtime,name,category,unit_measurement)
             VALUES (now(),#{name},#{category},#{unitMeasurement})
     </insert>
+
     <!-- Agricultural SelectAgricId(@Param("id")Integer id);-->
     <select id="SelectAgricId" resultType="com.agriculture.pojo.Agricultural">
         SELECT * FROM agricultural WHERE id=#{id}
     </select>
+
     <!--int DeleteAgricId(@Param("id")Integer id);-->
     <update id="DeleteAgricId" parameterType="com.agriculture.pojo.Agricultural">
         UPDATE agricultural SET disabled=1 WHERE id=#{id}
     </update>
 
+    <!-- int UpdateAgricId(Agricultural Agricultural); -->
     <update id="UpdateAgricId" parameterType="com.agriculture.pojo.Agricultural">
         UPDATE agricultural
         set name=#{name},category=#{category},unit_measurement=#{unitMeasurement}
         where id=#{id}
     </update>
+
+    <!-- List<Agricultural> getAgricList(); -->
+    <select id="getAgricList" resultType="com.agriculture.pojo.Agricultural">
+        select * from agricultural
+    </select>
 </mapper>

@@ -311,6 +311,10 @@ function getVarietyList_add() {
 function onUploadTable() {
     //加载作物品种周期
     getCrop_growth_cycle();
+    //查询所有农事
+    getWorkList();
+    //查询所有农事
+    getAgricList();
 
     //更新表格
     $("#templatePlan_table").bootstrapTable("removeAll");
@@ -333,13 +337,25 @@ function getCrop_growth_cycle() {
     })
 }
 
-
 //查询所有农事
-function getWork() {
+function getWorkList() {
     $.ajax({
-        url: "/basicCenter/getVarietyList",
+        url: "/basicCenter/getWorkList",
         dataType: "json",
         type: "post",
+        data: {},
+        success: function (data) {
+
+        }
+    })
+}
+//查询所有农资
+function getAgricList() {
+    $.ajax({
+        url: "/basicCenter/getAgricList",
+        dataType: "json",
+        type: "post",
+        data: {},
         success: function (data) {
 
         }

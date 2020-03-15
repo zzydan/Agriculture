@@ -21,7 +21,7 @@
                             <label class="control-label col-sm-1">作物品种</label>
                             <div class="col-sm-2">
                                 <select class="form-control" name="variety" id="variety_like">
-
+                                    <option>请先选择作物种类</option>
                                 </select>
                             </div>
                             <label class="control-label col-sm-1">种植方案名称</label>
@@ -93,7 +93,7 @@
                             <label class="control-label col-sm-1">作物品种</label>
                             <div class="col-sm-2">
                                 <select class="form-control" name="variety" id="variety_add" onchange="onUploadTable()">
-
+                                    <option>请先选择作物种类</option>
                                 </select>
                             </div>
                         </div>

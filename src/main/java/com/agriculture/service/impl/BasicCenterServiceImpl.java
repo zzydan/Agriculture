@@ -52,6 +52,12 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     @Autowired
     private CropGrowthCycleTimeMapper cropGrowthCycleTimeMapper;
 
+    @Autowired
+    private WorkMapper workMapper;
+
+    @Autowired
+    private AgriculturalMapper agriculturalMapper;
+
     /**
      * 添加分场
      * @param parvialfield
@@ -128,47 +134,6 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         /* 修改分场地理位置*/
         boolean b1=locationMapper.updateLocation(parvialfield);
         return false;
-    }
-    /**
-     * 查询作物种类列表
-     * @param
-     * @return
-     */
-    @Override
-    public List<CropSpecies> getSpeciesList() {
-        List<CropSpecies> cropSpecies = cropSpeciesMapper.getSpeciesList();
-        return cropSpecies;
-    }
-
-    /**
-     * 查询作物品种列表
-     * @param
-     * @return
-     */
-    @Override
-    public List<CropVariety> getVarietyList() {
-        List<CropVariety> cropVarieties = cropVarietyMapper.getVarietyList();
-        return cropVarieties;
-    }
-
-    /**
-     * 查询作物品种列表 根据种类id
-     * @param SpeciesId
-     * @return
-     */
-    @Override
-    public List<CropVariety> getVarietyListBySpeciesId(Integer SpeciesId) {
-        List<CropVariety> cropVarieties = cropVarietyMapper.getVarietyListBySpeciesId(SpeciesId);
-        return cropVarieties;
-    }
-
-    @Override
-    public List<CropGrowthCycleTime> getCropGrowthCycleList(Integer speciesId, Integer varietyId) {
-
-        //根据作物种类查询作物周期
-        List<CropGrowthCycleTime> cropGrowthCycleTimes = cropGrowthCycleTimeMapper.getCropGrowthCycleTime(speciesId,varietyId);
-
-        return cropGrowthCycleTimes;
     }
 
     /**
@@ -322,6 +287,78 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         return AgriculturalMapper.UpdateAgricId(Agricultural);
     }
 
+
+    /**
+     * 查询作物种类列表
+     * @param
+     * @return
+     */
+    @Override
+    public List<CropSpecies> getSpeciesList() {
+        List<CropSpecies> cropSpecies = cropSpeciesMapper.getSpeciesList();
+        return cropSpecies;
+    }
+
+    /**
+     * 查询作物品种列表
+     * @param
+     * @return
+     */
+    @Override
+    public List<CropVariety> getVarietyList() {
+        List<CropVariety> cropVarieties = cropVarietyMapper.getVarietyList();
+        return cropVarieties;
+    }
+
+    /**
+     * 查询作物品种列表 根据种类id
+     * @param SpeciesId
+     * @return
+     */
+    @Override
+    public List<CropVariety> getVarietyListBySpeciesId(Integer SpeciesId) {
+        List<CropVariety> cropVarieties = cropVarietyMapper.getVarietyListBySpeciesId(SpeciesId);
+        return cropVarieties;
+    }
+
+    /**
+     * 根据作物种类查询作物周期
+     * @param speciesId
+     * @param varietyId
+     * @return
+     */
+    @Override
+    public List<CropGrowthCycleTime> getCropGrowthCycleList(Integer speciesId, Integer varietyId) {
+
+        List<CropGrowthCycleTime> cropGrowthCycleTimes = cropGrowthCycleTimeMapper.getCropGrowthCycleTime(speciesId,varietyId);
+
+        return cropGrowthCycleTimes;
+    }
+
+    /**
+     * 查询所有农事
+     * @return
+     */
+    @Override
+    public List<Work> getWorkList() {
+
+        List<Work> workList = workMapper.getWorkList();
+
+        return workList;
+    }
+
+    /**
+     * 查询所有农资
+     * @return
+     */
+    @Override
+    public List<Agricultural> getAgricList() {
+
+        List<Agricultural> agricList = agriculturalMapper.getAgricList();
+
+        return agricList;
+    }
+
     /**
      * 查询所有模板
      * @param pageInfo
@@ -370,5 +407,6 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
         return templateMapper.deleteTemplate(templateId);
     }
+
 
 }

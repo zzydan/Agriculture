@@ -174,6 +174,82 @@ public class BasicCenterController {
 
         return parvialfield;
     }
+
+
+    /**
+     * 添加地块
+     * @param lot,overlay
+     * @return
+     */
+    @RequestMapping("addLot")
+    @ResponseBody
+    public boolean addLot(Lot lot,String overlay){
+
+        //把js对象数组转化为对象集合
+        List<Location> locations = (List<Location>)JSONArray.parseArray(overlay, Location.class);
+        boolean b = basicCenterService.addLot(lot,locations);
+
+        return b;
+    }
+
+    /**
+     * 查询所有农资
+     * @param pageInfo
+     * @return
+     */
+    @RequestMapping("SelectAgric")
+    @ResponseBody
+    public PageInfo<Agricultural> SelectAgric(OrderPageInfo pageInfo) {
+
+        PageInfo<Agricultural> user = basicCenterService.SelectAgric(pageInfo);
+
+        return user;
+    }
+
+    /**
+     * 添加农资信息
+     * @param Agricultural
+     * @return
+     */
+    @RequestMapping("AddAgric")
+    @ResponseBody
+    public int AddAgric(Agricultural Agricultural){
+        return basicCenterService.AddAgric(Agricultural);
+    }
+
+    /**
+     * 删除农资
+     * @param id
+     * @return
+     */
+    @RequestMapping("DeleteAgricId/{id}")
+    @ResponseBody
+    public int DeleteAgricId(@PathVariable("id")Integer id){
+        return basicCenterService.DeleteAgricId(id);
+    }
+
+    /**
+     * 查询单个农资
+     * @return
+     */
+    @RequestMapping("SelectAgricId/{id}")
+    @ResponseBody
+    public Agricultural SelectAgricId(@PathVariable("id")Integer id){
+        Agricultural list=basicCenterService.SelectAgricId(id);
+        return list;
+    }
+
+    /**
+     *
+     * @param Agricultural
+     * @return
+     */
+    @RequestMapping("Agricultural")
+    @ResponseBody
+    public int UpdateAgricId(Agricultural Agricultural){
+        return basicCenterService.UpdateAgricId(Agricultural);
+    }
+
     /**
      * 查询作物种类列表
      * @param
@@ -230,69 +306,30 @@ public class BasicCenterController {
     }
 
     /**
-     * 添加地块
-     * @param lot,overlay
+     * 查询所有农事
      * @return
      */
-    @RequestMapping("addLot")
+    @RequestMapping("getWorkList")
     @ResponseBody
-    public boolean addLot(Lot lot,String overlay){
+    public List<Work> getWorkList() {
 
-        //把js对象数组转化为对象集合
-        List<Location> locations = (List<Location>)JSONArray.parseArray(overlay, Location.class);
-        boolean b = basicCenterService.addLot(lot,locations);
+        List<Work> works = basicCenterService.getWorkList();
 
-        return b;
+        return works;
     }
+
 
     /**
      * 查询所有农资
-     * @param pageInfo
      * @return
      */
-    @RequestMapping("SelectAgric")
+    @RequestMapping("getAgricList")
     @ResponseBody
-    public PageInfo<Agricultural> SelectAgric(OrderPageInfo pageInfo) {
+    public List<Agricultural> getAgricList() {
 
-        PageInfo<Agricultural> user = basicCenterService.SelectAgric(pageInfo);
+        List<Agricultural> agriculturals = basicCenterService.getAgricList();
 
-        return user;
-    }
-
-    /**
-     * 添加农资信息
-     * @param Agricultural
-     * @return
-     */
-    @RequestMapping("AddAgric")
-    @ResponseBody
-    public int AddAgric(Agricultural Agricultural){
-        return basicCenterService.AddAgric(Agricultural);
-    }
-    /**
-     * 删除农资
-     * @param id
-     * @return
-     */
-    @RequestMapping("DeleteAgricId/{id}")
-    @ResponseBody
-    public int DeleteAgricId(@PathVariable("id")Integer id){
-        return basicCenterService.DeleteAgricId(id);
-    }
-    /**
-     * 查询单个角色
-     * @return
-     */
-    @RequestMapping("SelectAgricId/{id}")
-    @ResponseBody
-    public Agricultural SelectAgricId(@PathVariable("id")Integer id){
-        Agricultural list=basicCenterService.SelectAgricId(id);
-        return list;
-    }
-    @RequestMapping("Agricultural")
-    @ResponseBody
-    public int UpdateAgricId(Agricultural Agricultural){
-        return basicCenterService.UpdateAgricId(Agricultural);
+        return agriculturals;
     }
 
     /**

@@ -160,6 +160,15 @@ public interface BasicCenterService {
      */
     boolean updateLot(Lot lot);
 
+
+    /**
+     * 根据种类id 查询作物生育周期
+     * @param speciesId
+     * @param varietyId
+     * @return
+     */
+    List<CropGrowthCycleTime> getCropGrowthCycleList(Integer speciesId, Integer varietyId);
+
     /**
      * 删除模板
      * @param templateId
@@ -174,13 +183,6 @@ public interface BasicCenterService {
      */
     int addTemplate(Template template);
 
-    /**
-     *
-     * @param speciesId
-     * @param varietyId
-     * @return
-     */
-    List<CropGrowthCycleTime> getCropGrowthCycleList(Integer speciesId, Integer varietyId);
 
     /**
      * 删除分场
@@ -188,4 +190,16 @@ public interface BasicCenterService {
      * @return
      */
     boolean deleteFenChangById(Integer id);
+
+    /**
+     * 查询所有农事
+     * @return
+     */
+    List<Work> getWorkList();
+
+    /**
+     * 查询所有农资
+     * @return
+     */
+    List<Agricultural> getAgricList();
 }

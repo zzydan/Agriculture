@@ -44,4 +44,9 @@ public interface AgriculturalMapper {
      */
     int UpdateAgricId(Agricultural Agricultural);
 
+    /**
+     * 查询所有农资
+     * @return
+     */
+    List<Agricultural> getAgricList();
 }
