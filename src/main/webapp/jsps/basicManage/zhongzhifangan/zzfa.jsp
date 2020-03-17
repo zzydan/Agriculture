@@ -66,11 +66,11 @@
 </div>
 
 
-<!-- 添加的模态框（Modal） -->
+<!-- 添加模板模态框（Modal） -->
 <div class="modal" id="addTemplateInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
-     style=" margin-left: -560px;">
+     style=" margin-left: -660px;">
     <div class="modal-dialog">
-        <div class="modal-content" style="width: 1100px;margin-right: 300px">
+        <div class="modal-content" style="width: 1300px;margin-right: 300px">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">新增模板</h4>
@@ -130,11 +130,54 @@
 </div>
 <!-- /.modal -->
 
-<!-- 编辑模态框（Modal） -->
-<div class="modal" id="upTemplateInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
-     style=" margin-left: -560px;">
+<!-- 添加农资模态框（Modal） -->
+<div class="modal" id="agricListInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
+     style=" margin-left: -400px;">
     <div class="modal-dialog">
-        <div class="modal-content" style="width: 1100px;margin-right: 300px">
+        <div class="modal-content" style="width: 1000px;margin-right: 300px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">农资列表</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="layui-card" style="height: 600px">
+                        <style>
+                            #agricList_table tr th {
+                                padding: 1px;
+                                height: 37px;
+                                font-size: 14px;
+                                text-align: center;
+                                vertical-align: middle;
+                            }
+
+                            #agricList_table tr td {
+                                padding: 1px;
+                                height: 37px;
+                                font-size: 14px;
+                                text-align: center;
+                                vertical-align: middle;
+                            }
+                        </style>
+                        <table id="agricList_table"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <a class="layui-btn layui-btn-fluid" onclick="">保存</a>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+<!-- /.modal -->
+
+<!-- 编辑模板模态框（Modal） -->
+<div class="modal" id="upTemplateInfo_Modal" tabindex="-1" aria-labelledby="myModalLabel"
+     style=" margin-left: -660px;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 1300px;margin-right: 300px">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="upmyModalLabel">编辑人员</h4>

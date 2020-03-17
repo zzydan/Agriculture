@@ -74,7 +74,11 @@
                                     <select class="form-control" id="Agric_select" name="Agric_select">
                                         <option value="0">请选择</option>
                                         <option value="肥料">肥料</option>
-                                        <option value="杀虫">杀虫</option>
+                                        <option value="农药">农药</option>
+                                        <option value="机械">机械</option>
+                                        <option value="滴灌带">滴灌带</option>
+                                        <option value="其他">其他</option>
+
                                     </select>
                                 </div>
                                 <label for="name" class="col-md-1 control-label">农资名称</label>

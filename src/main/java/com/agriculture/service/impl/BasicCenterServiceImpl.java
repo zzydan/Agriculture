@@ -40,6 +40,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
     @Resource
     private LotMapper lotMapper;
+
     @Resource
     private AgriculturalMapper AgriculturalMapper;
 

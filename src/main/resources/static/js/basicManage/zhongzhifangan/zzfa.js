@@ -8,11 +8,13 @@ $(function () {
 
 })
 
+//模糊查询
 function template_likeForm_querybtn() {
     var formData = $("#template_likeForm").serialize();
 
     template_table(formData);
 }
+
 //模板表格
 function template_table(formData) {
     $("#template_table").bootstrapTable("destroy");
@@ -78,6 +80,7 @@ function template_table(formData) {
         ]
     })
 }
+
 //模板计划表
 function templatePlan_table() {
     $("#templatePlan_table").bootstrapTable("destroy");
@@ -101,25 +104,41 @@ function templatePlan_table() {
                 field: 'sysq',
                 title: '生育时期',
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
-                    return "<select class='form-control' name='sysq'></select>";
+                    var str = "";
+
+                    str = str + "<select class='form-control' name='sysq'></select>";
+
+                    return str;
                 }
             }, {
                 field: 'ns',
                 title: '农事',
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
-                    return "<select class='form-control' name='ns'></select>";
+                    var str = "";
+
+                    str = str + "<select class='form-control' name='ns'></select>";
+
+                    return str;
                 }
             }, {
                 field: 'nzNumber',
                 title: '农资',
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
-                    return "<input type='button' name='nzNumber' value='" + value + "' class='layui-input'>";
+                    var str = "";
+
+                    str = str + "<input type='button' name='nzNumber' value='请选择' onclick='showAgricListInfo_Modal()' class='layui-input'>";
+
+                    return str;
                 }
             }, {
                 field: 'title',
                 title: '农事操作说明',
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
-                    return "<input type='text' name='title' value='" + value + "' placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+                    var str = "";
+
+                    str = str + "<input type='text' name='title' value='" + value + "' placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+
+                    return str;
                 }
             }, {
                 title: "操作",
@@ -163,7 +182,6 @@ function deletePlan(index) {
     //根据id移除数据
     $("#templatePlan_table").bootstrapTable("remove", {field: 'index', values: arrays});
 }
-
 
 //打开添加模板模态框
 function addTemplateInfo() {
@@ -280,6 +298,7 @@ function getVarietyList_like() {
     })
 
 }
+
 //查询品种列表
 function getVarietyList_add() {
 
@@ -313,8 +332,6 @@ function onUploadTable() {
     getCrop_growth_cycle();
     //查询所有农事
     getWorkList();
-    //查询所有农事
-    getAgricList();
 
     //更新表格
     $("#templatePlan_table").bootstrapTable("removeAll");
@@ -349,7 +366,85 @@ function getWorkList() {
         }
     })
 }
-//查询所有农资
+
+function showAgricListInfo_Modal() {
+    //打开模态框
+    $("#agricListInfo_Modal").modal("show");
+    //加载农资表格
+    agricList_table();
+    //查询所有农资信息
+    getAgricList();
+}
+
+//打开农资模态框
+function agricList_table() {
+    $("#agricList_table").bootstrapTable("destroy");
+    $("#agricList_table").bootstrapTable({ // 对应table标签的id
+        cache: false, //关闭缓存
+        pagination: true, //开启分页
+        sidePagination: "client", //客户端分页client,"server"服务端分页
+        pageNumber: 1, //分页起始行,默认第一行
+        sortName: "id", //排序名
+        sortOrder: "asc", //排序方式
+        pageSize: 10, //每页几行
+        pageList: [10], //设置每页几行的下拉框
+        striped: true,       //是否显示行间隔色
+        columns: [//field对应的是entity中的属性 title:列名
+            {
+                field: 'id', // 返回json数据中的name
+                title: '序号', // 表格表头显示文字
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    return index + 1;
+                }
+            }, {
+                field: 'category',
+                title: '投入项分类',
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    var str = "";
+
+                    str = str + "<input type='text' name='title' value='" + value + "' placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+
+                    return str;
+                }
+
+            }, {
+                field: 'name',
+                title: '农资名称',
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    var str = "";
+
+                    str = str + "<input type='text' name='title' value='" + value + "' placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+
+                    return str;
+                }
+            }, {
+                field: 'unitMeasurement',
+                title: '用量',
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    var str = "";
+
+                    str = str + "<input type='text' name='title' value='" + value + "' placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+
+                    return str;
+                }
+            }, {
+                title: "操作",
+                formatter: function (value, row, index) {
+                    var str =
+                        "<a href='javascript:findTemplateById(" + row.id + ")' class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
+                        "<i  class=\"layui-icon layui-icon-edit\">" +
+                        "</i>编辑</a> " +
+                        "<a href='javascript:deleteTemplate(" + row.id + ")' class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
+                        "<i class=\"layui-icon layui-icon-delete\">" +
+                        "</i>删除</a> ";
+                    return str;
+                }
+            }
+        ]
+    })
+}
+
+//查询所有农资信息
 function getAgricList() {
     $.ajax({
         url: "/basicCenter/getAgricList",
