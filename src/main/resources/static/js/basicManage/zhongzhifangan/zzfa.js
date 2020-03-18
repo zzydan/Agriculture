@@ -4,6 +4,8 @@ var form = layui.form;
 var sysq_data=[];
 //农事数据
 var ns_data=[];
+//农资类别数据
+var nzcategory_data=['肥料','农药','机械','滴灌带','其他'];
 //农资数据
 var nz_data=[];
 
@@ -103,6 +105,7 @@ function templatePlan_table() {
             {
                 field: 'index', // 返回json数据中的name
                 title: '序号', // 表格表头显示文字
+                width : 100,
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
                     row.index = index;
                     return index + 1;
@@ -131,6 +134,7 @@ function templatePlan_table() {
             }, {
                 field: 'ns',
                 title: '农事',
+                width : 160,
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
                     //向模板计划表格中添加生育周期下拉框
                     var ns_option = "<select onchange='upPlanns(" + JSON.stringify(row) + ")' class='form-control' name='ns'><option value=\"\">请选择</option>"
@@ -151,17 +155,23 @@ function templatePlan_table() {
             }, {
                 field: 'nzNumber',
                 title: '农资',
+                width : 100,
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
                     var str = "";
-
-                    str = str + "<input type='button' name='nzNumber' value='请选择' " +
-                        "onclick='showAgricListInfo_Modal()' class='layui-input'>";
+                    if(value!=""){
+                        str = str + "<input type='button' name='nzNumber' value='"+value+
+                            "' onclick='showAgricListInfo_Modal()' class='layui-input'>";
+                    }else {
+                        str = str + "<input type='button' name='nzNumber' value='请选择' " +
+                            "onclick='showAgricListInfo_Modal()' class='layui-input'>";
+                    }
 
                     return str;
                 }
             }, {
                 field: 'title',
                 title: '农事操作说明',
+                width : 500,
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
                     var str = "";
 
@@ -172,6 +182,7 @@ function templatePlan_table() {
                 }
             }, {
                 title: "操作",
+                width : 215,
                 formatter: function (value, row, index) {
                     var str =
                         "<a href='javascript:addPlanToTable()' class=\"layui-btn layui-btn-info layui-btn-xs\" lay-event=\"edit\">" +
@@ -186,6 +197,7 @@ function templatePlan_table() {
         ]
     })
 }
+
 //修改表格中生育时期
 function upPlansysq(object) {
     var value = $("#templatePlan_table tr[data-index='" + object.index + "'] select[name='sysq']").find("option:selected").text();
@@ -206,7 +218,7 @@ function upPlanns(object) {
 }
 //修改表格中农资数量
 function upPlannzNumber(object) {
-    var value = $("#templatePlan_table tr[data-index='" + object.index + "'] input[name='nzNumber']").val();
+
 
     object.nzNumber = value;
 
@@ -246,11 +258,12 @@ function addPlanToTable() {
     var rows=$("#templatePlan_table").bootstrapTable("getData").length;
 
     var obj = createPlans('', '', '', '', '');
+
     $("#templatePlan_table").bootstrapTable("append", obj);
 
 }
 
-//删除
+//删除计划表的某一行
 function deletePlan(index) {
     // 声明一个数组
     var arrays = new Array();
@@ -335,7 +348,7 @@ function getSpeciesList() {
         dataType: "json",
         type: "post",
         success: function (data) {
-            var html = "<option value=\"\">请选择</option>"
+            var html = "<option value=''>请选择</option>"
             if (data) {
                 speciesList = data;
                 $.each(data, function (a, b) {
@@ -453,6 +466,12 @@ function showAgricListInfo_Modal() {
     $("#agricListInfo_Modal").modal("show");
     //加载农资表格
     agricList_table();
+
+    //更新表格
+    $("#agricList_table").bootstrapTable("removeAll");
+
+    //添加信息
+    addNZToTable()
 }
 
 //打开农资模态框
@@ -470,50 +489,82 @@ function agricList_table() {
         striped: true,       //是否显示行间隔色
         columns: [//field对应的是entity中的属性 title:列名
             {
-                field: 'id', // 返回json数据中的name
+                field: 'index', // 返回json数据中的name
                 title: '序号', // 表格表头显示文字
+                width : 80,
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+
+                    row.index = index;
+
                     return index + 1;
                 }
             }, {
                 field: 'category',
                 title: '投入项分类',
-                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
-                    var str = "";
+                width : 160,
+                formatter: function (value, row, index) {
+                    //向模板计划表格中添加投入项分类下拉框
+                    var nzCategory_option = "<select onchange='upNZcategory(" + JSON.stringify(row) + ")' class='form-control' name='category'><option value=\"\">请选择</option>"
+                    if (nzcategory_data) {
+                        for (var i = 0 ;i < nzcategory_data.length;i++){
+                            if(value == nzcategory_data[i]){
+                                nzCategory_option += " <option selected value=\"" + nzcategory_data[i] + "\">" + nzcategory_data[i] + "</option>"
+                            }else {
+                                nzCategory_option += " <option value=\"" + nzcategory_data[i] + "\">" + nzcategory_data[i] + "</option>"
+                            }
+                        }
 
-                    str = str + "<input type='text' name='title' value='" + value + "' placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+                    }
+                    nzCategory_option += "</select>"
 
-                    return str;
+                    return nzCategory_option;
                 }
 
             }, {
                 field: 'name',
                 title: '农资名称',
+                width : 160,
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
-                    var str = "";
+                    //向模板计划表格中添加投入项分类下拉框
+                    var nzName_option = "<select onchange='upNZname(" + JSON.stringify(row) + ")' class='form-control' name='name'><option value=\"\">请选择</option>"
+                    if (nz_data) {
+                        for (var i = 0 ;i < nz_data.length;i++){
+                            if(row.category == nz_data[i].category){
+                                if(value == nz_data[i].name){
+                                    nzName_option += " <option selected value=\"" + nz_data[i].unitMeasurement + "\">" + nz_data[i].name + "</option>"
+                                }else {
+                                    nzName_option += " <option value=\"" + nz_data[i].unitMeasurement + "\">" + nz_data[i].name + "</option>"
+                                }
+                            }
+                        }
 
-                    str = str + "<input type='text' name='title' value='" + value + "' placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+                    }
+                    nzName_option += "</select>"
 
-                    return str;
+                    return nzName_option;
                 }
             }, {
                 field: 'unitMeasurement',
                 title: '用量',
+                width : 320,
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
                     var str = "";
 
-                    str = str + "<input type='text' name='title' value='" + value + "' placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+                    str = str + "<input type='text' style='width: 240px;' name='unitMeasurement_danwei' value='" + value + "' " +
+                        "placeholder='请输入' onchange='upNZunitMeasurement(" + JSON.stringify(row) + ")' class='layui-input layui-input-inline'>"+
+                        "<span style='width: 80px'>"+row.danwei+"</span>";
 
                     return str;
                 }
             }, {
                 title: "操作",
+                width : 215,
                 formatter: function (value, row, index) {
                     var str =
-                        "<a href='javascript:findTemplateById(" + row.id + ")' class=\"layui-btn layui-btn-normal layui-btn-xs\" lay-event=\"edit\">" +
-                        "<i  class=\"layui-icon layui-icon-edit\">" +
-                        "</i>编辑</a> " +
-                        "<a href='javascript:deleteTemplate(" + row.id + ")' class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
+                        "<a href='javascript:addNZToTable()' class=\"layui-btn layui-btn-info layui-btn-xs\" lay-event=\"edit\">" +
+                        "<i  class=\"layui-icon layui-icon-add-1\">" +
+                        "</i>新增</a> " +
+                        "<a href='javascript:deleteNZ(" + index + ")' class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
                         "<i class=\"layui-icon layui-icon-delete\">" +
                         "</i>删除</a> ";
                     return str;
@@ -521,6 +572,66 @@ function agricList_table() {
             }
         ]
     })
+}
+
+//修改农资表格中投入项类别
+function upNZcategory(object) {
+    var value = $("#agricList_table tr[data-index='" + object.index + "'] select[name='category']").find("option:selected").text();
+
+    object.category = value;
+    object.danwei = '';
+
+    $("#agricList_table").bootstrapTable('updateRow', {index: object.index, row: object});
+}
+
+//修改农资表格中农资名称
+function upNZname(object) {
+    var value = $("#agricList_table tr[data-index='" + object.index + "'] select[name='name']").find("option:selected").text();
+    var danwei = $("#agricList_table tr[data-index='" + object.index + "'] select[name='name']").find("option:selected").val();
+
+    object.name = value;
+    object.danwei = danwei;
+    $("#agricList_table").bootstrapTable('updateRow', {index: object.index, row: object});
+}
+
+//修改农资表格中的投入量
+function upNZunitMeasurement(object) {
+    var value = $("#agricList_table tr[data-index='" + object.index + "'] input[name='unitMeasurement_danwei']").find("option:selected").text();
+
+    object.unitMeasurement = value;
+
+    $("#agricList_table").bootstrapTable('updateRow', {index: object.index, row: object});
+}
+
+
+//创建农资对象
+function createNZObject(index, category, name, unitMeasurement,danwei) {
+    var obj = new Object();
+    obj.index = index;
+    obj.category = category;
+    obj.name = name;
+    obj.unitMeasurement = unitMeasurement;
+    obj.danwei = danwei;
+    return obj;
+}
+
+//添加农资信息到表格
+function addNZToTable() {
+    //总共多少行数据
+    var rows=$("#agricList_table").bootstrapTable("getData").length;
+
+    var obj = createNZObject('', '', '', '','');
+
+    $("#agricList_table").bootstrapTable("append", obj);
+}
+
+//删除计划表的某一行
+function deleteNZ(index) {
+    // 声明一个数组
+    var arrays = new Array();
+    arrays.push(parseInt(index));
+    //根据id移除数据
+    $("#agricList_table").bootstrapTable("remove", {field: 'index', values: arrays});
 }
 
 //查询所有农资信息

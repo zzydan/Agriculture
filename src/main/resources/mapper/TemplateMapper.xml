@@ -6,15 +6,15 @@
         select template.*,crop_variety.name AS categoryName,crop_species.name AS varietyName from template
         LEFT JOIN crop_species on template.category = crop_species.id
         LEFT JOIN crop_variety on template.variety = crop_variety.id
-        WHERE 1=1
+        WHERE template.disabled = 0
         <if test="info.name != null and info.name != ''">
-            and name like CONCAT('%',#{info.name },'%')
+            and template.name like CONCAT('%',#{info.name },'%')
         </if>
         <if test="info.category != null and info.category != ''">
-            and category = #{info.category}
+            and template.category = #{info.category}
         </if>
         <if test="info.variety != null and info.variety != ''">
-            and variety = #{info.variety}
+            and template.variety = #{info.variety}
         </if>
     </select>
 

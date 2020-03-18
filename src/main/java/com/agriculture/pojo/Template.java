@@ -15,11 +15,11 @@ public class Template implements Serializable {
 
     private Integer category;
 
-    private Integer categoryName;
+    private String categoryName;
 
     private Integer variety;
 
-    private Integer varietyName;
+    private String varietyName;
 
     private List<TemplatePlan> templatePlanList;
 
@@ -31,19 +31,19 @@ public class Template implements Serializable {
         this.templatePlanList = templatePlanList;
     }
 
-    public Integer getCategoryName() {
+    public String getCategoryName() {
         return categoryName;
     }
 
-    public void setCategoryName(Integer categoryName) {
+    public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
 
-    public Integer getVarietyName() {
+    public String getVarietyName() {
         return varietyName;
     }
 
-    public void setVarietyName(Integer varietyName) {
+    public void setVarietyName(String varietyName) {
         this.varietyName = varietyName;
     }
 

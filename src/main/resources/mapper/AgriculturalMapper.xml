@@ -35,6 +35,6 @@
 
     <!-- List<Agricultural> getAgricList(); -->
     <select id="getAgricList" resultType="com.agriculture.pojo.Agricultural">
-        select * from agricultural
+        select * from agricultural WHERE disabled = 0
     </select>
 </mapper>

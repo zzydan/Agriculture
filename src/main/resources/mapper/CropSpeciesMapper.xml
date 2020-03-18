@@ -8,6 +8,6 @@
          */
         List<CropSpecies> getSpeciesList();-->
     <select id="getSpeciesList" resultType="com.agriculture.pojo.CropSpecies">
-        select * from crop_species
+        select * from crop_species WHERE disabled = 0
     </select>
 </mapper>

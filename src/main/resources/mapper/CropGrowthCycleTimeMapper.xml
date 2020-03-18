@@ -4,7 +4,7 @@
     <!-- List<CropGrowthCycleTime> getCropGrowthCycleTime(@Param("speciesId") Integer speciesId,@Param("varietyId")  Integer varietyId); -->
     <select id="getCropGrowthCycleTime" resultType="com.agriculture.pojo.CropGrowthCycleTime">
         select * from crop_growth_cycle_time
-        WHERE crop_growth_cycle_id =
+        WHERE disabled = 0 AND crop_growth_cycle_id =
         (select id from crop_growth_cycle WHERE crop_species_id = #{speciesId} AND crop_variety_id = #{varietyId})
     </select>
 
