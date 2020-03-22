@@ -3,6 +3,7 @@ package com.agriculture.controller;
 
 import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
+import com.agriculture.tools.JSONUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -363,8 +364,17 @@ public class BasicCenterController {
      */
     @RequestMapping("addTemplate")
     @ResponseBody
-    public int addTemplate(Template template) {
+    public int addTemplate(Template template,String templatePlanData) {
 
+        //还原数据
+        List<TemplatePlan> templatePlans = new JSONUtils().jsonToList(templatePlanData, TemplatePlan.class);
+
+        for (int i = 0; i < templatePlans.size(); i++) {
+            System.out.println(templatePlans.get(i));
+        }
+        template.setTemplatePlanList(templatePlans);
+
+        //添加模板
         int i = basicCenterService.addTemplate(template);
 
         return i;

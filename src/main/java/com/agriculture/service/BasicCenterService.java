@@ -161,7 +161,6 @@ public interface BasicCenterService {
      */
     boolean updateLot(Lot lot);
 
-
     /**
      * 根据种类id 查询作物生育周期
      * @param speciesId

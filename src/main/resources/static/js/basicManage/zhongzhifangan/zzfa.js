@@ -160,10 +160,10 @@ function templatePlan_table() {
                     var str = "";
                     if(value!=""){
                         str = str + "<input type='button' name='nzNumber' value='"+value+
-                            "' onclick='showAgricListInfo_Modal("+index+")' class='layui-input'>";
+                            "' onclick='showAgricListInfo_Modal("+index+","+JSON.stringify(row)+")' class='layui-input'>";
                     }else {
                         str = str + "<input type='button' name='nzNumber' value='请选择' " +
-                            "onclick='showAgricListInfo_Modal("+index+")' class='layui-input'>";
+                            "onclick='showAgricListInfo_Modal("+index+","+null+")' class='layui-input'>";
                     }
 
                     return str;
@@ -235,12 +235,12 @@ function upPlantitle(object) {
 }
 
 //创建一个全新table对象
-function createPlans(index, sysq, ns, nsList, nzNumber, title) {
+function createPlans(index, sysq, ns, templatePlanAgriculturalList, nzNumber, title) {
     var obj = new Object();
     obj.index = index;
     obj.sysq = sysq;
     obj.ns = ns;
-    obj.nsList = nsList;
+    obj.templatePlanAgriculturalList = templatePlanAgriculturalList;
     obj.nzNumber = nzNumber;
     obj.title = title;
     return obj;
@@ -248,10 +248,8 @@ function createPlans(index, sysq, ns, nsList, nzNumber, title) {
 
 //添加信息到table表中
 function addPlanToTable() {
-    //总共多少行数据
-    var rows=$("#templatePlan_table").bootstrapTable("getData").length;
 
-    var obj = createPlans('', '', '', '', '');
+    var obj = createPlans('', '', '', '', '', '');
 
     $("#templatePlan_table").bootstrapTable("append", obj);
 
@@ -269,10 +267,35 @@ function deletePlan(index) {
 //打开添加模板模态框
 function addTemplateInfo() {
 
+    document.getElementById("template_Form").reset();
+
     $("#addTemplateInfo_Modal").modal("show");
 
     templatePlan_table();
+}
 
+//添加模板信息
+function addTemplateData() {
+    //获取数据
+    var template_Form =$("#template_Form").serialize();
+    var templatePlanTableData =JSON.stringify($("#templatePlan_table").bootstrapTable("getData"));
+
+    $.ajax({
+        url: "/basicCenter/addTemplate?"+template_Form,
+        type: "post",
+        dataType:"json",
+        async: false,
+        data: {"templatePlanData":templatePlanTableData},
+        success: function (data) {
+
+            $("#addTemplateInfo_Modal").modal("hide");
+
+            alert("新建成功！");
+        },
+        error: function () {
+            alert("请求失败");
+        }
+    });
 }
 
 //回显数据
@@ -295,7 +318,6 @@ function findTemplateById(id) {
 
 //修改保存
 function updateTemplate(id) {
-
 
     $.ajax({
         url: "/basicCenter/updateTemplate",
@@ -455,10 +477,11 @@ function getWorkList() {
     })
 }
 //显示农资信息模态框
-function showAgricListInfo_Modal(index) {
+function showAgricListInfo_Modal(index,object) {
+
     //打开模态框
     $("#agricListInfo_Modal").modal("show");
-    //
+    //保存下标
     $("#template_table_index").val(index);
 
     //加载农资表格
@@ -468,7 +491,12 @@ function showAgricListInfo_Modal(index) {
     $("#agricList_table").bootstrapTable("removeAll");
 
     //添加信息
-    addNZToTable()
+    if(object != null){
+        addNZToTable2(object.templatePlanAgriculturalList);
+    }else {
+        addNZToTable();
+    }
+
 }
 
 //打开农资模态框
@@ -496,7 +524,7 @@ function agricList_table() {
                     return index + 1;
                 }
             }, {
-                field: 'category',
+                field: 'trxfl',
                 title: '投入项分类',
                 width : 160,
                 formatter: function (value, row, index) {
@@ -518,7 +546,7 @@ function agricList_table() {
                 }
 
             }, {
-                field: 'name',
+                field: 'nzmc',
                 title: '农资名称',
                 width : 160,
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
@@ -526,7 +554,7 @@ function agricList_table() {
                     var nzName_option = "<select onchange='upNZname(" + JSON.stringify(row) + ")' class='form-control' name='name'><option value=\"\">请选择</option>"
                     if (nz_data) {
                         for (var i = 0 ;i < nz_data.length;i++){
-                            if(row.category == nz_data[i].category){
+                            if(row.trxfl == nz_data[i].category){
                                 if(value == nz_data[i].name){
                                     nzName_option += " <option selected value=\"" + nz_data[i].unitMeasurement + "\">" + nz_data[i].name + "</option>"
                                 }else {
@@ -541,7 +569,7 @@ function agricList_table() {
                     return nzName_option;
                 }
             }, {
-                field: 'unitMeasurement',
+                field: 'yl',
                 title: '用量',
                 width : 320,
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
@@ -575,7 +603,7 @@ function agricList_table() {
 function upNZcategory(object) {
     var value = $("#agricList_table tr[data-index='" + object.index + "'] select[name='category']").find("option:selected").text();
 
-    object.category = value;
+    object.trxfl = value;
     object.danwei = '';
 
     $("#agricList_table").bootstrapTable('updateRow', {index: object.index, row: object});
@@ -586,7 +614,7 @@ function upNZname(object) {
     var value = $("#agricList_table tr[data-index='" + object.index + "'] select[name='name']").find("option:selected").text();
     var danwei = $("#agricList_table tr[data-index='" + object.index + "'] select[name='name']").find("option:selected").val();
 
-    object.name = value;
+    object.nzmc = value;
     object.danwei = danwei;
     $("#agricList_table").bootstrapTable('updateRow', {index: object.index, row: object});
 }
@@ -595,18 +623,18 @@ function upNZname(object) {
 function upNZunitMeasurement(object) {
     var value = $("#agricList_table tr[data-index='" + object.index + "'] input[name='unitMeasurement_danwei']").val();
 
-    object.unitMeasurement = value;
+    object.yl = value;
 
     $("#agricList_table").bootstrapTable('updateRow', {index: object.index, row: object});
 }
 
 //创建农资对象
-function createNZObject(index, category, name, unitMeasurement,danwei) {
+function createNZObject(index, trxfl, nzmc, yl,danwei) {
     var obj = new Object();
     obj.index = index;
-    obj.category = category;
-    obj.name = name;
-    obj.unitMeasurement = unitMeasurement;
+    obj.trxfl = trxfl;
+    obj.nzmc = nzmc;
+    obj.yl = yl;
     obj.danwei = danwei;
     return obj;
 }
@@ -617,6 +645,14 @@ function addNZToTable() {
     var obj = createNZObject('', '', '', '','');
 
     $("#agricList_table").bootstrapTable("append", obj);
+}
+//添加农资信息到表格
+function addNZToTable2(templatePlanAgriculturalList) {
+    for (var i = 0; i < templatePlanAgriculturalList.length; i++) {
+        var obj = createNZObject('', templatePlanAgriculturalList[i].category, templatePlanAgriculturalList[i].name, templatePlanAgriculturalList[i].unitMeasurement,templatePlanAgriculturalList[i].danwei);
+
+        $("#agricList_table").bootstrapTable("append", obj);
+    }
 }
 
 //删除计划表的某一行
@@ -645,6 +681,9 @@ function getAgricList() {
 function addAgricListData() {
     //总共多少行数据
     var agricTableData=$('#agricList_table').bootstrapTable('getData');
+
+    //验证数据是否填写完毕
+
     //总共多少行数据
     var row=$("#agricList_table").bootstrapTable("getData").length;
 
@@ -652,12 +691,10 @@ function addAgricListData() {
 
     var object = $("#templatePlan_table").bootstrapTable("getRowByIndex",index);
 
-    console.log(object);
-
-    object.nsList = agricTableData;
+    object.templatePlanAgriculturalList = agricTableData;
     object.nzNumber = row;
 
     $("#templatePlan_table").bootstrapTable('updateRow', {index: object.index, row: object});
 
-    console.log(agricTableData);
+    $("#agricListInfo_Modal").modal("hide");
 }

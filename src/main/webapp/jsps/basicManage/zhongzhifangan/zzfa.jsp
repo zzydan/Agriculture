@@ -123,7 +123,7 @@
             </div>
             <div class="panel-body">
                 <div class="form-group">
-                    <a class="layui-btn layui-btn-fluid" onclick="">保存</a>
+                    <a class="layui-btn layui-btn-fluid" onclick="addTemplateData()">保存</a>
                 </div>
             </div>
         </div><!-- /.modal-content -->

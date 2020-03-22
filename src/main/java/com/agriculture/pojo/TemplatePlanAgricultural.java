@@ -16,7 +16,17 @@ public class TemplatePlanAgricultural implements Serializable {
 
     private String yl;
 
+    private String danwei;
+
     private Integer planId;
+
+    public String getDanwei() {
+        return danwei;
+    }
+
+    public void setDanwei(String danwei) {
+        this.danwei = danwei;
+    }
 
     private static final long serialVersionUID = 1L;
 

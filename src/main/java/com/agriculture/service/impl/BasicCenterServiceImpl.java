@@ -41,6 +41,10 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     private AgriculturalMapper AgriculturalMapper;
     @Resource
     private TemplateMapper templateMapper;
+    @Autowired
+    private TemplatePlanMapper templatePlanMapper;
+    @Autowired
+    private TemplatePlanAgriculturalMapper templatePlanAgriculturalMapper;
 
     @Autowired
     private CropGrowthCycleTimeMapper cropGrowthCycleTimeMapper;
@@ -403,6 +407,14 @@ public class BasicCenterServiceImpl implements BasicCenterService {
      */
     @Override
     public int addTemplate(Template template) {
+//        templateMapper
+//        templatePlanMapper
+//        templatePlanAgriculturalMapper
+
+
+
+
+
         return 0;
     }
 
