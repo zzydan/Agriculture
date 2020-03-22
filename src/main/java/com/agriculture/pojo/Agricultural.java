@@ -16,6 +16,16 @@ public class Agricultural implements Serializable {
 
     private String unitMeasurement;
 
+    private String danwei;
+
+    public String getDanwei() {
+        return danwei;
+    }
+
+    public void setDanwei(String danwei) {
+        this.danwei = danwei;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {

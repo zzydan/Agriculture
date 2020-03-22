@@ -136,7 +136,7 @@
      style=" margin-left: -400px;margin-top: 57px">
     <div class="modal-dialog">
         <div class="modal-content" style="width: 1000px;margin-right: 300px">
-            <div class="modal-header">
+            <div class="modawl-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">农资列表</h4>
             </div>
@@ -159,14 +159,22 @@
                                 text-align: center;
                                 vertical-align: middle;
                             }
+                            #agricList_table tr td:nth-child(4) {
+                                padding: 2px;
+                                height: 37px;
+                                font-size: 14px;
+                                text-align: left;
+                                vertical-align: middle;
+                            }
                         </style>
+                        <input type="hidden" id="template_table_index">
                         <table id="agricList_table"></table>
                     </div>
                 </div>
             </div>
             <div class="panel-body">
                 <div class="form-group">
-                    <a class="layui-btn layui-btn-fluid" onclick="">保存</a>
+                    <a class="layui-btn layui-btn-fluid" onclick="addAgricListData()">保存</a>
                 </div>
             </div>
         </div><!-- /.modal-content -->
