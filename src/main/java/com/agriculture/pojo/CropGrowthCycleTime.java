@@ -20,7 +20,41 @@ public class CropGrowthCycleTime implements Serializable {
 
     private Integer picId;
 
+    private String truename;
+
+    private String name;
+
+    private String csname;
+
     private static final long serialVersionUID = 1L;
+
+    public String getTruename() {
+        return truename;
+    }
+
+    public void setTruename(String truename) {
+        this.truename = truename;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCsname() {
+        return csname;
+    }
+
+    public void setCsname(String csname) {
+        this.csname = csname;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Integer getId() {
         return id;

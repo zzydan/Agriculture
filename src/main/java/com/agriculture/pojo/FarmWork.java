@@ -32,6 +32,25 @@ public class FarmWork implements Serializable {
 
     private String result;
 
+    private String truename;
+    private String workName;
+
+    public String getWorkName() {
+        return workName;
+    }
+
+    public void setWorkName(String workName) {
+        this.workName = workName;
+    }
+
+    public String getTruename() {
+        return truename;
+    }
+
+    public void setTruename(String truename) {
+        this.truename = truename;
+    }
+
     @Override
     public String toString() {
         return "FarmWork{" +

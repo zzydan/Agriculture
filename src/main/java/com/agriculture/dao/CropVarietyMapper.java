@@ -20,4 +20,36 @@ public interface CropVarietyMapper {
      * @return
      */
     List<CropVariety> getVarietyListBySpeciesId(@Param("SpeciesId") Integer SpeciesId);
+    /**
+     * 查看作物品种
+     * @return
+     */
+    List<CropVariety> findVariety();
+
+    /**
+     * 查询单个品种
+     * @param id
+     * @return
+     */
+    CropVariety findVarietyId(@Param("id")Integer id);
+    /**
+     * 删除品种
+     * @param id
+     * @return
+     */
+    int deleteVariety(@Param("id")Integer id);
+
+    /**
+     * 添加种类
+     * @param cropVariety
+     * @return
+     */
+    int InsertVariety(CropVariety cropVariety);
+
+    /**
+     * 修改种类
+     * @param cropVariety
+     * @return
+     */
+    int updataVariety(CropVariety cropVariety);
 }

@@ -7,10 +7,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -176,11 +174,11 @@ public class BasicCenterController {
     }
 
 
-    /**
+   /* *//**
      * 添加地块
      * @param lot,overlay
      * @return
-     */
+     *//*
     @RequestMapping("addLot")
     @ResponseBody
     public boolean addLot(Lot lot,String overlay){
@@ -190,7 +188,7 @@ public class BasicCenterController {
         boolean b = basicCenterService.addLot(lot,locations);
 
         return b;
-    }
+    }*/
 
     /**
      * 查询所有农资
@@ -386,6 +384,210 @@ public class BasicCenterController {
         return i;
     }
 
+    /**
+     * 查询作物种类
+     * @return
+     */
+    @RequestMapping("SelectCropAll")
+    @ResponseBody
+    public List<CropSpecies> SelectCropAll(){
+        List<CropSpecies> list=basicCenterService.SelectCropAll();
+        return list;
+    }
 
+    /**
+     * 添加种类
+     * @param CropSpecies
+     * @param User1Pic
+     * @return
+     */
+    @RequestMapping("addcrop")
+    @ResponseBody
+    public boolean addcrop(CropSpecies CropSpecies, MultipartFile User1Pic){
+        System.out.println(User1Pic);
+        int i=basicCenterService.addcrop(CropSpecies,User1Pic);
+        return i>0;
+    }
+    /**
+     * 查询作物品种
+     * @return
+     */
+    @RequestMapping("findVariety")
+    @ResponseBody
+    public List<CropVariety> findVariety(){
+        List<CropVariety> list=basicCenterService.findVariety();
+        return list;
+    }
+    /**
+     * 查询品种回显
+     * @param id
+     * @return
+     */
+    @RequestMapping("findVarietyId/{id}")
+    @ResponseBody
+    public  CropVariety findVarietyId(@PathVariable("id")Integer id){
+        CropVariety list=basicCenterService.findVarietyId(id);
+        return list;
+    }
+    /**
+     * 删除品种
+     * @param id
+     * @return
+     */
+    @RequestMapping("deleteVariety/{id}")
+    @ResponseBody
+    public int deleteVariety(@PathVariable("id")Integer id){
+        return basicCenterService.deleteVariety(id);
+    }
+
+    /**
+     * 添加品种
+     * @param cropVariety
+     * @return
+     */
+    @RequestMapping("InsertVariety")
+    @ResponseBody
+    public int InsertVariety(CropVariety cropVariety){
+        return basicCenterService.InsertVariety(cropVariety);
+    }
+
+    /**
+     * 修改品种
+     * @param cropVariety
+     * @return
+     */
+    @RequestMapping("updataVariety")
+    @ResponseBody
+    public int updataVariety(CropVariety cropVariety){
+        return basicCenterService.updataVariety(cropVariety);
+    }
+
+    /**
+     * 查询所有农事
+     * @return
+     */
+    @RequestMapping("FindFarm")
+    @ResponseBody
+    public List<FarmWork> FindFarm() {
+        List<FarmWork> list=basicCenterService.FindFarm();
+        return list;
+    }
+
+    /**
+     * 查询单个农事信息
+     * @param id
+     * @return
+     */
+    @RequestMapping("FindFarmId/{id}")
+    @ResponseBody
+    public FarmWork FindFarmId(@PathVariable("id")Integer id) {
+        return basicCenterService.FindFarmId(id);
+    }
+    /**
+     * 添加农事
+     * @param FarmWork
+     * @return
+     */
+    @RequestMapping("addFarm")
+    @ResponseBody
+    public int addFarm(FarmWork FarmWork) {
+        return basicCenterService.addFarm(FarmWork);
+    }
+    /**
+     * 修改农事
+     * @param FarmWork
+     * @return
+     */
+    @RequestMapping("UpdateFarm")
+    @ResponseBody
+    public int UpdateFarm(FarmWork FarmWork) {
+        return basicCenterService.UpdateFarm(FarmWork);
+    }
+
+    /**
+     * 删除农事
+     * @param id
+     * @return
+     */
+    @RequestMapping("deleteFarm/{id}")
+    @ResponseBody
+    public int deleteFarm(@PathVariable("id")Integer id) {
+        return basicCenterService.deleteFarm(id);
+    }
+    /**
+     * 查询所有的生育时期
+     * @return
+     */
+    @RequestMapping("FindCropGrowthCycleTime")
+    @ResponseBody
+    public List<CropGrowthCycleTime> FindCropGrowthCycleTime() {
+        List<CropGrowthCycleTime> list=basicCenterService.FindCropGrowthCycleTime();
+        return list;
+    }
+    /**
+     * 添加生育周期时期
+     * @param CropGrowthCycle
+     * @param zwswxld_up
+     * @param starttime
+     * @param endtime
+     * @return
+     */
+    @RequestMapping("/addCropGrowth")
+    @ResponseBody
+    public boolean addCropGrowth(CropGrowthCycle CropGrowthCycle, @RequestParam("zwswxld_up[]") String[] zwswxld_up, @RequestParam("starttime[]") String[] starttime,@RequestParam("endtime[]") String[] endtime){
+        System.out.println("添加生育周期");
+        Boolean bo=basicCenterService.addCropGrowth(CropGrowthCycle, zwswxld_up,starttime ,endtime);
+        return bo;
+    }
+    /**
+     * 查询单个生育周期信息
+     * @param id
+     * @return
+     */
+    @RequestMapping("/SelectCropTimeId/{id}")
+    @ResponseBody
+    public List<CropGrowthCycleTime> SelectCropTimeId(@PathVariable("id")Integer id) {
+        return basicCenterService.SelectCropTimeId(id);
+    }
+    /**
+     * 删除生育种类
+     * @param id
+     * @return
+     */
+    @RequestMapping("/deleteCrop/{id}")
+    @ResponseBody
+    public int deleteCrop(@PathVariable("id")Integer id) {
+        return basicCenterService.deleteCrop(id);
+    }
+    /**
+     * 查询单个种类
+     * @param id
+     * @return
+     */
+    @RequestMapping("/SelectCropSpeciesId/{id}")
+    @ResponseBody
+    public CropSpecies SelectCropSpeciesId(@PathVariable("id")Integer id) {
+        return basicCenterService.SelectCropSpeciesId(id);
+    }
+    /**
+     * 修改种类
+     * @param CropSpecies
+     * @return
+     */
+    @RequestMapping("UpdateCropSpercies")
+    @ResponseBody
+    public int UpdateCropSpercies(CropSpecies CropSpecies) {
+        return basicCenterService.UpdateCropSpercies(CropSpecies);
+    }
+    /**
+     * 删除种类
+     * @param id
+     * @return
+     */
+    @RequestMapping("/DeleteCropSperciesId/{id}")
+    @ResponseBody
+    public int DeleteCropSperciesId(@PathVariable("id")Integer id) {
+        return basicCenterService.DeleteCropSperciesId(id);
+    }
 }
 

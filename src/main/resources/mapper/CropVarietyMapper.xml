@@ -15,4 +15,31 @@
     <select id="getVarietyListBySpeciesId" resultType="com.agriculture.pojo.CropVariety">
         select * from crop_variety WHERE 1=1 AND species = #{SpeciesId}
     </select>
+    <!-- List<CropVariety> findVariety();-->
+    <select id="findVariety" resultType="com.agriculture.pojo.CropVariety">
+        SELECT va.*,us.*,sp.name as name1
+        FROM crop_variety va,crop_species sp,sec_user us
+        WHERE va.species=sp.id and us.id=va.user_id  and sp.disabled=0 and va.disabled=0
+    </select>
+    <!--CropVariety findVarietyId(@Param("id")Integer id);-->
+    <select id="findVarietyId" resultType="com.agriculture.pojo.CropVariety">
+        SELECT va.*,us.*,sp.name as name1
+        FROM crop_variety va,crop_species sp,sec_user us
+        WHERE va.species=sp.id and us.id=va.user_id  and sp.disabled=0 and va.disabled=0 and va.id=#{id}
+    </select>
+    <!--int deleteVariety(@Param("id")Integer id);-->
+    <update id="deleteVariety" parameterType="com.agriculture.pojo.CropVariety">
+        update crop_variety set disabled = 1 where id = #{id}
+    </update>
+    <!--int InsertVariety(CropVariety cropVariety);-->
+    <insert id="InsertVariety" parameterType="com.agriculture.pojo.CropVariety">
+        INSERT into crop_variety (createtime,name,user_id,species,zwswxld)
+        VALUES (now(),#{name},#{userId},#{species},#{zwswxld})
+    </insert>
+    <!--int updataVariety(@Param("id")Integer id);-->
+    <update id="updataVariety" parameterType="com.agriculture.pojo.CropVariety">
+        UPDATE crop_variety
+        SET name=#{name},species=#{species},zwswxld=#{zwswxld}
+        WHERE id=#{id}
+    </update>
 </mapper>

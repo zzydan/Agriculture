@@ -10,4 +10,33 @@
     <select id="getSpeciesList" resultType="com.agriculture.pojo.CropSpecies">
         select * from crop_species
     </select>
+    <!-- List<CropSpecies> SelectCropAll();-->
+    <select id="SelectCropAll" resultType="com.agriculture.pojo.CropSpecies">
+        SELECT *
+        FROM crop_species cr , sec_user us
+        WHERE cr.user_id=us.id AND cr.disabled=0 and us.disabled=0
+    </select>
+    <!-- int addcrop(CropSpecies CropSpecies);-->
+    <insert id="addcrop" parameterType="com.agriculture.pojo.CropSpecies">
+        INSERT into crop_species (createtime,name,pic_id,user_id)
+        VALUES (now(),#{crop_species.name},#{crop_species.user1Pic},#{crop_species.userId})
+    </insert>
+    <!-- CropSpecies SelectCropSpeciesId(@Param("id")Integer id);-->
+    <select id="SelectCropSpeciesId" resultType="com.agriculture.pojo.CropSpecies">
+        SELECT *
+        FROM crop_species cr , sec_user us
+        WHERE cr.user_id=us.id AND cr.disabled=0 and us.disabled=0 and cr.id=#{id}
+    </select>
+    <!--int UpdateCropSpercies(CropSpecies CropSpecies);-->
+    <update id="UpdateCropSpercies" parameterType="com.agriculture.pojo.CropSpecies">
+        UPDATE crop_species
+        SET name=#{name}
+        WHERE id=#{id}
+    </update>
+    <!--int DeleteCropSperciesId(@Param("id")Integer id);-->
+    <update id="DeleteCropSperciesId" parameterType="com.agriculture.pojo.CropSpecies">
+        UPDATE crop_species
+        SET disabled=1
+        WHERE id=#{id}
+    </update>
 </mapper>
