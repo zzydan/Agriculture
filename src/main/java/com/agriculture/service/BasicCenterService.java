@@ -3,6 +3,7 @@ package com.agriculture.service;
 import com.agriculture.pojo.*;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -115,13 +116,13 @@ public interface BasicCenterService {
      * @return
      */
     Template findTemplateById(Integer templateId);
-
-    /**
+/*
+    *//**
      * 添加地块
      * @param lot,overlay
      * @return
-     */
-    boolean addLot(Lot lot, List<Location> locations);
+     *//*
+    boolean addLot(Lot lot, List<Location> locations);*/
 
     /**
      * 查询分场列表vo,一个分场对多个地块，一个地块有对应多个经纬度
@@ -202,4 +203,119 @@ public interface BasicCenterService {
      * @return
      */
     List<Agricultural> getAgricList();
+    /**
+     * 查询作物品种
+     * @return
+     */
+    List<CropSpecies> SelectCropAll();
+
+
+
+    /**
+     * 添加作物种类名称
+     * @param CropSpecies
+     * @return
+     */
+    int addcrop(CropSpecies CropSpecies, MultipartFile user1Pic);
+    /**
+     * 查看作物品种
+     * @return
+     */
+    List<CropVariety> findVariety();
+    /**
+     * 查询单个品种
+     * @param id
+     * @return
+     */
+    CropVariety findVarietyId(Integer id);
+    /**
+     * 删除品种
+     * @param id
+     * @return
+     */
+    int deleteVariety(Integer id);
+    /**
+     * 添加种类
+     * @param cropVariety
+     * @return
+     */
+    int InsertVariety(CropVariety cropVariety);
+    /**
+     * 修改种类
+     * @param cropVariety
+     * @return
+     */
+    int updataVariety(CropVariety cropVariety);
+    /**
+     * 查询所有农事
+     * @return
+     */
+    List<FarmWork> FindFarm();
+
+    /**
+     * 查询单个农事信息
+     * @param id
+     * @return
+     */
+    FarmWork FindFarmId(@Param("id")Integer id);
+    /**
+     * 添加农事
+     * @param FarmWork
+     * @return
+     */
+    int addFarm(FarmWork FarmWork);
+    /**
+     * 修改农事
+     * @param FarmWork
+     * @return
+     */
+    int UpdateFarm(FarmWork FarmWork);
+
+    /**
+     * 删除农事
+     * @param id
+     * @return
+     */
+    int deleteFarm(Integer id);
+    /**
+     * 查询所有生育时期
+     * @return
+     */
+    List<CropGrowthCycleTime> FindCropGrowthCycleTime();
+    /**
+     * 添加生育周期
+     * @param CropGrowthCycle
+     * @return
+     */
+    Boolean addCropGrowth(CropGrowthCycle CropGrowthCycle,String[] zwswxld_up,String[] starttime,String[] endtime);
+    /**
+     * 查询单个生育周期信息
+     * @param id
+     * @return
+     */
+    List<CropGrowthCycleTime> SelectCropTimeId(@Param("id")Integer id);
+    /**
+     * 删除生育种类
+     * @param id
+     * @return
+     */
+    int deleteCrop(Integer id);
+    /**
+     * 查询单个种类
+     * @param id
+     * @return
+     */
+    CropSpecies SelectCropSpeciesId(@Param("id")Integer id);
+    /**
+     * 修改种类
+     * @param CropSpecies
+     * @return
+     */
+    int UpdateCropSpercies(CropSpecies CropSpecies);
+    /**
+     * 删除种类
+     * @param id
+     * @return
+     */
+    int DeleteCropSperciesId(Integer id);
 }

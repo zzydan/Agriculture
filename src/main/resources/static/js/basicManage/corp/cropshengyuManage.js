@@ -1,17 +1,136 @@
 $(function () {
     role_table();
-
+    findEnter();
+    findEntersp();
 })
 
+$(document).ready(function() {
+
+    var MaxInputs       = 8;
+    var InputsWrapper   = $("#InputsWrapper");
+    var AddButton       = $("#AddMoreFileBox");
+
+    var x = InputsWrapper.length;
+    var FieldCount=0;
+
+    $(AddButton).click(function (e)
+    {
+        if(x <= MaxInputs)
+        {
+            FieldCount++;
+
+            $(InputsWrapper).append(
+                 '<tr>'
+                +'<td>'
+                +"<input type=\"text\" class=\"form-control\" id=\"zwswxld_up"+FieldCount+"\" name=\"zwswxld_up\" placeholder=\"请输入\">"
+                +'</td>'
+                +'<td  style="width:600px";>'
+                +'<div class="form-group">'
+                +'<div class="col-sm-1">'
+                +'</div>'
+                +'<div class="col-sm-4" style="top: 7px;">'
+                +"<input type=\"date\" class=\"form-control\" id=\"starttime"+FieldCount+"\" name=\"starttime\" placeholder=\"请输入\" style=\"width:200px\";>"
+                +'</div>'
+                +'<div class="col-sm-1">'
+                +'</div>'
+                +'<div class="col-sm-4" style="top: 7px;">'
+                +"<input type=\"date\" class=\"form-control\" id=\"endtime"+FieldCount+"\" name=\"endtime\" placeholder=\"请输入\"  style=\"width:200px\";>"
+                +'</div>'
+                +'</div>'
+                +'</td>'
+                +'<td>'
+                +'<div class="item">'
+                +'<img class="icon addImg" onclick=\"clickImg(this);"\ src="/static/jquerygwscmoban/images/addImg.png">'
+                +'<input name="url" type="file" class="upload_input" onchange="change(this)">'
+                +'<div class="preBlock">'
+                +"<img id=\"enterprisemapperUser1Pic_add"+FieldCount+"\" class=\"preview\" alt=\"\" name=\"pic\" width=\"34\" height=\"34\">"
+                +'</div>'
+                +'<img class="delete" onclick=\"deleteImg(this);"\ src="/static/jquerygwscmoban/images/delete.png">'
+                +'</div>'
+                +'</td>'
+                +'<td>'
+                +'<button type="button" class="layui-btn layui-btn-danger layui-btn-sm" onclick=\"deleteThis(this.parentNode.parentNode)\">删除</button>'
+                +'</td>'
+                +'</tr>'
+            );
+            x++;
+        }
+        return false;
+    });
+
+    $("body").on("click",".removeclass", function(e){
+        if( x > 1 ) {
+            $(this).parent('div').remove();
+            x--;
+        }
+        return false;
+    })
+
+});
+//删除
+function deleteThis(i) {
+    i.remove();
+}
 //点击打开新建用户模态框
 function addUserInfo() {
     $("#addUserInfo_Modal").modal("show");
     /*findRes();*/
 }
+function findEnter() {
+    $.ajax({
+        type: "post",
+        url: "/basicCenter/findVariety",
+        data: {},
+        dataType: "json",
+        success: function (data) {
+            var str = "";
+            if (data != null && data.length != 0) {
+                $("#cv_id").children("option:gt(0)").remove();
+                $("#cv_id_up").children("option:gt(0)").remove();
+                str = str + "<option value=''>选择品种</option>";
+                for (var i = 0; i < data.length; i++) {
+                    str = str + "<option value=" + data[i].id + ">" + data[i].name + "</option>";
+                }
+                $("#cv_id").append(str);
+                $("#cv_id_up").append(str);
+
+            }
+        },//请求失败时回调函数
+        error: function () {
+            alert("失败 ");
+        }
+    });
+}
+
+function findEntersp() {
+    $.ajax({
+        type: "post",
+        url: "/basicCenter/SelectCropAll",
+        data: {},
+        dataType: "json",
+        success: function (data) {
+            var str = "";
+            if (data != null && data.length != 0) {
+                $("#cs_id").children("option:gt(0)").remove();
+                $("#cs_id_up").children("option:gt(0)").remove();
+                str = str + "<option value=''>选择种类</option>";
+                for (var i = 0; i < data.length; i++) {
+                    str = str + "<option value=" + data[i].id + ">" + data[i].name + "</option>";
+                }
+                $("#cs_id").append(str);
+                $("#cs_id_up").append(str);
+
+            }
+        },//请求失败时回调函数
+        error: function () {
+            alert("失败 ");
+        }
+    });
+}
 function role_table() {
     $("#role_table").bootstrapTable("destroy");
     $("#role_table").bootstrapTable({ // 对应table标签的id
-        url: "/basicCenter/SelectCropAll", // 获取表格数据的url
+        url: "/basicCenter/FindCropGrowthCycleTime", // 获取表格数据的url
         method: "get", //请求方式
         cache: false, //关闭缓存
         toolbar: '#toolbar', //工具按钮用哪个容器
@@ -33,8 +152,11 @@ function role_table() {
                     return index + 1;
                 }
             }, {
-                field: 'name',
-                title: '种类名称'
+                field: 'csname',
+                title: '品种名称'
+            }, {
+                field: 'sysqmc',
+                title: '生育时期'
             }, {
                 field: 'truename',
                 title: '创建人'
@@ -57,64 +179,40 @@ function role_table() {
         ]
     })
 }
-//显示所有权限
-function findRes() {
-    $.ajax({
-        url: "/usermanager/findRes",
-        type: "post",
-        dataType: "json",
-        async: false,
-        data: {},
-        success: function (data) {
-            $("#resParentCheckbox").empty();
-            for (var i = 0; i < data.length; i++) {
-                $("#resParentCheckbox").append("<div id=" + "resChildCheckbox" + data[i].info + " class='panel-body panel-success'></div>");
 
-                $("#resChildCheckbox" + data[i].info).append(
-                    "<div><label class='checkbox-inline'>" +
-                    "<input type='checkbox' name='listRes' onchange='checkAll(this)' value=" + data[i].id + ">" + data[i].resname +
-                    "</label></div>");
-                var list = data[i].resList;
+var zwswxld_up=[];
+var starttime=[];
+var endtime=[];
+var pic=[];
+function addRole() {
 
-                $("#resChildCheckbox" + data[i].info).append("<div>");
-                for (var j = 0; j < list.length; j++) {
-                    $("#resChildCheckbox" + data[i].info).append(
-                        "<label class='checkbox-inline'>" +
-                        "<input type='checkbox' name='listRes' onchange='checkaaa(this)' value=" + list[j].id + ">" + list[j].resname +
-                        "</label>");
-                }
-                $("#resParentCheckbox").append("</div></div>");
-            }
-        },
-        error: function () {
-            alert("请求失败");
-        }
-    });
-}
-//添加作物品种
-function addcrop() {
-    var userId=$("#id_add").val();
-    var name=$("#name").val();
-
-    var formData = new FormData();
-    formData.append('userId', userId);
-    formData.append('name', name);
-    var User1Pic=$("#enterprisemapperUser1Pic_add").attr("src");
-    if(User1Pic!= null){
-        //2.把二进制的图片数据转为Blob对象
-        var User1Pic_blob = processData(User1Pic);
-        formData.append('User1Pic', User1Pic_blob);
+    var zws=document.getElementsByName("zwswxld_up");
+    for(var i=0;i<zws.length;i++){
+        zwswxld_up.push(zws[i].value);
     }
-    alert(userId);
-    alert(name);
-    alert(User1Pic);
+    var start=document.getElementsByName("starttime");
+    for(var i=0;i<start.length;i++){
+        starttime.push(start[i].value);
+    }
+    var end=document.getElementsByName("endtime");
+    for(var i=0;i<end.length;i++){
+        endtime.push(end[i].value);
+    }
+    var cropSpeciesId=$("#cs_id").val();
+    var cropVarietyId=$("#cv_id").val();
+    alert(cropSpeciesId)
+    alert(cropVarietyId)
     $.ajax({
-        url: "/basicCenter/addcrop",
+        url: "/basicCenter/addCropGrowth",
         type: "post",
         dataType: "json",
-        data: formData,
-        processData: false,
-        contentType: false,
+        data: {
+            zwswxld_up:zwswxld_up,
+            starttime:starttime,
+            endtime:endtime,
+            cropSpeciesId:cropSpeciesId,
+            cropVarietyId:cropVarietyId
+        },
         success: function (data) {
             alert("创建成功！！");
             window.location.reload();
@@ -124,19 +222,27 @@ function addcrop() {
         }
     });
 }
+
+
 function upRole() {
     var id=$("#id_up").val();
-    var name=$("#name_up").val();
+    var enterpriseId=$("#Enterprise_select_1_up").val();
+    var roleName=$("#rolename_up").val();
+    var roleType=$("#select_roletype_up").val();
+    var roleBz=$("#roleBz_up").val();
     $.ajax({
-        url: "/basicCenter/UpdateCropSpercies",
+        url: "/basicCenter/upRoleId",
         type: "post",
         dataType: "json",
         data: {
             id:id,
-            name:name,
+            enterpriseId:enterpriseId,
+            roleName:roleName,
+            roleType:roleType,
+            roleBz:roleBz
         },
         success: function (data) {
-            alert("修改成功！！");
+            alert("修改角色成功！！");
             window.location.reload();
         },
         error: function () {
@@ -148,7 +254,7 @@ function upRole() {
 function deleteManager(id) {
     if (confirm("确认删除么！！！")) {
         $.ajax({
-            url: "/basicCenter/DeleteCropSperciesId/"+id,
+            url: "/basicCenter/deleteCrop/"+id,
             type: "post",
             dataType: "json",
             success: function (data) {
@@ -167,13 +273,24 @@ function deleteManager(id) {
 //点击打开编辑用户模态框
 function updRoleById(id) {
     $.ajax({
-        url: "/basicCenter/SelectCropSpeciesId/"+id,
+        url: "/basicCenter/SelectCropTimeId/"+id,
         type:"post",
         dataType:"json",
         success:function(data){
             $("#id_up").val(data.id);
-            $("#name_up").val(data.name);
+            $("#rolename_up").val(data.roleName);
+            $("#roleBz_up").val(data.roleBz);
 
+            $("#cs_id_up option").each(function(){
+                if($(this).val()==data.cropSpeciesId){
+                    $(this).attr("selected","selected");
+                }
+            });
+            $("#cv_id_up option").each(function(){
+                if($(this).val()==data.cropVarietyId){
+                    $(this).attr("selected","selected");
+                }
+            });
             $("#UpUserInfo_Modal").modal("show");
         },error:function(){
             console.log("出错了！");
@@ -185,7 +302,7 @@ function updRoleById(id) {
 function deleteRole(id) {
     if (confirm("确认删除么！！！")) {
         $.ajax({
-            url: "/usermanager/deleteRole",
+            url: "/basicCenter/deleteRole",
             type: "post",
             dataType: "json",
             async: false,
@@ -204,37 +321,6 @@ function deleteRole(id) {
 }
 
 
-//复选框全选全不选
-function checkAll(obj) {
-    if ($(obj).prop("checked")) {
-        $(obj).parent().parent().parent().find("input").prop("checked", true);
-    } else {
-        $(obj).parent().parent().parent().find("input").prop("checked", false);
-    }
-
-}
-//复选框子节点联动父节点
-function checkaaa(obj) {
-    if ($(obj).prop("checked")) {
-        $(obj).parent().parent().find("div").children().children().prop("checked", true);
-    } else if ($(obj).parent().parent().find("input[type='checkbox']:checked").length == 1) {
-        $(obj).parent().parent().find("div").children().children().prop("checked", false);
-    }
-
-}
-//验证通过
-function isOk(obj, text) {
-    obj.parent().parent().removeClass("has-error");
-    obj.parent().parent().addClass("has-success");
-    obj.parent().next().children(":first").html(text);
-
-}
-//验证不通过
-function isError(obj, text) {
-    obj.parent().parent().removeClass("has-success");
-    obj.parent().parent().addClass("has-error");
-    obj.parent().next().children(":first").html(text);
-}
 //点击
 var clickImg = function(obj){
     $(obj).parent().find('.upload_input').click();

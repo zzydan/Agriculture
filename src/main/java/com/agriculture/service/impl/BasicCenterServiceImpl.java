@@ -5,11 +5,13 @@ import com.agriculture.dao.TemplateMapper;
 import com.agriculture.dao.*;
 import com.agriculture.pojo.*;
 import com.agriculture.service.BasicCenterService;
+import com.agriculture.tools.OssUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -25,39 +27,39 @@ public class BasicCenterServiceImpl implements BasicCenterService {
 
     @Resource
     private CropVarietyMapper cropVarietyMapper;
-
     @Resource
     private CropSpeciesMapper cropSpeciesMapper;
-
     @Resource
     private LocationMapper locationMapper;
-
     @Resource
     private ParvialfieldMapper parvialfieldMapper;
-
     @Resource
     private SecUserMapper secUserMapper;
-
     @Resource
     private LotMapper lotMapper;
-
     @Resource
     private AgriculturalMapper AgriculturalMapper;
-
     @Resource
     private TemplateMapper templateMapper;
 
     @Autowired
-    private CropGrowthCycleMapper cropGrowthCycleMapper;
-
-    @Autowired
     private CropGrowthCycleTimeMapper cropGrowthCycleTimeMapper;
-
     @Autowired
     private WorkMapper workMapper;
-
+    @Autowired
+    private SecPicMapper secPicMapper;
     @Autowired
     private AgriculturalMapper agriculturalMapper;
+    @Autowired
+    private FarmWorkMapper farmWorkMapper;
+    @Autowired
+    private CropGrowthCycleMapper CropGrowthCycleMapper;
+    @Autowired
+    private OssUtils ossUtils;
+
+
+
+
 
     /**
      * 添加分场
@@ -152,11 +154,11 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         return b&&b1;
     }
 
-    /**
+  /*  *//**
      * 添加地块
      * @param lot,overlay
      * @return
-     */
+     *//*
     @Transactional
     @Override
     public boolean addLot(Lot lot, List<Location> locations) {
@@ -172,7 +174,7 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         boolean b1=locationMapper.addLocations(locations);
 
         return b&b1;
-    }
+    }*/
 
     /**
      * 查询分场列表vo,一个分场对多个地块，一个地块有对应多个经纬度
@@ -360,6 +362,12 @@ public class BasicCenterServiceImpl implements BasicCenterService {
         return agricList;
     }
 
+    @Override
+    public List<CropSpecies> SelectCropAll() {
+        List<CropSpecies> list=cropSpeciesMapper.SelectCropAll();
+        return list;
+    }
+
     /**
      * 查询所有模板
      * @param pageInfo
@@ -407,6 +415,196 @@ public class BasicCenterServiceImpl implements BasicCenterService {
     public int deleteTemplate(Integer templateId) {
 
         return templateMapper.deleteTemplate(templateId);
+    }
+    /**
+     * 添加作物种类
+     * @param CropSpecies
+     * @param user1Pic
+     * @return
+     */
+    @Override
+    public int addcrop(CropSpecies CropSpecies, MultipartFile user1Pic) {
+        if (user1Pic != null) {
+            String filename = user1Pic.getOriginalFilename();
+            if (!"".equals(filename.trim())) {
+                //上传到OSS
+                String uploadUrl = ossUtils.uploadImg2Oss(user1Pic);
+                SecPic secPic = new SecPic();
+                secPic.setName(filename);
+                secPic.setInfo("PicId-1 pic");
+                secPic.setPath(uploadUrl);
+
+                int id = secPicMapper.addPiC(secPic);
+
+                CropSpecies.setPicId(secPic.getId());
+            }
+        }
+        int i=cropSpeciesMapper.addcrop(CropSpecies);
+        return i;
+    }
+
+    /**
+     * 查询所有品种
+     * @return
+     */
+    @Override
+    public List<CropVariety> findVariety() {
+        List<CropVariety> list= cropVarietyMapper.findVariety();
+        return list;
+    }
+
+    @Override
+    public CropVariety findVarietyId(Integer id) {
+        return cropVarietyMapper.findVarietyId(id);
+    }
+
+    /**
+     * 删除品种
+     * @param id
+     * @return
+     */
+    @Override
+    public int deleteVariety(Integer id) {
+        return cropVarietyMapper.deleteVariety(id);
+    }
+
+    /**
+     * 添加品种
+     * @param cropVariety
+     * @return
+     */
+    @Override
+    public int InsertVariety(CropVariety cropVariety) {
+        return cropVarietyMapper.InsertVariety(cropVariety);
+    }
+
+    /**
+     * 修改品种
+     * @param cropVariety
+     * @return
+     */
+    @Override
+    public int updataVariety(CropVariety cropVariety) {
+        return cropVarietyMapper.updataVariety(cropVariety);
+    }
+
+    /**
+     * 查询所有农事
+     * @return
+     */
+    @Override
+    public List<FarmWork> FindFarm() {
+        List<FarmWork> list=farmWorkMapper.FindFarm();
+        return list;
+    }
+
+    /**
+     * 查询单个农事
+     * @param id
+     * @return
+     */
+    @Override
+    public FarmWork FindFarmId(Integer id) {
+        return farmWorkMapper.FindFarmId(id);
+    }
+
+    /**
+     * 添加农事
+     * @param FarmWork
+     * @return
+     */
+    @Override
+    public int addFarm(FarmWork FarmWork) {
+        return farmWorkMapper.addFarm(FarmWork);
+    }
+
+    /**
+     * 修改农事
+     * @param FarmWork
+     * @return
+     */
+    @Override
+    public int UpdateFarm(FarmWork FarmWork) {
+        return farmWorkMapper.UpdateFarm(FarmWork);
+    }
+
+    /**
+     * 删除农事
+     * @param id
+     * @return
+     */
+    @Override
+    public int deleteFarm(Integer id) {
+        return farmWorkMapper.deleteFarm(id);
+    }
+
+    @Override
+    public List<CropGrowthCycleTime> FindCropGrowthCycleTime() {
+        List<CropGrowthCycleTime> list=cropGrowthCycleTimeMapper.FindCropGrowthCycleTime();
+        return list;
+    }
+
+
+    /**
+     * 查询所有的生育时期
+     * @return
+     */
+    @Override
+    public Boolean addCropGrowth(CropGrowthCycle CropGrowthCycle,String[] zwswxld_up, String[] starttime, String[] endtime) {
+        boolean b=CropGrowthCycleMapper.addCropGrowth(CropGrowthCycle);
+        if(b=true){
+            for (int i = 0; i < zwswxld_up.length; i++) {
+                cropGrowthCycleTimeMapper.AddCroptime(CropGrowthCycle.getId(), zwswxld_up[i], starttime[i],endtime[i]);
+                System.out.println(CropGrowthCycle.getId());
+            }
+        }
+        return b;
+    }
+    /**
+     * 查询单个生育周期信息
+     * @param id
+     * @return
+     */
+    @Override
+    public List<CropGrowthCycleTime> SelectCropTimeId(Integer id) {
+        return cropGrowthCycleTimeMapper.SelectCropTimeId(id);
+    }
+
+    /**
+     * 删除生育种类
+     * @param id
+     * @return
+     */
+    @Override
+    public int deleteCrop(Integer id) {
+        return CropGrowthCycleMapper.deleteCrop(id);
+    }
+    /**
+     * 查询单个种类
+     * @param id
+     * @return
+     */
+    @Override
+    public CropSpecies SelectCropSpeciesId(Integer id) {
+        return cropSpeciesMapper.SelectCropSpeciesId(id);
+    }
+    /**
+     * 修改种类
+     * @param CropSpecies
+     * @return
+     */
+    @Override
+    public int UpdateCropSpercies(CropSpecies CropSpecies) {
+        return cropSpeciesMapper.UpdateCropSpercies(CropSpecies);
+    }
+    /**
+     * 删除种类
+     * @param id
+     * @return
+     */
+    @Override
+    public int DeleteCropSperciesId(Integer id) {
+        return cropSpeciesMapper.DeleteCropSperciesId(id);
     }
 
 

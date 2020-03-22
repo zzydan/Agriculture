@@ -44,4 +44,33 @@
         AND `work_fertilizer`.`farm_work_id`=`work`.`work_id`
         AND `work_fertilizer`.`id`=`agricultural`.`id`
     </select>
+    <!--List<FarmWork> FindFarm();-->
+    <select id="FindFarm" resultType="com.agriculture.pojo.FarmWork">
+       SELECT *
+        FROM farm_work fa,sec_user us,`work` wo
+        WHERE fa.disabled=0 AND us.disabled=0 and us.id=fa.user_id AND wo.work_id=fa.work_id
+    </select>
+    <!--FarmWork FindFarmId(@Param("id")Integer id);-->
+    <select id="FindFarmId" resultType="com.agriculture.pojo.FarmWork">
+       SELECT *
+        FROM farm_work fa,sec_user us
+        WHERE fa.disabled=0 AND us.disabled=0 AND us.id=fa.user_id AND fa.id=#{id}
+    </select>
+    <!--int addFarm(FarmWork FarmWork);-->
+    <insert id="addFarm" parameterType="com.agriculture.pojo.FarmWork">
+        INSERT into farm_work (createtime,user_id,name)
+        VALUES (now(),#{id},#{name})
+    </insert>
+    <!--int UpdateFarm(FarmWork FarmWork);-->
+    <update id="UpdateFarm" parameterType="com.agriculture.pojo.FarmWork">
+        UPDATE farm_work
+        SET name=#{name}
+        WHERE id=#{id}
+    </update>
+    <!--int deleteFarm(@Param("id")Integer id);-->
+    <update id="deleteFarm" parameterType="com.agriculture.pojo.FarmWork">
+        UPDATE farm_work
+        SET disabled=1
+        WHERE id=#{id}
+    </update>
 </mapper>

@@ -7,5 +7,40 @@
         WHERE disabled = 0 AND crop_growth_cycle_id =
         (select id from crop_growth_cycle WHERE crop_species_id = #{speciesId} AND crop_variety_id = #{varietyId})
     </select>
-
+    <!--List<CropGrowthCycleTime> FindCropGrowthCycleTime();-->
+    <select id="FindCropGrowthCycleTime" resultType="com.agriculture.pojo.CropGrowthCycleTime">
+        select
+             cgc.id,concat_ws(cs.`name`,cv.`name`,"(",")")as csname,GROUP_CONCAT(cgct.sysqmc) as sysqmc ,su.trueName,cv.createtime
+        from
+            crop_growth_cycle as cgc
+        inner join
+            crop_variety as cv
+        on
+            cgc.crop_variety_id = cv.id and cv.disabled=0
+        inner join
+            crop_growth_cycle_time as cgct
+        on
+            cgc.id = cgct.crop_growth_cycle_id and cgct.disabled=0
+        inner join
+            sec_user as su
+        on
+            su.id = cv.user_id and su.disabled=0
+        inner join
+            crop_species as cs
+        on
+            cs.id = cgc.crop_species_id and cs.disabled=0
+        group by
+            cgc.id
+    </select>
+    <!--Boolean AddCroptime(@Param("id") Integer id, @Param("zwswxld_up") String zwswxld_up,@Param("starttime") String starttime,@Param("endtime") String endtime);-->
+    <insert id="AddCroptime" parameterType="com.agriculture.pojo.CropGrowthCycleTime">
+        insert into crop_growth_cycle_time (createtime,crop_growth_cycle_id,sysqmc,start_time,end_time)
+        VALUES (now(),#{id},#{zwswxld_up},#{starttime},#{endtime})
+    </insert>
+    <!---->
+    <select id="SelectCropTimeId" resultType="com.agriculture.pojo.CropGrowthCycleTime">
+        SELECT cgc.id,cgc.crop_species_id,cgc.crop_variety_id,cgct.sysqmc,cgct.start_time,cgct.end_time
+        FROM crop_growth_cycle cgc ,crop_growth_cycle_time cgct
+        WHERE cgct.crop_growth_cycle_id=cgc.id AND cgct.disabled=0 AND cgc.disabled=0 AND cgc.id=#{id}
+    </select>
 </mapper>

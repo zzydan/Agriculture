@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.CropGrowthCycleMapper" >
-
+    <!-- int addCropGrowth(CropGrowthCycle CropGrowthCycle); -->
+    <insert id="addCropGrowth" parameterType="com.agriculture.pojo.CropGrowthCycle">
+        <selectKey order="AFTER" resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into crop_growth_cycle (createtime,crop_species_id,crop_variety_id)
+        values (now(),#{cropSpeciesId},#{cropVarietyId})
+    </insert>
+    <!---->
+    <update id="deleteCrop" parameterType="com.agriculture.pojo.CropGrowthCycle">
+        UPDATE crop_growth_cycle cgc,crop_growth_cycle_time cgct
+        SET cgc.disabled=1 , cgct.disabled=1
+        WHERE cgc.id=cgct.crop_growth_cycle_id AND cgc.id=7
+    </update>
 </mapper>
