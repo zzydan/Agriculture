@@ -12,10 +12,87 @@ var nz_data=[];
 $(function () {
     //查询种类列表
     getSpeciesList();
+    //查询所有农事
+    getWorkList();
+    //查询所有农资信息
+    getAgricList();
     //加载表
     template_table(null);
-
 })
+
+//查询种类列表
+function getSpeciesList() {
+    $.ajax({
+        url: "/basicCenter/getSpeciesList",
+        dataType: "json",
+        type: "post",
+        success: function (data) {
+            var html = "<option value=''>请选择</option>"
+            if (data) {
+                speciesList = data;
+                $.each(data, function (a, b) {
+                    html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
+                })
+            }
+            $("#category_like").append(html);
+            $("#category_add").append(html);
+        }
+    })
+
+}
+//查询品种列表
+function getVarietyList_like() {
+
+    var id = $("#category_like").children("option:selected").val();
+
+    $.ajax({
+        url: "/basicCenter/getVarietyListBySpeciesId",
+        dataType: "json",
+        data: {'SpeciesId': id},
+        type: "post",
+        success: function (data) {
+            $("#variety_like").empty();
+
+            var html = "<option value=\"\">请选择</option>"
+            if (data) {
+                varietyList = data;
+                $.each(data, function (a, b) {
+                    html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
+                })
+            }
+            $("#variety_like").append(html)
+            layui.form.render("select");
+        }
+    })
+
+}
+//查询所有农事
+function getWorkList() {
+    $.ajax({
+        url: "/basicCenter/getWorkList",
+        dataType: "json",
+        type: "post",
+        async : false,
+        data: {},
+        success: function (data) {
+            ns_data = data;
+        }
+    })
+}
+//查询所有农资信息
+function getAgricList() {
+    $.ajax({
+        url: "/basicCenter/getAgricList",
+        dataType: "json",
+        type: "post",
+        async : false,
+        data: {},
+        success: function (data) {
+            nz_data = data;
+        }
+    })
+}
+
 
 //模糊查询
 function template_likeForm_querybtn() {
@@ -23,7 +100,6 @@ function template_likeForm_querybtn() {
 
     template_table(formData);
 }
-
 //模板表格
 function template_table(formData) {
     $("#template_table").bootstrapTable("destroy");
@@ -89,6 +165,7 @@ function template_table(formData) {
         ]
     })
 }
+
 
 //模板计划表
 function templatePlan_table() {
@@ -160,7 +237,7 @@ function templatePlan_table() {
                     var str = "";
                     if(value!=""){
                         str = str + "<input type='button' name='nzNumber' value='"+value+
-                            "' onclick='showAgricListInfo_Modal("+index+","+JSON.stringify(row)+")' class='layui-input'>";
+                            "' onclick='showAgricListInfo_Modal("+index+","+JSON.stringify(row.templatePlanAgriculturalList)+")' class='layui-input'>";
                     }else {
                         str = str + "<input type='button' name='nzNumber' value='请选择' " +
                             "onclick='showAgricListInfo_Modal("+index+","+null+")' class='layui-input'>";
@@ -197,7 +274,6 @@ function templatePlan_table() {
         ]
     })
 }
-
 //修改表格中生育时期
 function upPlansysq(object) {
     var value = $("#templatePlan_table tr[data-index='" + object.index + "'] select[name='sysq']").find("option:selected").val();
@@ -208,7 +284,6 @@ function upPlansysq(object) {
 
     $("#templatePlan_table").bootstrapTable('updateRow', {index: object.index, row: object});
 }
-
 //修改表格中农事
 function upPlanns(object) {
     var value = $("#templatePlan_table tr[data-index='" + object.index + "'] select[name='ns']").find("option:selected").val();
@@ -217,7 +292,6 @@ function upPlanns(object) {
 
     $("#templatePlan_table").bootstrapTable('updateRow', {index: object.index, row: object});
 }
-
 //修改表格中农事操作说明
 function upPlantitle(object) {
     var value = $("#templatePlan_table tr[data-index='" + object.index + "'] input[name='title']").val();
@@ -233,7 +307,6 @@ function upPlantitle(object) {
 
     //$("#templatePlan_table").bootstrapTable('updateRow', {index: object.index, row: object});
 }
-
 //创建一个全新table对象
 function createPlans(index, sysq, ns, templatePlanAgriculturalList, nzNumber, title) {
     var obj = new Object();
@@ -245,7 +318,6 @@ function createPlans(index, sysq, ns, templatePlanAgriculturalList, nzNumber, ti
     obj.title = title;
     return obj;
 }
-
 //添加信息到table表中
 function addPlanToTable() {
 
@@ -254,7 +326,6 @@ function addPlanToTable() {
     $("#templatePlan_table").bootstrapTable("append", obj);
 
 }
-
 //删除计划表的某一行
 function deletePlan(index) {
     // 声明一个数组
@@ -263,7 +334,6 @@ function deletePlan(index) {
     //根据id移除数据
     $("#templatePlan_table").bootstrapTable("remove", {field: 'index', values: arrays});
 }
-
 //打开添加模板模态框
 function addTemplateInfo() {
 
@@ -273,7 +343,6 @@ function addTemplateInfo() {
 
     templatePlan_table();
 }
-
 //添加模板信息
 function addTemplateData() {
     //获取数据
@@ -301,113 +370,6 @@ function addTemplateData() {
         }
     });
 }
-
-//回显数据
-function findTemplateById(id) {
-    $.ajax({
-        url: "/basicCenter/findTemplateById",
-        type: "post",
-        dataType: "json",
-        async: false,
-        data: {'templateId': id},
-        success: function (data) {
-
-
-        },
-        error: function () {
-            alert("请求失败");
-        }
-    });
-}
-
-//修改保存
-function updateTemplate(id) {
-
-    $.ajax({
-        url: "/basicCenter/updateTemplate",
-        type: "post",
-        dataType: "json",
-        async: false,
-        data: {'userId': id},
-        success: function (data) {
-
-
-        },
-        error: function () {
-            alert("请求失败");
-        }
-    });
-}
-
-//删除
-function deleteTemplate(id) {
-    if (confirm("确认删除么！！！")) {
-        $.ajax({
-            url: "/basicCenter/deleteTemplate",
-            type: "post",
-            dataType: "json",
-            async: false,
-            data: {'templateId': id},
-            success: function (data) {
-                if (data > 0) {
-                    alert("删除成功！！！");
-                    $("#template_table").bootstrapTable("refresh");
-                }
-            },
-            error: function () {
-                alert("请求失败");
-            }
-        });
-    }
-}
-
-//查询种类列表
-function getSpeciesList() {
-    $.ajax({
-        url: "/basicCenter/getSpeciesList",
-        dataType: "json",
-        type: "post",
-        success: function (data) {
-            var html = "<option value=''>请选择</option>"
-            if (data) {
-                speciesList = data;
-                $.each(data, function (a, b) {
-                    html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
-                })
-            }
-            $("select[name='category']").append(html)
-        }
-    })
-
-}
-
-//查询品种列表
-function getVarietyList_like() {
-
-    var id = $("#category_like").children("option:selected").val();
-
-    $.ajax({
-        url: "/basicCenter/getVarietyListBySpeciesId",
-        dataType: "json",
-        data: {'SpeciesId': id},
-        type: "post",
-        success: function (data) {
-            $("#variety_like").empty();
-
-            var html = "<option value=\"\">请选择</option>"
-            if (data) {
-                varietyList = data;
-                $.each(data, function (a, b) {
-                    html += " <option value=\"" + b.id + "\">" + b.name + "</option>"
-                })
-            }
-            $("#variety_like").append(html)
-            layui.form.render("select");
-        }
-    })
-
-}
-
 //查询品种列表
 function getVarietyList_add() {
 
@@ -435,51 +397,7 @@ function getVarietyList_add() {
 
 }
 
-//加载添加模板表
-function onUploadTable() {
-    //加载作物品种周期
-    getCrop_growth_cycle();
-    //查询所有农事
-    getWorkList();
-    //查询所有农资信息
-    getAgricList();
 
-    //更新表格
-    $("#templatePlan_table").bootstrapTable("removeAll");
-
-    addPlanToTable();
-}
-
-//查询作物品种的周期
-function getCrop_growth_cycle() {
-    var category_id = $("#category_add").children("option:selected").val();
-    var variety_id = $("#variety_add").children("option:selected").val();
-
-    $.ajax({
-        url: "/basicCenter/getCropGrowthCycleList",
-        dataType: "json",
-        type: "post",
-        async : false,
-        data: {'speciesId': category_id,'varietyId': variety_id},
-        success: function (data) {
-            sysq_data = data;
-        }
-    })
-}
-
-//查询所有农事
-function getWorkList() {
-    $.ajax({
-        url: "/basicCenter/getWorkList",
-        dataType: "json",
-        type: "post",
-        async : false,
-        data: {},
-        success: function (data) {
-            ns_data = data;
-        }
-    })
-}
 //显示农资信息模态框
 function showAgricListInfo_Modal(index,object) {
 
@@ -493,16 +411,15 @@ function showAgricListInfo_Modal(index,object) {
 
     //更新表格
     $("#agricList_table").bootstrapTable("removeAll");
-
+    console.log(object)
     //添加信息
     if(object != null){
-        addNZToTable2(object.templatePlanAgriculturalList);
+        addNZToTable2(object);
     }else {
         addNZToTable();
     }
 
 }
-
 //打开农资模态框
 function agricList_table() {
     $("#agricList_table").bootstrapTable("destroy");
@@ -602,7 +519,6 @@ function agricList_table() {
         ]
     })
 }
-
 //修改农资表格中投入项类别
 function upNZcategory(object) {
     var value = $("#agricList_table tr[data-index='" + object.index + "'] select[name='category']").find("option:selected").text();
@@ -612,7 +528,6 @@ function upNZcategory(object) {
 
     $("#agricList_table").bootstrapTable('updateRow', {index: object.index, row: object});
 }
-
 //修改农资表格中农资名称
 function upNZname(object) {
     var value = $("#agricList_table tr[data-index='" + object.index + "'] select[name='name']").find("option:selected").text();
@@ -622,7 +537,6 @@ function upNZname(object) {
     object.danwei = danwei;
     $("#agricList_table").bootstrapTable('updateRow', {index: object.index, row: object});
 }
-
 //修改农资表格中的投入量
 function upNZunitMeasurement(object) {
     var value = $("#agricList_table tr[data-index='" + object.index + "'] input[name='unitMeasurement_danwei']").val();
@@ -631,7 +545,6 @@ function upNZunitMeasurement(object) {
 
     $("#agricList_table").bootstrapTable('updateRow', {index: object.index, row: object});
 }
-
 //创建农资对象
 function createNZObject(index, trxfl, nzmc, yl,danwei) {
     var obj = new Object();
@@ -642,7 +555,6 @@ function createNZObject(index, trxfl, nzmc, yl,danwei) {
     obj.danwei = danwei;
     return obj;
 }
-
 //添加农资信息到表格
 function addNZToTable() {
 
@@ -653,12 +565,11 @@ function addNZToTable() {
 //添加农资信息到表格
 function addNZToTable2(templatePlanAgriculturalList) {
     for (var i = 0; i < templatePlanAgriculturalList.length; i++) {
-        var obj = createNZObject('', templatePlanAgriculturalList[i].category, templatePlanAgriculturalList[i].name, templatePlanAgriculturalList[i].unitMeasurement,templatePlanAgriculturalList[i].danwei);
+        var obj = createNZObject('', templatePlanAgriculturalList[i].trxfl, templatePlanAgriculturalList[i].nzmc, templatePlanAgriculturalList[i].yl,templatePlanAgriculturalList[i].danwei);
 
         $("#agricList_table").bootstrapTable("append", obj);
     }
 }
-
 //删除计划表的某一行
 function deleteNZ(index) {
     // 声明一个数组
@@ -667,21 +578,7 @@ function deleteNZ(index) {
     //根据id移除数据
     $("#agricList_table").bootstrapTable("remove", {field: 'index', values: arrays});
 }
-
-//查询所有农资信息
-function getAgricList() {
-    $.ajax({
-        url: "/basicCenter/getAgricList",
-        dataType: "json",
-        type: "post",
-        async : false,
-        data: {},
-        success: function (data) {
-            nz_data = data;
-        }
-    })
-}
-
+//将农资信息保存到计划表中
 function addAgricListData() {
     //总共多少行数据
     var agricTableData=$('#agricList_table').bootstrapTable('getData');
@@ -702,3 +599,280 @@ function addAgricListData() {
 
     $("#agricListInfo_Modal").modal("hide");
 }
+
+
+
+//回显数据
+function findTemplateById(id) {
+    var template;
+    $.ajax({
+        url: "/basicCenter/findTemplateById",
+        type: "post",
+        dataType: "json",
+        async: false,
+        data: {'templateId': id},
+        success: function (data) {
+            template = data;
+        },
+        error: function () {
+            alert("请求失败");
+        }
+
+    });
+
+    $("#upTemplateInfo_Modal").modal("show");
+    //加载基本信息
+    $("#name_update").val(template.name);
+    getSpeciesList_up(template.category);
+    getVarietyList_update(template.category,template.variety);
+
+    //加载生育周期
+    getCrop_growth_cycle_update(template.category,template.variety);
+
+    //加载计划表
+    templatePlan_table_update();
+    addPlanToTable_update(template.templatePlanList);
+
+}
+//查询作物品种的周期
+function getCrop_growth_cycle_update(category,variety) {
+    $.ajax({
+        url: "/basicCenter/getCropGrowthCycleList",
+        dataType: "json",
+        type: "post",
+        async : false,
+        data: {'speciesId': category,'varietyId': variety},
+        success: function (data) {
+            sysq_data = data;
+        }
+    })
+}
+//模板计划表
+function templatePlan_table_update() {
+    $("#templatePlan_table_update").bootstrapTable("destroy");
+    $("#templatePlan_table_update").bootstrapTable({ // 对应table标签的id
+        cache: false, //关闭缓存
+        pagination: true, //开启分页
+        sidePagination: "client", //客户端分页client,"server"服务端分页
+        pageNumber: 1, //分页起始行,默认第一行
+        pageSize: 10, //每页几行
+        pageList: [10], //设置每页几行的下拉框
+        striped: true,       //是否显示行间隔色
+        columns: [//field对应的是entity中的属性 title:列名
+            {
+                field: 'index', // 返回json数据中的name
+                title: '序号', // 表格表头显示文字
+                width : 100,
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    row.index = index;
+                    return index + 1;
+                }
+            }, {
+                field: 'sysq',
+                title: '生育时期',
+                width : 160,
+                formatter: function (value, row, index) {// selNumber'+ row.registerId + '
+                    //向模板计划表格中添加生育周期下拉框
+                    var sysq_option = "<select onchange='upPlansysq(" + JSON.stringify(row) + ")' class='form-control' name='sysq'><option value=\"\">请选择</option>"
+                    if (sysq_data) {
+                        $.each(sysq_data, function (a, b) {
+                            if(value == b.id){
+                                sysq_option += " <option selected value=\"" + b.id + "\">" + b.sysqmc + "</option>"
+                            }else {
+                                sysq_option += " <option value=\"" + b.id + "\">" + b.sysqmc + "</option>"
+                            }
+
+                        })
+                    }
+                    sysq_option += "</select>"
+
+                    return sysq_option;
+                }
+            }, {
+                field: 'ns',
+                title: '农事',
+                width : 160,
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    //向模板计划表格中添加生育周期下拉框
+                    var ns_option = "<select onchange='upPlanns(" + JSON.stringify(row) + ")' class='form-control' name='ns'><option value=\"\">请选择</option>"
+                    if (ns_data) {
+                        $.each(ns_data, function (a, b) {
+                            if(value == b.workId){
+                                ns_option += " <option selected value=\"" + b.workId + "\">" + b.workName + "</option>"
+                            }else {
+                                ns_option += " <option value=\"" + b.workId + "\">" + b.workName + "</option>"
+                            }
+
+                        })
+                    }
+                    ns_option += "</select>"
+
+                    return ns_option;
+                }
+            }, {
+                field: 'nzNumber',
+                title: '农资',
+                width : 100,
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    var str = "";
+                    if(value!=""){
+                        str = str + "<input type='button' name='nzNumber' value='"+value+
+                            "' onclick='showAgricListInfo_Modal("+index+","+JSON.stringify(row.templatePlanAgriculturalList)+")' class='layui-input'>";
+                    }else {
+                        str = str + "<input type='button' name='nzNumber' value='请选择' " +
+                            "onclick='showAgricListInfo_Modal("+index+","+null+")' class='layui-input'>";
+                    }
+
+                    return str;
+                }
+            }, {
+                field: 'title',
+                title: '农事操作说明',
+                width : 500,
+                formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
+                    var str = "";
+
+                    str = str + "<input type='text' name='title' value='" + row.title + "' " +
+                        "placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+
+                    return str;
+                }
+            }, {
+                title: "操作",
+                width : 215,
+                formatter: function (value, row, index) {
+                    var str =
+                        "<a href='javascript:addPlanToTable()' class=\"layui-btn layui-btn-info layui-btn-xs\" lay-event=\"edit\">" +
+                        "<i  class=\"layui-icon layui-icon-add-1\">" +
+                        "</i>新增</a> " +
+                        "<a href='javascript:deletePlan(" + index + ")' class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
+                        "<i class=\"layui-icon layui-icon-delete\">" +
+                        "</i>删除</a> ";
+                    return str;
+                }
+            }
+        ]
+    })
+}
+//添加信息到修改信息table表中
+function addPlanToTable_update(list) {
+    for (var i = 0; i <list.length ; i++) {
+        var obj = createPlans('', list[i].sysq, list[i].ns, list[i].templatePlanAgriculturalList, list[i].templatePlanAgriculturalList.length, list[i].title);
+        $("#templatePlan_table_update").bootstrapTable("append", obj);
+    }
+
+
+}
+//查询种类列表
+function getSpeciesList_up(category) {
+    $.ajax({
+        url: "/basicCenter/getSpeciesList",
+        dataType: "json",
+        type: "post",
+        success: function (data) {
+            var html = "<option value=''>请选择</option>"
+            if (data) {
+                speciesList = data;
+                for (var i = 0; i <data.length ; i++) {
+                    if(parseInt(category) == parseInt(data[i].id)){
+                        html += "<option selected value=\"" + data[i].id + "\">" + data[i].name + "</option>"
+                    }else {
+                        html += "<option value=\"" + data[i].id + "\">" + data[i].name + "</option>"
+                    }
+                }
+            }
+            $("#category_update").append(html)
+        }
+    })
+
+}
+//查询品种列表
+function getVarietyList_update(category,variety) {
+    $.ajax({
+        url: "/basicCenter/getVarietyListBySpeciesId",
+        dataType: "json",
+        data: {'SpeciesId': category},
+        type: "post",
+        success: function (data) {
+            $("#variety_update").empty();
+            var html = "<option value=\"\">请选择</option>"
+            if (data) {
+                varietyList = data;
+                for (var i = 0; i <data.length ; i++) {
+                    if(parseInt(variety) == parseInt(data[i].id)){
+                        html += "<option selected value=\"" + data[i].id + "\">" + data[i].name + "</option>"
+                    }else {
+                        html += "<option value=\"" + data[i].id + "\">" + data[i].name + "</option>"
+                    }
+                }
+            }
+            $("#variety_update").append(html)
+            layui.form.render("select");
+        }
+    })
+}
+//修改保存
+function updateTemplate(id) {
+
+    $.ajax({
+        url: "/basicCenter/updateTemplate",
+        type: "post",
+        dataType: "json",
+        async: false,
+        data: {'userId': id},
+        success: function (data) {
+
+        },
+        error: function () {
+            alert("请求失败");
+        }
+    });
+}
+//删除
+function deleteTemplate(id) {
+    if (confirm("确认删除么！！！")) {
+        $.ajax({
+            url: "/basicCenter/deleteTemplate",
+            type: "post",
+            dataType: "json",
+            async: false,
+            data: {'templateId': id},
+            success: function (data) {
+                if (data > 0) {
+                    alert("删除成功！！！");
+                    $("#template_table").bootstrapTable("refresh");
+                }
+            },
+            error: function () {
+                alert("请求失败");
+            }
+        });
+    }
+}
+//加载添加模板表
+function onUploadTable() {
+    //加载作物品种周期
+    getCrop_growth_cycle();
+
+    //更新表格
+    $("#templatePlan_table").bootstrapTable("removeAll");
+
+    addPlanToTable();
+}
+//查询作物品种的周期
+function getCrop_growth_cycle() {
+    var category_id = $("#category_add").children("option:selected").val();
+    var variety_id = $("#variety_add").children("option:selected").val();
+
+    $.ajax({
+        url: "/basicCenter/getCropGrowthCycleList",
+        dataType: "json",
+        type: "post",
+        async : false,
+        data: {'speciesId': category_id,'varietyId': variety_id},
+        success: function (data) {
+            sysq_data = data;
+        }
+    })
+}
+

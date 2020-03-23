@@ -34,6 +34,7 @@
                 <result property="trxfl" column="trxfl"/>
                 <result property="nzmc" column="nzmc"/>
                 <result property="yl" column="yl"/>
+                <result property="danwei" column="danwei"/>
                 <result property="planId" column="planId"/>
             </collection>
         </collection>
@@ -42,7 +43,7 @@
 
     <!-- Template findTemplateById(Integer templateId); -->
     <select id="findTemplateById" resultMap="templateResultMap" >
-        select t.*,tp.ns,tp.sysq,tp.title,tp.template_id,tpa.nzmc,tpa.trxfl,tpa.yl,tpa.plan_id from template as t
+        select t.*,tp.ns,tp.sysq,tp.title,tp.template_id,tpa.nzmc,tpa.trxfl,tpa.yl,tpa.danwei,tpa.plan_id from template as t
         LEFT JOIN template_plan as tp on t.id =tp. template_id
         LEFT JOIN template_plan_agricultural as tpa ON tp.id = tpa.plan_id
         WHERE t.id= #{templateId}
