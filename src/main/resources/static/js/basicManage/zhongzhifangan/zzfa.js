@@ -119,7 +119,7 @@ function templatePlan_table() {
                     var sysq_option = "<select onchange='upPlansysq(" + JSON.stringify(row) + ")' class='form-control' name='sysq'><option value=\"\">请选择</option>"
                     if (sysq_data) {
                         $.each(sysq_data, function (a, b) {
-                            if(value == b.sysqmc){
+                            if(value == b.id){
                                 sysq_option += " <option selected value=\"" + b.id + "\">" + b.sysqmc + "</option>"
                             }else {
                                 sysq_option += " <option value=\"" + b.id + "\">" + b.sysqmc + "</option>"
@@ -140,7 +140,7 @@ function templatePlan_table() {
                     var ns_option = "<select onchange='upPlanns(" + JSON.stringify(row) + ")' class='form-control' name='ns'><option value=\"\">请选择</option>"
                     if (ns_data) {
                         $.each(ns_data, function (a, b) {
-                            if(value == b.workName){
+                            if(value == b.workId){
                                 ns_option += " <option selected value=\"" + b.workId + "\">" + b.workName + "</option>"
                             }else {
                                 ns_option += " <option value=\"" + b.workId + "\">" + b.workName + "</option>"
@@ -200,7 +200,7 @@ function templatePlan_table() {
 
 //修改表格中生育时期
 function upPlansysq(object) {
-    var value = $("#templatePlan_table tr[data-index='" + object.index + "'] select[name='sysq']").find("option:selected").text();
+    var value = $("#templatePlan_table tr[data-index='" + object.index + "'] select[name='sysq']").find("option:selected").val();
 
     object.sysq = value;
 
@@ -211,7 +211,7 @@ function upPlansysq(object) {
 
 //修改表格中农事
 function upPlanns(object) {
-    var value = $("#templatePlan_table tr[data-index='" + object.index + "'] select[name='ns']").find("option:selected").text();
+    var value = $("#templatePlan_table tr[data-index='" + object.index + "'] select[name='ns']").find("option:selected").val();
 
     object.ns = value;
 
@@ -290,7 +290,11 @@ function addTemplateData() {
 
             $("#addTemplateInfo_Modal").modal("hide");
 
+            $('#template_table').bootstrapTable("refresh");
+
             alert("新建成功！");
+
+
         },
         error: function () {
             alert("请求失败");

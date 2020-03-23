@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.TemplatePlanMapper" >
-
+    <!-- int addTemplatePlan(@Param("templatePlan") TemplatePlan templatePlan,@Param("templateId")  Integer templateId); -->
+    <insert id="addTemplatePlan" parameterType="com.agriculture.pojo.TemplatePlan" useGeneratedKeys="true" keyProperty="templatePlan.id">
+        insert into template_plan (createtime, title, sysq, ns, template_id)
+        values (now(),#{templatePlan.title},#{templatePlan.sysq},#{templatePlan.ns},#{templateId});
+    </insert>
 </mapper>

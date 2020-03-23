@@ -18,16 +18,45 @@
         </if>
     </select>
 
+    <resultMap type="com.agriculture.pojo.Template" id="templateResultMap">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="category" column="category"/>
+        <result property="variety" column="variety"/>
+        <collection property="templatePlanList" javaType="list" ofType="com.agriculture.pojo.TemplatePlan">
+            <id property="id" column="id"/>
+            <result property="title" column="title"/>
+            <result property="sysq" column="sysq"/>
+            <result property="ns" column="ns"/>
+            <result property="templateId" column="templateId"/>
+            <collection property="templatePlanAgriculturalList" javaType="list" ofType="com.agriculture.pojo.TemplatePlanAgricultural">
+                <id property="id" column="id"/>
+                <result property="trxfl" column="trxfl"/>
+                <result property="nzmc" column="nzmc"/>
+                <result property="yl" column="yl"/>
+                <result property="planId" column="planId"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+
     <!-- Template findTemplateById(Integer templateId); -->
-    <select id="findTemplateById" resultType="com.agriculture.pojo.Template">
-        select * from template as t
-        left join template_plan as tp on t.id =tp. template_id
+    <select id="findTemplateById" resultMap="templateResultMap" >
+        select t.*,tp.ns,tp.sysq,tp.title,tp.template_id,tpa.nzmc,tpa.trxfl,tpa.yl,tpa.plan_id from template as t
+        LEFT JOIN template_plan as tp on t.id =tp. template_id
         LEFT JOIN template_plan_agricultural as tpa ON tp.id = tpa.plan_id
         WHERE t.id= #{templateId}
     </select>
+
+
 
     <!-- int deleteTemplate(Integer templateId); -->
     <update id="deleteTemplate">
         update template set disabled = 1 where id = #{templateId}
     </update>
+
+    <!-- int addTemplate(Template template); -->
+    <insert id="addTemplate" parameterType="com.agriculture.pojo.Template" useGeneratedKeys="true" keyProperty="id">
+        insert into template (createtime, name, category, variety) values (now(),#{name},#{category},#{variety});
+    </insert>
 </mapper>

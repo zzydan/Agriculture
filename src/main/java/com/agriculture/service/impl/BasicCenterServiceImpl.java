@@ -407,15 +407,19 @@ public class BasicCenterServiceImpl implements BasicCenterService {
      */
     @Override
     public int addTemplate(Template template) {
-//        templateMapper
-//        templatePlanMapper
-//        templatePlanAgriculturalMapper
-
-
-
-
-
-        return 0;
+        //添加模板基础信息
+        int i = templateMapper.addTemplate(template);
+        if(i>0){
+            //循环添加模板农事信息
+            for (TemplatePlan templatePlan:template.getTemplatePlanList()) {
+                int result = templatePlanMapper.addTemplatePlan(templatePlan,template.getId());
+                //循环添加农资信息
+                if(result>0){
+                    templatePlanAgriculturalMapper.addTemplatePlanAgricultural(templatePlan.getTemplatePlanAgriculturalList(),templatePlan.getId());
+                }
+            }
+        }
+        return i;
     }
 
     /**

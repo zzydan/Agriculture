@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.TemplatePlanAgriculturalMapper" >
-
+    <!--     int addTemplatePlanAgricultural(@Param("list") List<TemplatePlanAgricultural> templatePlanAgriculturalList,@Param("planId") Integer id); -->
+    <insert id="addTemplatePlanAgricultural" parameterType="com.agriculture.pojo.TemplatePlanAgricultural">
+        insert into template_plan_agricultural (createtime, trxfl, nzmc, yl, plan_id)
+        values
+        <foreach collection="list" separator="," open="(" close=")" item="tpa">
+            now(),#{tpa.trxfl},#{tpa.nzmc},CONCAT(#{tpa.yl},#{tpa.danwei}),#{planId}
+        </foreach>
+    </insert>
 </mapper>

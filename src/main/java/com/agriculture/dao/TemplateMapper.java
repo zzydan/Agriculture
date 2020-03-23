@@ -27,4 +27,11 @@ public interface TemplateMapper {
      * @return
      */
     int deleteTemplate(Integer templateId);
+
+    /**
+     * 添加模板信息
+     * @param template
+     * @return
+     */
+    int addTemplate(Template template);
 }

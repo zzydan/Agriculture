@@ -13,11 +13,11 @@ public class TemplatePlan implements Serializable {
 
     private String title;
 
-    private String sysq;
+    private Integer sysq;
 
-    private String ns;
+    private Integer ns;
 
-    private String templateId;
+    private Integer templateId;
 
     private List<TemplatePlanAgricultural> templatePlanAgriculturalList;
 
@@ -63,28 +63,28 @@ public class TemplatePlan implements Serializable {
         this.title = title == null ? null : title.trim();
     }
 
-    public String getSysq() {
+    public Integer getSysq() {
         return sysq;
     }
 
-    public void setSysq(String sysq) {
-        this.sysq = sysq == null ? null : sysq.trim();
+    public void setSysq(Integer sysq) {
+        this.sysq = sysq ;
     }
 
-    public String getNs() {
+    public Integer getNs() {
         return ns;
     }
 
-    public void setNs(String ns) {
-        this.ns = ns == null ? null : ns.trim();
+    public void setNs(Integer ns) {
+        this.ns = ns;
     }
 
-    public String getTemplateId() {
+    public Integer getTemplateId() {
         return templateId;
     }
 
-    public void setTemplateId(String templateId) {
-        this.templateId = templateId == null ? null : templateId.trim();
+    public void setTemplateId(Integer templateId) {
+        this.templateId = templateId;
     }
 
     @Override
