@@ -103,25 +103,8 @@ function user_table(formData) {
                 field: 'tel',
                 title: "手机号"
             }, {
-                field: 'name',
-                title: "所属企业"
-            }, {
                 field: 'roleName',
                 title: "用户角色"
-            }, {
-                field: 'roleType',
-                title: '客户端',
-                formatter: function (value, row, index) {
-                    if (value == 1) {
-                        return 'app'
-                    } else if (value == 2) {
-                        return 'pc'
-                    }else if (value == 3) {
-                        return 'app/pc'
-                    } else {
-                        return '未知'
-                    }
-                }
             }, {
                 field: 'createtime',
                 title: "创建时间"
@@ -254,36 +237,4 @@ function deleteManager(id) {
             }
         });
     }
-}
-
-//复选框全选全不选
-function checkAll(obj) {
-    if ($(obj).prop("checked")) {
-        $(obj).parent().parent().parent().find("input").prop("checked", true);
-    } else {
-        $(obj).parent().parent().parent().find("input").prop("checked", false);
-    }
-
-}
-//复选框子节点联动父节点
-function checkaaa(obj) {
-    if ($(obj).prop("checked")) {
-        $(obj).parent().parent().find("div").children().children().prop("checked", true);
-    } else if ($(obj).parent().parent().find("input[type='checkbox']:checked").length == 1) {
-        $(obj).parent().parent().find("div").children().children().prop("checked", false);
-    }
-
-}
-//验证通过
-function isOk(obj, text) {
-    obj.parent().parent().removeClass("has-error");
-    obj.parent().parent().addClass("has-success");
-    obj.parent().next().children(":first").html(text);
-
-}
-//验证不通过
-function isError(obj, text) {
-    obj.parent().parent().removeClass("has-success");
-    obj.parent().parent().addClass("has-error");
-    obj.parent().next().children(":first").html(text);
 }
