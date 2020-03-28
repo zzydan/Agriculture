@@ -5,8 +5,8 @@
     <insert id="addTemplatePlanAgricultural" parameterType="com.agriculture.pojo.TemplatePlanAgricultural">
         insert into template_plan_agricultural (createtime, trxfl, nzmc, yl, danwei,plan_id)
         values
-        <foreach collection="list" separator="," open="(" close=")" item="tpa">
-            now(),#{tpa.trxfl},#{tpa.nzmc},#{tpa.yl},#{tpa.danwei},#{planId}
+        <foreach collection="list" separator="," item="tpa">
+            (now(),#{tpa.trxfl},#{tpa.nzmc},#{tpa.yl},#{tpa.danwei},#{planId})
         </foreach>
     </insert>
 </mapper>

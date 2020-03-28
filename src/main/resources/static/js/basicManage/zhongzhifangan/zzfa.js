@@ -459,13 +459,11 @@ function agricList_table() {
                                 nzCategory_option += " <option value=\"" + nzcategory_data[i] + "\">" + nzcategory_data[i] + "</option>"
                             }
                         }
-
                     }
                     nzCategory_option += "</select>"
 
                     return nzCategory_option;
                 }
-
             }, {
                 field: 'nzmc',
                 title: '农资名称',
@@ -599,8 +597,6 @@ function addAgricListData() {
 
     $("#agricListInfo_Modal").modal("hide");
 }
-
-
 
 //回显数据
 function findTemplateById(id) {
@@ -812,15 +808,25 @@ function getVarietyList_update(category,variety) {
     })
 }
 //修改保存
-function updateTemplate(id) {
+function updateTemplate() {
+//获取数据
+    var template_Form =$("#template_Form_update").serialize();
+    var templatePlanTableData =JSON.stringify($("#templatePlan_table_update").bootstrapTable("getData"));
 
     $.ajax({
-        url: "/basicCenter/updateTemplate",
+        url: "/basicCenter/addTemplate?"+template_Form,
         type: "post",
-        dataType: "json",
+        dataType:"json",
         async: false,
-        data: {'userId': id},
+        data: {"templatePlanData":templatePlanTableData},
         success: function (data) {
+
+            $("#addTemplateInfo_Modal").modal("hide");
+
+            $('#template_table').bootstrapTable("refresh");
+
+            alert("新建成功！");
+
 
         },
         error: function () {
