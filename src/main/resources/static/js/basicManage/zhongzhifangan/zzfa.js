@@ -92,6 +92,28 @@ function getAgricList() {
         }
     })
 }
+//查询作物品种的周期
+function getCrop_growth_cycle() {
+    var modal_name = $("#modal_name").val();
+    if(modal_name=="add"){
+        var category_id = $("#category_add").children("option:selected").val();
+        var variety_id = $("#variety_add").children("option:selected").val();
+    }
+    if(modal_name=="update"){
+        var category_id = $("#category_update").children("option:selected").val();
+        var variety_id = $("#variety_update").children("option:selected").val();
+    }
+    $.ajax({
+        url: "/basicCenter/getCropGrowthCycleList",
+        dataType: "json",
+        type: "post",
+        async : false,
+        data: {'speciesId': category_id,'varietyId': variety_id},
+        success: function (data) {
+            sysq_data = data;
+        }
+    })
+}
 
 
 //模糊查询
@@ -280,8 +302,6 @@ function upPlansysq(object) {
 
     object.sysq = value;
 
-    console.log(value);
-
     $("#templatePlan_table").bootstrapTable('updateRow', {index: object.index, row: object});
 }
 //修改表格中农事
@@ -340,6 +360,7 @@ function addTemplateInfo() {
     document.getElementById("template_Form").reset();
 
     $("#addTemplateInfo_Modal").modal("show");
+    $("#modal_name").val("add");
 
     templatePlan_table();
 }
@@ -396,6 +417,17 @@ function getVarietyList_add() {
     })
 
 }
+//加载添加模板表
+function onUploadTable() {
+    //加载作物品种周期
+    getCrop_growth_cycle();
+
+    //更新表格
+    $("#templatePlan_table").bootstrapTable("removeAll");
+
+    addPlanToTable();
+}
+
 
 
 //显示农资信息模态框
@@ -587,16 +619,27 @@ function addAgricListData() {
     var row=$("#agricList_table").bootstrapTable("getData").length;
 
     var index = $("#template_table_index").val();
+    var modal_name = $("#modal_name").val();
+    if(modal_name=="add"){
+        var object = $("#templatePlan_table").bootstrapTable("getRowByIndex",index);
 
-    var object = $("#templatePlan_table").bootstrapTable("getRowByIndex",index);
+        object.templatePlanAgriculturalList = agricTableData;
+        object.nzNumber = row;
 
-    object.templatePlanAgriculturalList = agricTableData;
-    object.nzNumber = row;
+        $("#templatePlan_table").bootstrapTable('updateRow', {index: object.index, row: object});
+    }
+    if(modal_name=="update"){
+        var object = $("#templatePlan_table_update").bootstrapTable("getRowByIndex",index);
 
-    $("#templatePlan_table").bootstrapTable('updateRow', {index: object.index, row: object});
+        object.templatePlanAgriculturalList = agricTableData;
+        object.nzNumber = row;
+
+        $("#templatePlan_table_update").bootstrapTable('updateRow', {index: object.index, row: object});
+    }
 
     $("#agricListInfo_Modal").modal("hide");
 }
+
 
 //回显数据
 function findTemplateById(id) {
@@ -617,7 +660,9 @@ function findTemplateById(id) {
     });
 
     $("#upTemplateInfo_Modal").modal("show");
+    $("#modal_name").val("update");
     //加载基本信息
+    $("#template_id").val(template.id);
     $("#name_update").val(template.name);
     getSpeciesList_up(template.category);
     getVarietyList_update(template.category,template.variety);
@@ -669,7 +714,7 @@ function templatePlan_table_update() {
                 width : 160,
                 formatter: function (value, row, index) {// selNumber'+ row.registerId + '
                     //向模板计划表格中添加生育周期下拉框
-                    var sysq_option = "<select onchange='upPlansysq(" + JSON.stringify(row) + ")' class='form-control' name='sysq'><option value=\"\">请选择</option>"
+                    var sysq_option = "<select onchange='upPlansysq_update(" + JSON.stringify(row) + ")' class='form-control' name='sysq'><option value=\"\">请选择</option>"
                     if (sysq_data) {
                         $.each(sysq_data, function (a, b) {
                             if(value == b.id){
@@ -690,7 +735,7 @@ function templatePlan_table_update() {
                 width : 160,
                 formatter: function (value, row, index) {//单元格格式化函数，有三个参数：value： 该列的字段值；row： 这一行的数据对象；index： 行号，第几行，从0开始计算
                     //向模板计划表格中添加生育周期下拉框
-                    var ns_option = "<select onchange='upPlanns(" + JSON.stringify(row) + ")' class='form-control' name='ns'><option value=\"\">请选择</option>"
+                    var ns_option = "<select onchange='upPlanns_update(" + JSON.stringify(row) + ")' class='form-control' name='ns'><option value=\"\">请选择</option>"
                     if (ns_data) {
                         $.each(ns_data, function (a, b) {
                             if(value == b.workId){
@@ -729,7 +774,7 @@ function templatePlan_table_update() {
                     var str = "";
 
                     str = str + "<input type='text' name='title' value='" + row.title + "' " +
-                        "placeholder='请输入' onchange='upPlantitle(" + JSON.stringify(row) + ")' class='layui-input'>";
+                        "placeholder='请输入' onchange='upPlantitle_update(" + JSON.stringify(row) + ")' class='layui-input'>";
 
                     return str;
                 }
@@ -738,10 +783,10 @@ function templatePlan_table_update() {
                 width : 215,
                 formatter: function (value, row, index) {
                     var str =
-                        "<a href='javascript:addPlanToTable()' class=\"layui-btn layui-btn-info layui-btn-xs\" lay-event=\"edit\">" +
+                        "<a href='javascript:addPlanToTable_update2()' class=\"layui-btn layui-btn-info layui-btn-xs\" lay-event=\"edit\">" +
                         "<i  class=\"layui-icon layui-icon-add-1\">" +
                         "</i>新增</a> " +
-                        "<a href='javascript:deletePlan(" + index + ")' class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
+                        "<a href='javascript:deletePlan2(" + index + ")' class=\"layui-btn layui-btn-danger layui-btn-xs\" lay-event=\"del\">" +
                         "<i class=\"layui-icon layui-icon-delete\">" +
                         "</i>删除</a> ";
                     return str;
@@ -750,14 +795,67 @@ function templatePlan_table_update() {
         ]
     })
 }
+//修改表格中生育时期
+function upPlansysq_update(object) {
+    var value = $("#templatePlan_table_update tr[data-index='" + object.index + "'] select[name='sysq']").find("option:selected").val();
+
+    object.sysq = value;
+
+    $("#templatePlan_table_update").bootstrapTable('updateRow', {index: object.index, row: object});
+}
+//修改表格中农事
+function upPlanns_update(object) {
+    var value = $("#templatePlan_table_update tr[data-index='" + object.index + "'] select[name='ns']").find("option:selected").val();
+
+    object.ns = value;
+
+    $("#templatePlan_table_update").bootstrapTable('updateRow', {index: object.index, row: object});
+}
+//修改表格中农事操作说明
+function upPlantitle_update(object) {
+    var value = $("#templatePlan_table_update tr[data-index='" + object.index + "'] input[name='title']").val();
+
+    object.title = value;
+
+    var rows = {
+        index : object.index, //更新列所在行的索引
+        field : "title", //要更新列的field
+        value : value //要更新列的数据
+    }//更新表格数据
+    $('#templatePlan_table_update').bootstrapTable("updateCell",rows);
+}
 //添加信息到修改信息table表中
 function addPlanToTable_update(list) {
     for (var i = 0; i <list.length ; i++) {
         var obj = createPlans('', list[i].sysq, list[i].ns, list[i].templatePlanAgriculturalList, list[i].templatePlanAgriculturalList.length, list[i].title);
         $("#templatePlan_table_update").bootstrapTable("append", obj);
     }
+}
+//加载添加模板表
+function onUploadTable_update() {
+    //加载作物品种周期
+    getCrop_growth_cycle();
 
+    //更新表格
+    $("#templatePlan_table_update").bootstrapTable("removeAll");
 
+    addPlanToTable_update2();
+}
+//添加信息到table表中
+function addPlanToTable_update2() {
+
+    var obj = createPlans('', '', '', '', '', '');
+
+    $("#templatePlan_table_update").bootstrapTable("append", obj);
+
+}
+//删除计划表的某一行
+function deletePlan2(index) {
+    // 声明一个数组
+    var arrays = new Array();
+    arrays.push(parseInt(index));
+    //根据id移除数据
+    $("#templatePlan_table_update").bootstrapTable("remove", {field: 'index', values: arrays});
 }
 //查询种类列表
 function getSpeciesList_up(category) {
@@ -784,6 +882,11 @@ function getSpeciesList_up(category) {
 }
 //查询品种列表
 function getVarietyList_update(category,variety) {
+    var category_id =$("#category_update").val();
+
+    if(category_id!=null){
+        category = category_id;
+    }
     $.ajax({
         url: "/basicCenter/getVarietyListBySpeciesId",
         dataType: "json",
@@ -814,20 +917,18 @@ function updateTemplate() {
     var templatePlanTableData =JSON.stringify($("#templatePlan_table_update").bootstrapTable("getData"));
 
     $.ajax({
-        url: "/basicCenter/addTemplate?"+template_Form,
+        url: "/basicCenter/updateTemplate?"+template_Form,
         type: "post",
         dataType:"json",
         async: false,
         data: {"templatePlanData":templatePlanTableData},
         success: function (data) {
 
-            $("#addTemplateInfo_Modal").modal("hide");
+            $("#upTemplateInfo_Modal").modal("hide");
 
             $('#template_table').bootstrapTable("refresh");
 
-            alert("新建成功！");
-
-
+            alert("修改成功！");
         },
         error: function () {
             alert("请求失败");
@@ -855,30 +956,7 @@ function deleteTemplate(id) {
         });
     }
 }
-//加载添加模板表
-function onUploadTable() {
-    //加载作物品种周期
-    getCrop_growth_cycle();
 
-    //更新表格
-    $("#templatePlan_table").bootstrapTable("removeAll");
 
-    addPlanToTable();
-}
-//查询作物品种的周期
-function getCrop_growth_cycle() {
-    var category_id = $("#category_add").children("option:selected").val();
-    var variety_id = $("#variety_add").children("option:selected").val();
 
-    $.ajax({
-        url: "/basicCenter/getCropGrowthCycleList",
-        dataType: "json",
-        type: "post",
-        async : false,
-        data: {'speciesId': category_id,'varietyId': variety_id},
-        success: function (data) {
-            sysq_data = data;
-        }
-    })
-}
 

@@ -368,14 +368,29 @@ public class BasicCenterController {
 
         //还原数据
         List<TemplatePlan> templatePlans = new JSONUtils().jsonToList(templatePlanData, TemplatePlan.class);
-
-        for (int i = 0; i < templatePlans.size(); i++) {
-            System.out.println(templatePlans.get(i));
-        }
         template.setTemplatePlanList(templatePlans);
 
         //添加模板
         int i = basicCenterService.addTemplate(template);
+
+        return i;
+    }
+
+    /**
+     * 修改模板
+     * @param template
+     * @return
+     */
+    @RequestMapping("updateTemplate")
+    @ResponseBody
+    public int updateTemplate(Template template,String templatePlanData) {
+
+        //还原数据
+        List<TemplatePlan> templatePlans = new JSONUtils().jsonToList(templatePlanData, TemplatePlan.class);
+        template.setTemplatePlanList(templatePlans);
+
+        //添加模板
+        int i = basicCenterService.updateTemplate(template);
 
         return i;
     }

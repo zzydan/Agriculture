@@ -3,6 +3,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="../../common/head.jsp"></jsp:include>
 
+<!-- 判断打开的是添加模态框还是修改模态框 -->
+<<input type="hidden" id="modal_name">
+
 <script src="${pageContext.request.contextPath}/static/js/basicManage/zhongzhifangan/zzfa.js"></script>
 <div class="layui-fluid" style="height: 50%">
     <div class="layui-card">
@@ -140,10 +143,10 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">修改模板</h4>
             </div>
-
             <div class="modal-body">
                 <div class="panel-body">
                     <form id="template_Form_update" class="form-horizontal">
+                        <input type="hidden" id="template_id" name="id">
                         <div class="form-group" style="margin-top:15px">
                             <label class="control-label col-sm-2">种植模板方案名称</label>
                             <div class="col-sm-3">
@@ -157,7 +160,7 @@
                             </div>
                             <label class="control-label col-sm-1">作物品种</label>
                             <div class="col-sm-2">
-                                <select class="form-control" name="variety" id="variety_update" onchange="onUploadTable()">
+                                <select class="form-control" name="variety" id="variety_update" onchange="onUploadTable_update()">
                                     <option>请先选择作物种类</option>
                                 </select>
                             </div>
@@ -187,7 +190,7 @@
             </div>
             <div class="panel-body">
                 <div class="form-group">
-                    <a class="layui-btn layui-btn-fluid" onclick="addTemplateData()">保存</a>
+                    <a class="layui-btn layui-btn-fluid" onclick="updateTemplate()">保存</a>
                 </div>
             </div>
         </div><!-- /.modal-content -->

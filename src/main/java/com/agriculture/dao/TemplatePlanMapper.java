@@ -12,5 +12,12 @@ public interface TemplatePlanMapper {
      * @param templateId
      * @return
      */
-    int addTemplatePlan(@Param("templatePlan") TemplatePlan templatePlan,@Param("templateId")  Integer templateId);
+    int addTemplatePlan(@Param("templatePlan") TemplatePlan templatePlan,@Param("templateId") Integer templateId);
+
+    /**
+     * 根据模板id删除信息
+     * @param templateId
+     * @return
+     */
+    int delTemplatePlanByTemplateId(@Param("templateId") Integer templateId);
 }

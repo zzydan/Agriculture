@@ -6,4 +6,9 @@
         insert into template_plan (createtime, title, sysq, ns, template_id)
         values (now(),#{templatePlan.title},#{templatePlan.sysq},#{templatePlan.ns},#{templateId});
     </insert>
+
+    <!-- int delTemplatePlanByTemplateId(@Param("templateId") Integer templateId); -->
+    <delete id="delTemplatePlanByTemplateId">
+        DELETE FROM template_plan WHERE template_id = #{templateId}
+    </delete>
 </mapper>

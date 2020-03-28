@@ -60,4 +60,9 @@
     <insert id="addTemplate" parameterType="com.agriculture.pojo.Template" useGeneratedKeys="true" keyProperty="id">
         insert into template (createtime, name, category, variety) values (now(),#{name},#{category},#{variety});
     </insert>
+
+    <!-- int updateTemplate(Template template); -->
+    <update id="updateTemplate" parameterType="com.agriculture.pojo.Template">
+        update template set name = name,category = category,variety = variety where id = id
+    </update>
 </mapper>

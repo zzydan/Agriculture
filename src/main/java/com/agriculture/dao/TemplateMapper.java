@@ -34,4 +34,11 @@ public interface TemplateMapper {
      * @return
      */
     int addTemplate(Template template);
+
+    /**
+     * 修改模板基础信息
+     * @param template
+     * @return
+     */
+    int updateTemplate(Template template);
 }

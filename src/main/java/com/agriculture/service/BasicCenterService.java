@@ -183,6 +183,13 @@ public interface BasicCenterService {
      */
     int addTemplate(Template template);
 
+    /**
+     * 修改模板
+     * @param template
+     * @return
+     */
+    int updateTemplate(Template template);
+
 
     /**
      * 删除分场
