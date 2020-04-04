@@ -42,4 +42,15 @@
         SET name=#{name},species=#{species},zwswxld=#{zwswxld}
         WHERE id=#{id}
     </update>
+
+    <!-- /**
+     * 获取分场内所有作物
+     * @param fenChangId
+     * @return
+     */
+    List<CropVariety> getSpeciesrByFenChang(Integer fenChangId); -->
+    <select id="getSpeciesrByFenChang" resultType="com.agriculture.pojo.CropVariety">
+        select cv.* from lot l
+        left JOIN crop_variety cv ON l.zwpz = cv.id WHERE l.ssfc = #{fenChangId} GROUP BY cv.id
+    </select>
 </mapper>

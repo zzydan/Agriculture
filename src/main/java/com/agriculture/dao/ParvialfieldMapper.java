@@ -52,5 +52,16 @@ public interface ParvialfieldMapper {
      */
     boolean deleteFenChangById(Integer id);
 
-
+    /**
+     * 获取分场负责人的列表
+     * @param id
+     * @return
+     */
+    List<Parvialfield> getFenChangListByUser1(Integer id);
+    /**
+     * 获取分场技术员的列表
+     * @param id
+     * @return
+     */
+    List<Parvialfield> getFenChangListByUser2(Integer id);
 }

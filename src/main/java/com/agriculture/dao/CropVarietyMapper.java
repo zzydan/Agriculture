@@ -52,4 +52,11 @@ public interface CropVarietyMapper {
      * @return
      */
     int updataVariety(CropVariety cropVariety);
+
+    /**
+     * 获取分场内所有作物
+     * @param fenChangId
+     * @return
+     */
+    List<CropVariety> getSpeciesrByFenChang(Integer fenChangId);
 }

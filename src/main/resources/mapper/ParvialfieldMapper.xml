@@ -132,4 +132,26 @@
     <update id="deleteFenChangById">
       update parvialfield set disabled=1 where id=#{id}
     </update>
+
+
+    <!-- /**
+     * 获取分场负责人的列表
+     * @param id
+     * @return
+     */
+    List<Parvialfield> getFenChangListByUser1(Integer id); -->
+    <select id="getFenChangListByUser1" resultType="com.agriculture.pojo.Parvialfield">
+        select * from parvialfield WHERE fieldlength_user = #{id} AND disabled = 0
+    </select>
+
+    <!-- /**
+    * 获取分场技术员的列表
+    * @param id
+    * @return
+    */
+   List<Parvialfield> getFenChangListByUser2(Integer id); -->
+   <select id="getFenChangListByUser2" resultType="com.agriculture.pojo.Parvialfield">
+        select * from parvialfield WHERE technician_user = #{id} AND disabled = 0
+   </select>
+
 </mapper>

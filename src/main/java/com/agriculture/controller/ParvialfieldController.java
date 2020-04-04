@@ -20,7 +20,7 @@ import java.util.List;
 public class ParvialfieldController {
     @Resource
     private ParvialfieldService parvialfieldService;
-//获取所有分厂
+    //获取所有分厂
     @RequestMapping("getAll")
     @ResponseBody
     public List<Parvialfield> getAll(){
