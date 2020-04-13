@@ -18,7 +18,28 @@ public class SecPic implements Serializable {
 
     private Date createtime;
 
+    private String  objType;
+
+    private Integer objId;
+
+
     private static final long serialVersionUID = 1L;
+
+    public String getObjType() {
+        return objType;
+    }
+
+    public void setObjType(String objType) {
+        this.objType = objType;
+    }
+
+    public Integer getObjId() {
+        return objId;
+    }
+
+    public void setObjId(Integer objId) {
+        this.objId = objId;
+    }
 
     public Integer getId() {
         return id;
@@ -78,19 +99,16 @@ public class SecPic implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", name=").append(name);
-        sb.append(", info=").append(info);
-        sb.append(", path=").append(path);
-        sb.append(", size=").append(size);
-        sb.append(", disabled=").append(disabled);
-        sb.append(", createtime=").append(createtime);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return "SecPic{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", info='" + info + '\'' +
+                ", path='" + path + '\'' +
+                ", size=" + size +
+                ", disabled=" + disabled +
+                ", createtime=" + createtime +
+                ", objType='" + objType + '\'' +
+                ", objId='" + objId + '\'' +
+                '}';
     }
 }
