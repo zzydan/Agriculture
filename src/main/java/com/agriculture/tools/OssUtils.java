@@ -68,7 +68,7 @@ public class OssUtils {
      * @param fileName
      * @return
      */
-    private String uploadFile2OSS(InputStream instream, String fileName) {
+    public String uploadFile2OSS(InputStream instream, String fileName) {
         String ret = "";
         try {
             //创建上传Object的Metadata

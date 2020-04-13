@@ -2,48 +2,116 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.FarmWorkMapper">
     <select id="getAll" resultType="com.agriculture.pojo.FarmWork">
-        SELECT `parvialfield`.`name` AS parvialfieldname,`lot`.`name` AS lotname,`lot`.`id` AS lotid,
-        `farm_work`.`id`,
-        `crop_species`.`name` AS cropspeciesname,
-        `farm_work`.`name` ,
-        `agricultural`.`name` AS agriculturalname,
-         `work_fertilizer`.`weight`AS weight,
-        `agricultural`.`unit_measurement` AS unitmeasurement,
-        `farm_work`.`finish_time` AS finishTime,
-        `farm_work`.`text`,
-        `farm_work`.`result`
-        FROM `parvialfield`,`lot`,`farm_work`,`agricultural`,`work`,`work_fertilizer`,`crop_species`
-        WHERE `parvialfield`.`id`=#{id}
-        AND `parvialfield`.`id`=`lot`.`ssfc`
-        AND `lot`.`zwzl`=`crop_species`.`id`
-        AND `lot`.`id`=`farm_work`.`lot_id`
-        AND `farm_work`.`work_id`=`work`.`work_id`
-        AND `work_fertilizer`.`farm_work_id`=`work`.`work_id`
-        AND `work_fertilizer`.`id`=`agricultural`.`id`
+SELECT `parvialfield`.`name` AS parvialfieldname,`lot`.`name` AS lotname,`lot`.`id` AS lotid,
+`farm_work`.`id`,
+`crop_species`.`name` AS cropspeciesname,
+`farm_work`.`name` ,
+`agricultural`.`name` AS agriculturalname,
+ `work_fertilizer`.`weight`AS weight,
+`agricultural`.`unit_measurement` AS unitmeasurement,
+`farm_work`.`finish_time` AS finishTime,
+`farm_work`.`text`,
+`farm_work`.`result`
+FROM `parvialfield`,`lot`,`farm_work`,`agricultural`,`work`,`work_fertilizer`,`crop_species`
+WHERE `parvialfield`.`id`=#{id}
+AND `parvialfield`.`id`=`lot`.`ssfc`
+AND `lot`.`zwzl`=`crop_species`.`id`
+AND `lot`.`id`=`farm_work`.`lot_id`
+AND `farm_work`.`work_id`=`work`.`work_id`
+AND `work_fertilizer`.`farm_work_id`=`work`.`work_id`
+AND `work_fertilizer`.`id`=`agricultural`.`id`
     </select>
+
 
 
     <select id="getxq" resultType="com.agriculture.pojo.FarmWork">
-        SELECT `parvialfield`.`name` AS parvialfieldname,`lot`.`name` AS lotname,
-        `farm_work`.`id`,
-        `crop_species`.`name` AS cropspeciesname,
-        `farm_work`.`name` ,
-        `agricultural`.`name` AS agriculturalname,
-         `work_fertilizer`.`weight`AS weight,
-        `agricultural`.`unit_measurement` AS unitmeasurement,
-        `farm_work`.`finish_time` AS finishTime,
-        `farm_work`.`text`,
-        `farm_work`.`result`
-        FROM `parvialfield`,`lot`,`farm_work`,`agricultural`,`work`,`work_fertilizer`,`crop_species`
-        WHERE `parvialfield`.`id`=#{id}
-        AND `lot`.id=#{lotid}
-        AND `parvialfield`.`id`=`lot`.`ssfc`
-        AND `lot`.`zwzl`=`crop_species`.`id`
-        AND `lot`.`id`=`farm_work`.`lot_id`
-        AND `farm_work`.`work_id`=`work`.`work_id`
-        AND `work_fertilizer`.`farm_work_id`=`work`.`work_id`
-        AND `work_fertilizer`.`id`=`agricultural`.`id`
+SELECT `parvialfield`.`name` AS parvialfieldname,`lot`.`name` AS lotname,
+`farm_work`.`id`,
+`crop_species`.`name` AS cropspeciesname,
+`farm_work`.`name` ,
+`agricultural`.`name` AS agriculturalname,
+ `work_fertilizer`.`weight`AS weight,
+`agricultural`.`unit_measurement` AS unitmeasurement,
+`farm_work`.`finish_time` AS finishTime,
+`farm_work`.`text`,
+`farm_work`.`result`
+FROM `parvialfield`,`lot`,`farm_work`,`agricultural`,`work`,`work_fertilizer`,`crop_species`
+WHERE `parvialfield`.`id`=#{id}
+AND `lot`.id=#{lotid}
+AND `parvialfield`.`id`=`lot`.`ssfc`
+AND `lot`.`zwzl`=`crop_species`.`id`
+AND `lot`.`id`=`farm_work`.`lot_id`
+AND `farm_work`.`work_id`=`work`.`work_id`
+AND `work_fertilizer`.`farm_work_id`=`work`.`work_id`
+AND `work_fertilizer`.`id`=`agricultural`.`id`
     </select>
+
+
+    <!-- /**
+     * 根据分场id查询农事详情
+     * @param id
+     * @return
+     */
+     List<FarmWork> getNongByFenChang(int id);-->
+    <select id="getNongByFenChang" resultType="com.agriculture.pojo.FarmWork">
+        SELECT
+            farm_work.*,
+            lot.`name` lotName,
+            work.work_name workName
+        FROM farm_work
+            LEFT JOIN lot ON lot.id = farm_work.lot_id
+            left JOIN `work` on `work`.work_id=farm_work.work_id
+	    where farm_work.lot_id in (select id from lot where ssfc=#{id})
+    </select>
+    <!-- /**
+     * 根据日期获取农事
+     * @param date
+     * @return
+     */
+    List<FarmWork> getWorkByDate(@Param("date") String date,@Param("id") Integer id);-->
+    <select id="getWorkByDate" resultType="com.agriculture.pojo.FarmWork">
+        SELECT
+            farm_work.*,
+            lot.`name` lotName,
+            work.work_name workName
+        FROM farm_work
+            LEFT JOIN lot ON lot.id = farm_work.lot_id
+            left JOIN `work` on `work`.work_id=farm_work.work_id
+	    where
+	        ( #{date} BETWEEN date_format( farm_work.start_time, '%Y-%m-%d' ) AND date_format( farm_work.finish_time, '%Y-%m-%d' ) )
+	        AND farm_work.lot_id IN ( SELECT id FROM lot WHERE ssfc = #{id} )
+      union
+        SELECT
+            farm_work.*,
+            lot.`name` lotName,
+            work.work_name workName
+        FROM farm_work
+            LEFT JOIN lot ON lot.id = farm_work.lot_id
+            left JOIN `work` on `work`.work_id=farm_work.work_id
+	    where
+	         #{date} =date_format( farm_work.ok_time, '%Y-%m-%d' )
+	        AND farm_work.lot_id IN ( SELECT id FROM lot WHERE ssfc = #{id} )
+    </select>
+
+    <!--/**
+    * 查询农事列表
+    * @param
+    * @return
+    */
+    List<Work> getNong();-->
+    <select id="getNong" resultType="com.agriculture.pojo.Work">
+        select * from work
+    </select>
+    <!--/**
+    * 添加临时农事
+    * @param farmWork
+    * @return
+    */
+    boolean addFarmWork(FarmWork farmWork);-->
+    <insert id="addFarmWork" useGeneratedKeys="true" keyProperty="id">
+        insert into farm_work (createtime,user_id, lot_id, work_id, text, fenlei,result,ok_time) VALUE
+        (now(),#{userId},#{lotId},#{workId},#{text},1,1,#{okTime})
+    </insert>
     <!--List<FarmWork> FindFarm();-->
     <select id="FindFarm" resultType="com.agriculture.pojo.FarmWork">
        SELECT *

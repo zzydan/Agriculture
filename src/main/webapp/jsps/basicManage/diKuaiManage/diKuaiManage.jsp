@@ -112,6 +112,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/GeoUtils.js"></script>
 <script type="text/javascript">
         var fenChangId=1;//存放下拉框选中的分场id默认id为1
+        var long=0;
+        var lat=0;
         var fenChangList=null;//存放所有分场的数据
         var arr=new Array();//新建一个数组存放回显的经纬度数据[{lid:1,str:str},{...}]
         var map1=null;
@@ -130,7 +132,9 @@
 
                 if(data){
                     fenChangList=data;
-                    var html=" <option value='0'>请选择</option>"
+                    var html=" <option value='0'>请选择</option>";
+                    long=fenChangList[0].longitude;
+                    lat=fenChangList[0].latitude;
                     getMap(fenChangList[0].longitude,fenChangList[0].latitude);
                     $.each(data,function (a,b) {
                         html+=" <option value=\""+b.id+"\">"+b.name+"</option>"
@@ -302,6 +306,8 @@
     $("#container").on("change","#fenChangSelect",function () {
         fenChangId=$("#fenChangSelect").val();
         //根据选择的分场重新加载地图
+        long=fenChangList[fenChangId-1].longitude;
+        lat=fenChangList[fenChangId-1].latitude;
         getMap(fenChangList[fenChangId-1].longitude,fenChangList[fenChangId-1].latitude);
     })
 
@@ -532,7 +538,7 @@
     $('#huaDiKUai_Modal').on('show.bs.modal', function () {
         // 百度地图API功能
          map = new BMap.Map('map', {mapType: BMAP_HYBRID_MAP});
-        var poi = new BMap.Point(119.17727607665722, 31.864854683156516);
+        var poi = new BMap.Point(long,lat);
         map.centerAndZoom(poi, 19);
         map.enableScrollWheelZoom();//可以滚动地图
 

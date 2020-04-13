@@ -9,9 +9,9 @@
     boolean addLot(Lot lot);-->
     <insert id="addLot" useGeneratedKeys="true" keyProperty="id">
         insert into lot
-          (createtime, name, ssfc, trzd, dkzz, zwzl, zwpz, dkjsy, ldfx, dkmj, dkzc)
+          (createtime, name, ssfc, trzd, dkzz, zwzl, zwpz, dkjsy, ldfx, dkmj, dkzc,zzfa)
         values
-          (now(),#{name},#{ssfc},#{trzd},#{dkzz},#{zwzl},#{zwpz},#{dkjsy},#{ldfx},#{dkmj},#{dkzc})
+          (now(),#{name},#{ssfc},#{trzd},#{dkzz},#{zwzl},#{zwpz},#{dkjsy},#{ldfx},#{dkmj},#{dkzc},'n')
     </insert>
 
     <!--/**

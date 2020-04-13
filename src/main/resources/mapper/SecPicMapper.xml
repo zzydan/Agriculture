@@ -6,4 +6,15 @@
         insert into sec_pic (name, info, path, createtime)
         values (#{name},#{info},#{path},now());
     </insert>
+
+    <!--/**
+    * 将上传图片的位置存到数据库
+    * @param secPic
+    * @return
+    */
+    boolean addPicture(SecPic secPic);-->
+    <insert id="addPicture">
+        insert into sec_pic (obj_type,obj_id, path, createtime) VALUE
+        (#{objType},#{objId},#{path},now())
+    </insert>
 </mapper>

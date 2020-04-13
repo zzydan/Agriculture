@@ -186,6 +186,38 @@
             "</div>")
         map.getContainer().appendChild(div);
         return div;
+
+str="<div class=\"mui-input-group\" style=\"width: 90%;margin-left: 5%;margin-bottom: 5px;\" id=\"di\">\n" +
+    "\t\t\t\t\t\t<div class=\"mui-input-row\" style=\"position: relative;margin-bottom: 5px;\">\n" +
+    "\t\t\t\t\t\t\t<img id=\"img\" style=\"position: absolute;height: 20px;width: 20px;right: -2px;top: -2px;\" src=\"../../images/no.png\">\n" +
+    "\t\t\t\t\t\n" +
+    "\t\t\t\t\t\t\t<label>农资名称</label>\n" +
+    "\t\t\t\t\t\t\t<a class=\"mui-navigate-right\">\n" +
+    "\t\t\t\t\t\t\t\t<span class=\"mui-badge1\">\n" +
+    "\t\t\t\t\t\t\t\t\t<select class=\"mui-h5\" id=\"d1\" style=\"margin:right; color:#000;\">\n" +
+    "\t\t\t\t\t\n" +
+    "\t\t\t\t\t\t\t\t\t</select>\n" +
+    "\t\t\t\t\t\t\t\t</span>\n" +
+    "\t\t\t\t\t\t\t</a>\n" +
+    "\t\t\t\t\t\t</div>\n" +
+    "\t\t\t\t\t\t<div class=\"mui-input-row\" style=\"position: relative;\">\n" +
+    "\t\t\t\t\t\t\t<label>农资使用量</label>\n" +
+    "\t\t\t\t\t\t\t<input type=\"text\" name=\"\" style=\" position: absolute;top: 5px;right: 50px; height: 30px;  margin-right: 60px;  border: 1px solid;width: 60px; border-color:silver\"\n" +
+    "\t\t\t\t\t\t\t class=\"in1\" id=\"\" value=\"\" />\n" +
+    "\t\t\t\t\t\t\t<a class=\"mui-navigate-right\">\n" +
+    "\t\t\t\t\t\t\t\t<span class=\"mui-badge1\">\n" +
+    "\t\t\t\t\t\t\t\t\t<select class=\"mui-h5\" id=\"d22\" style=\"margin:right; color:#000;\">\n" +
+    "\t\t\t\t\t\t\t\t\t\t<option value=\"\">kg/亩</option>\n" +
+    "\t\t\t\t\t\t\t\t\t\t<option value=\"\">g/亩</option>\n" +
+    "\t\t\t\t\t\t\t\t\t\t<option value=\"\">L/亩</option>\n" +
+    "\t\t\t\t\t\t\t\t\t\t<option value=\"\">ML/亩</option>\n" +
+    "\t\t\t\t\t\t\t\t\t</select>\n" +
+    "\t\t\t\t\t\t\t\t</span>\n" +
+    "\t\t\t\t\t\t\t</a>\n" +
+    "\t\t\t\t\t\n" +
+    "\t\t\t\t\t\t</div>\n" +
+    "\t\t\t\t\t</div>"
+
     }
 
 
@@ -193,7 +225,6 @@
 
     //参数是一个百度类型的多边形覆盖物
     function getArea(polygon){
-
         // 检查类型：既不是百度类型的范围又不是数组类型的数据，直接返回0
         if (!(polygon instanceof BMap.Polygon) && !(polygon instanceof Array)) {
             return 0;

@@ -11,4 +11,11 @@ public interface SecPicMapper {
      * @return
      */
     int addPiC(SecPic secPic);
+
+    /**
+     * 将上传图片的位置存到数据库
+     * @param secPic
+     * @return
+     */
+    boolean addPicture(SecPic secPic);
 }

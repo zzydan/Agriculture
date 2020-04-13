@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agriculture.dao.WorkFertilizerMapper" >
-
+    <!--/**
+    * 添加临时农事之农资添加
+    * @param workFertilizers
+    * @return
+    */
+    public boolean addZiList(List<WorkFertilizer> workFertilizers);-->
+    <insert id="addZiList">
+        insert into work_fertilizer (createtime, farm_work_id, agricultural_id, weight,umit) value
+        <foreach collection="workFertilizers" separator="," item="fe">
+            (now(),#{fe.farmWorkId},#{fe.agriculturalId},#{fe.weight},#{fe.umit})
+        </foreach>
+    </insert>
 </mapper>
